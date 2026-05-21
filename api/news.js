@@ -51,4 +51,3 @@ export default async function handler(req, res) {
     });
   }
 }
-Sent from my iPhone
