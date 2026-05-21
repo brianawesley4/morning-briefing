@@ -3,1792 +3,1258 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Morning Briefing — Executive Command Center</title>
+<title>Morning Command Center — Bri</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --black: #0a0a0a;
-    --charcoal: #1a1a1a;
-    --dark: #111111;
-    --panel: #161616;
-    --border: #2a2a2a;
-    --border-light: #333333;
-    --gold: #c9a84c;
-    --gold-light: #e2c97e;
-    --gold-dim: rgba(201,168,76,0.15);
-    --cream: #f5f0e8;
-    --cream-dim: rgba(245,240,232,0.07);
-    --white: #ffffff;
-    --muted: #666666;
-    --muted2: #444444;
-    --text: #d4cfc8;
-    --text-dim: #888888;
-    --green: #4a9a6e;
-    --red: #c05a5a;
-    --amber: #c9914c;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: 'Montserrat', sans-serif;
-    background: var(--black);
-    color: var(--text);
-    min-height: 100vh;
-    font-size: 13px;
-    line-height: 1.6;
-  }
-
-  /* HEADER */
-  .header {
-    background: var(--dark);
-    border-bottom: 1px solid var(--border);
-    padding: 28px 48px 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-
-  .header-left .date-label {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 4px;
-  }
-
-  .header-left h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 38px;
-    font-weight: 300;
-    color: var(--cream);
-    letter-spacing: -0.5px;
-    line-height: 1;
-  }
-
-  .header-left h1 em {
-    font-style: italic;
-    color: var(--gold-light);
-  }
-
-  .header-right {
-    text-align: right;
-  }
-
-  .header-right .time {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 42px;
-    font-weight: 300;
-    color: var(--cream);
-    letter-spacing: 2px;
-    line-height: 1;
-  }
-
-  .header-right .greeting {
-    font-size: 10px;
-    font-weight: 300;
-    letter-spacing: 2px;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin-top: 4px;
-  }
-
-  /* GOLD RULE */
-  .gold-rule {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    margin: 0;
-  }
-
-  /* MAIN LAYOUT */
-  .main {
-    max-width: 1600px;
-    margin: 0 auto;
-    padding: 40px 48px;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 20px;
-  }
-
-  /* CARDS */
-  .card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    padding: 28px 28px 24px;
-    position: relative;
-    overflow: hidden;
-    animation: fadeUp 0.6s ease both;
-  }
-
-  .card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--gold), transparent);
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-
-  .card:hover::before { opacity: 1; }
-
-  .card.span-2 { grid-column: span 2; }
-  .card.span-3 { grid-column: span 3; }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .card:nth-child(1) { animation-delay: 0.05s; }
-  .card:nth-child(2) { animation-delay: 0.1s; }
-  .card:nth-child(3) { animation-delay: 0.15s; }
-  .card:nth-child(4) { animation-delay: 0.2s; }
-  .card:nth-child(5) { animation-delay: 0.25s; }
-  .card:nth-child(6) { animation-delay: 0.3s; }
-  .card:nth-child(7) { animation-delay: 0.35s; }
-  .card:nth-child(8) { animation-delay: 0.4s; }
-
-  /* CARD HEADER */
-  .card-label {
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 18px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .card-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .card-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 300;
-    color: var(--cream);
-    margin-bottom: 18px;
-    line-height: 1.2;
-  }
-
-  /* SECTION LABEL */
-  .section-label {
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 6px;
-    margin-top: 16px;
-  }
-
-  /* =========================================
-     SECTION 1: MORNING EXECUTIVE SUMMARY
-  ========================================= */
-
-  .summary-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-top: 4px;
-  }
-
-  .summary-item {
-    padding: 14px 16px;
-    background: var(--cream-dim);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-  }
-
-  .summary-item .label {
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 6px;
-  }
-
-  .summary-item .value {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 16px;
-    font-weight: 400;
-    color: var(--cream);
-    line-height: 1.4;
-  }
-
-  .summary-item.highlight {
-    border-color: var(--gold);
-    background: var(--gold-dim);
-  }
-
-  .priority-list {
-    list-style: none;
-    margin-top: 4px;
-  }
-
-  .priority-list li {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 12px;
-    color: var(--text);
-  }
-
-  .priority-list li:last-child { border-bottom: none; }
-
-  .priority-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    font-weight: 300;
-    color: var(--gold);
-    line-height: 1;
-    min-width: 20px;
-  }
-
-  /* =========================================
-     SECTION 6: REVENUE COMMAND CENTER
-  ========================================= */
-
-  .revenue-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-
-  .revenue-stat {
-    text-align: center;
-    padding: 16px 8px;
-    background: var(--cream-dim);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    transition: border-color 0.2s;
-  }
-
-  .revenue-stat:hover { border-color: var(--gold); }
-
-  .revenue-stat .num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 32px;
-    font-weight: 300;
-    color: var(--cream);
-    line-height: 1;
-    margin-bottom: 4px;
-  }
-
-  .revenue-stat .num.gold { color: var(--gold-light); }
-  .revenue-stat .num.green { color: var(--green); }
-  .revenue-stat .num.red { color: var(--red); }
-
-  .revenue-stat .stat-label {
-    font-size: 9px;
-    font-weight: 500;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  .revenue-action {
-    padding: 16px 20px;
-    background: linear-gradient(135deg, rgba(201,168,76,0.1), rgba(201,168,76,0.03));
-    border: 1px solid var(--gold);
-    border-radius: 2px;
-    margin-top: 16px;
-  }
-
-  .revenue-action .action-label {
-    font-size: 9px;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 6px;
-    font-weight: 600;
-  }
-
-  .revenue-action .action-text {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 17px;
-    color: var(--cream);
-    line-height: 1.4;
-  }
-
-  /* Progress bar */
-  .progress-wrap {
-    margin-top: 16px;
-  }
-
-  .progress-label {
-    display: flex;
-    justify-content: space-between;
-    font-size: 10px;
-    color: var(--muted);
-    margin-bottom: 6px;
-    letter-spacing: 1px;
-  }
-
-  .progress-bar {
-    height: 3px;
-    background: var(--border);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--gold), var(--gold-light));
-    border-radius: 2px;
-    transition: width 1s ease;
-  }
-
-  /* =========================================
-     SECTION 2: INTEREST RATES
-  ========================================= */
-
-  .rate-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 16px;
-  }
-
-  .rate-item {
-    padding: 14px 16px;
-    background: var(--cream-dim);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-  }
-
-  .rate-item .rate-type {
-    font-size: 9px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 4px;
-  }
-
-  .rate-item .rate-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 30px;
-    font-weight: 300;
-    color: var(--cream);
-    line-height: 1;
-  }
-
-  .rate-item .rate-trend {
-    font-size: 10px;
-    color: var(--amber);
-    margin-top: 3px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .rate-item .rate-trend.up { color: var(--red); }
-  .rate-item .rate-trend.down { color: var(--green); }
-
-  .talking-point {
-    padding: 10px 14px;
-    border-left: 2px solid var(--gold);
-    margin-top: 8px;
-    font-size: 12px;
-    color: var(--text-dim);
-    font-style: italic;
-    line-height: 1.5;
-  }
-
-  /* =========================================
-     SECTION 7: LEAD FOLLOW-UP
-  ========================================= */
-
-  .lead-item {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .lead-item:last-child { border-bottom: none; }
-
-  .lead-priority {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .lead-priority.hot { background: var(--red); box-shadow: 0 0 6px var(--red); }
-  .lead-priority.warm { background: var(--amber); }
-  .lead-priority.cool { background: var(--muted2); }
-
-  .lead-name {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--cream);
-    min-width: 120px;
-  }
-
-  .lead-action {
-    font-size: 10px;
-    color: var(--muted);
-    flex: 1;
-  }
-
-  .lead-method {
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 3px 8px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    color: var(--gold);
-  }
-
-  /* =========================================
-     SECTION 8: CALENDAR
-  ========================================= */
-
-  .cal-item {
-    display: flex;
-    gap: 16px;
-    padding: 11px 0;
-    border-bottom: 1px solid var(--border);
-    align-items: flex-start;
-  }
-
-  .cal-item:last-child { border-bottom: none; }
-
-  .cal-time {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 16px;
-    font-weight: 300;
-    color: var(--gold);
-    min-width: 60px;
-    line-height: 1.2;
-  }
-
-  .cal-details .cal-title {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--cream);
-    margin-bottom: 2px;
-  }
-
-  .cal-details .cal-sub {
-    font-size: 10px;
-    color: var(--muted);
-    letter-spacing: 0.5px;
-  }
-
-  .cal-tag {
-    font-size: 9px;
-    padding: 2px 7px;
-    border-radius: 10px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-left: auto;
-    white-space: nowrap;
-    align-self: center;
-  }
-
-  .cal-tag.client { background: rgba(74,154,110,0.15); color: var(--green); }
-  .cal-tag.personal { background: rgba(201,168,76,0.12); color: var(--gold); }
-  .cal-tag.school { background: rgba(100,140,200,0.12); color: #8ab0e8; }
-  .cal-tag.warning { background: rgba(192,90,90,0.12); color: var(--red); }
-
-  /* =========================================
-     SECTION 9: TO-DO MATRIX
-  ========================================= */
-
-  .todo-columns {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-
-  .todo-col h4 {
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--gold);
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 10px;
-  }
-
-  .todo-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    padding: 5px 0;
-    font-size: 11px;
-    color: var(--text-dim);
-    line-height: 1.4;
-  }
-
-  .todo-check {
-    width: 12px;
-    height: 12px;
-    border: 1px solid var(--border-light);
-    border-radius: 2px;
-    flex-shrink: 0;
-    margin-top: 1px;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .todo-check:hover { border-color: var(--gold); }
-  .todo-check.done { background: var(--gold); border-color: var(--gold); }
-
-  /* =========================================
-     SECTION 10: POWER 5
-  ========================================= */
-
-  .power5-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
-  }
-
-  .power5-item {
-    padding: 16px 12px;
-    background: var(--cream-dim);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .power5-item:hover { border-color: var(--gold); }
-  .power5-item.done { border-color: var(--green); background: rgba(74,154,110,0.08); }
-
-  .power5-icon {
-    font-size: 18px;
-    margin-bottom: 8px;
-  }
-
-  .power5-label {
-    font-size: 9px;
-    font-weight: 500;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--muted);
-    line-height: 1.4;
-  }
-
-  .power5-status {
-    margin-top: 8px;
-    font-size: 10px;
-    color: var(--muted);
-  }
-
-  .power5-status.done { color: var(--green); }
-
-  /* =========================================
-     SECTION 11: BRAND VISIBILITY
-  ========================================= */
-
-  .content-idea {
-    padding: 16px 20px;
-    background: var(--cream-dim);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    margin-bottom: 12px;
-  }
-
-  .content-idea .idea-type {
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 6px;
-  }
-
-  .content-idea .idea-text {
-    font-size: 13px;
-    color: var(--text);
-    line-height: 1.5;
-  }
-
-  .posting-tracker {
-    display: flex;
-    gap: 6px;
-    margin-top: 14px;
-  }
-
-  .post-day {
-    flex: 1;
-    height: 32px;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2px;
-    font-size: 8px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--muted);
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .post-day:hover { border-color: var(--gold); }
-  .post-day.done { background: var(--gold-dim); border-color: var(--gold); color: var(--gold); }
-
-  /* =========================================
-     SECTION 15: WELLNESS
-  ========================================= */
-
-  .wellness-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-  }
-
-  .wellness-item {
-    padding: 14px 12px;
-    background: var(--cream-dim);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    text-align: center;
-  }
-
-  .wellness-emoji { font-size: 20px; margin-bottom: 6px; }
-
-  .wellness-label {
-    font-size: 9px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 4px;
-  }
-
-  .wellness-value {
-    font-size: 11px;
-    color: var(--text);
-  }
-
-  /* =========================================
-     SECTION 17: VISION PANEL
-  ========================================= */
-
-  .vision-card {
-    background: linear-gradient(135deg, #0f0f0f, #161610);
-    border: 1px solid var(--gold);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .vision-card::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -20%;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
-    pointer-events: none;
-  }
-
-  .affirmation {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 28px;
-    font-weight: 300;
-    font-style: italic;
-    color: var(--gold-light);
-    line-height: 1.3;
-    margin: 16px 0 20px;
-  }
-
-  .vision-pillars {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 16px;
-  }
-
-  .vision-pill {
-    padding: 5px 14px;
-    border: 1px solid rgba(201,168,76,0.3);
-    border-radius: 20px;
-    font-size: 10px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--gold);
-    font-weight: 500;
-  }
-
-  /* =========================================
-     SECTION 18: AI STRATEGY
-  ========================================= */
-
-  .ai-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 12px;
-  }
-
-  .ai-item {
-    padding: 16px;
-    background: var(--cream-dim);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-  }
-
-  .ai-item .ai-label {
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-
-  .ai-item.focus .ai-label { color: var(--green); }
-  .ai-item.ignore .ai-label { color: var(--muted); }
-  .ai-item.money .ai-label { color: var(--gold); }
-  .ai-item.risk .ai-label { color: var(--red); }
-  .ai-item.delegate .ai-label { color: #8ab0e8; }
-  .ai-item.decide .ai-label { color: var(--amber); }
-
-  .ai-item ul {
-    list-style: none;
-  }
-
-  .ai-item ul li {
-    font-size: 11px;
-    color: var(--text-dim);
-    padding: 4px 0;
-    border-bottom: 1px solid var(--border);
-    line-height: 1.4;
-  }
-
-  .ai-item ul li:last-child { border-bottom: none; }
-
-  /* =========================================
-     SECTION 14: WEALTH / MONEY
-  ========================================= */
-
-  .money-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 16px;
-  }
-
-  .money-stat {
-    padding: 14px;
-    background: var(--cream-dim);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-  }
-
-  .money-stat .m-label {
-    font-size: 9px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 4px;
-  }
-
-  .money-stat .m-value {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 24px;
-    font-weight: 300;
-    color: var(--cream);
-  }
-
-  .money-stat .m-value.green { color: var(--green); }
-  .money-stat .m-value.gold { color: var(--gold-light); }
-
-  .money-alert {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    background: rgba(192,90,90,0.07);
-    border: 1px solid rgba(192,90,90,0.3);
-    border-radius: 2px;
-    font-size: 11px;
-    color: var(--red);
-  }
-
-  /* =========================================
-     MARKET NEWS
-  ========================================= */
-
-  .news-item {
-    padding: 11px 0;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .news-item:last-child { border-bottom: none; }
-
-  .news-region {
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 3px;
-  }
-
-  .news-headline {
-    font-size: 12px;
-    color: var(--cream);
-    line-height: 1.4;
-    margin-bottom: 3px;
-  }
-
-  .news-note {
-    font-size: 10px;
-    color: var(--muted);
-    line-height: 1.4;
-  }
-
-  /* VIP */
-  .vip-item {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .vip-item:last-child { border-bottom: none; }
-
-  .vip-icon { font-size: 16px; min-width: 24px; text-align: center; }
-
-  .vip-details .vip-name {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--cream);
-  }
-
-  .vip-details .vip-action {
-    font-size: 10px;
-    color: var(--muted);
-    margin-top: 1px;
-  }
-
-  .vip-badge {
-    margin-left: auto;
-    font-size: 9px;
-    padding: 2px 8px;
-    border: 1px solid var(--gold);
-    border-radius: 10px;
-    color: var(--gold);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-
-  /* FOOTER */
-  .footer {
-    border-top: 1px solid var(--border);
-    padding: 20px 48px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 10px;
-    color: var(--muted);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-
-  .footer .brand {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 14px;
-    color: var(--gold);
-    letter-spacing: 3px;
-    font-style: italic;
-    text-transform: none;
-  }
-
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: var(--black); }
-  ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 2px; }
-
-  /* RESPONSIVE */
-  @media (max-width: 1200px) {
-    .main { grid-template-columns: 1fr 1fr; padding: 24px; }
-    .revenue-grid { grid-template-columns: repeat(3, 1fr); }
-    .power5-grid { grid-template-columns: repeat(3, 1fr); }
-    .ai-grid { grid-template-columns: 1fr 1fr; }
-    .card.span-3 { grid-column: span 2; }
-  }
-
-  @media (max-width: 768px) {
-    .header { padding: 20px 24px; flex-direction: column; gap: 12px; align-items: flex-start; }
-    .main { grid-template-columns: 1fr; padding: 16px; }
-    .card.span-2, .card.span-3 { grid-column: span 1; }
-    .revenue-grid { grid-template-columns: repeat(3, 1fr); }
-    .summary-grid { grid-template-columns: 1fr; }
-    .money-stats { grid-template-columns: 1fr 1fr; }
-    .rate-grid { grid-template-columns: 1fr 1fr; }
-  }
-
-  /* INTERACTIVE */
-  .editable {
-    cursor: pointer;
-    border-bottom: 1px dashed var(--border-light);
-    transition: border-color 0.2s;
-  }
-  .editable:focus {
-    outline: none;
-    border-bottom-color: var(--gold);
-  }
-
-  .btn {
-    padding: 8px 18px;
-    background: transparent;
-    border: 1px solid var(--gold);
-    color: var(--gold);
-    font-family: 'Montserrat', sans-serif;
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.2s;
-    border-radius: 1px;
-  }
-
-  .btn:hover {
-    background: var(--gold);
-    color: var(--black);
-  }
-
-  .section-divider {
-    grid-column: 1 / -1;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--border-light), transparent);
-    margin: 8px 0;
-  }
+:root{
+  --ink:#070707;--s1:#0f0f0f;--s2:#151515;--s3:#1c1c1c;--s4:#242424;
+  --line:#222;--line2:#2d2d2d;
+  --gold:#c9a85c;--gold2:#dfbe74;--gdim:rgba(201,168,92,.09);--gglow:rgba(201,168,92,.22);
+  --cream:#ede8de;--cdim:rgba(237,232,222,.055);
+  --txt:#bfbab2;--txt2:#6e6a63;--txt3:#3c3a36;
+  --grn:#4a9870;--grndim:rgba(74,152,112,.12);
+  --red:#b55252;--reddim:rgba(181,82,82,.10);
+  --amb:#c28848;--blu:#6a9dce;--bludim:rgba(106,157,206,.11);
+  --r:4px;--r2:8px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--txt);font-size:13px;line-height:1.65;min-height:100vh;-webkit-font-smoothing:antialiased}
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.025'/%3E%3C/svg%3E");opacity:.5}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes breathe{0%,100%{box-shadow:0 0 24px var(--gglow)}50%{box-shadow:0 0 48px rgba(201,168,92,.32)}}
+
+/* HEADER */
+.hdr{position:sticky;top:0;z-index:300;background:rgba(7,7,7,.96);backdrop-filter:blur(24px);border-bottom:1px solid var(--line);padding:20px 44px 18px;display:flex;justify-content:space-between;align-items:flex-end}
+.hdr::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 0%,var(--gold) 25%,var(--gold2) 50%,var(--gold) 75%,transparent 100%);opacity:.45}
+.hdr-l .dtag{font-size:9px;font-weight:500;letter-spacing:3.5px;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.hdr-l h1{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:300;color:var(--cream);letter-spacing:-.4px;line-height:1}
+.hdr-l h1 em{font-style:italic;color:var(--gold2)}
+.hdr-r{text-align:right}
+.clk{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:300;color:var(--cream);letter-spacing:2px;line-height:1}
+.clk .ap{font-family:'DM Sans',sans-serif;font-size:14px;letter-spacing:3px;color:var(--gold);margin-left:5px;font-weight:300}
+.tagline{font-size:9px;font-weight:400;letter-spacing:3px;text-transform:uppercase;color:var(--txt2);margin-top:4px}
+
+/* STATUS BAR */
+.sbar{position:relative;z-index:1;background:var(--s1);border-bottom:1px solid var(--line);padding:10px 44px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:20px;border:1px solid var(--line2);color:var(--txt2);transition:all .3s}
+.chip .dot{width:5px;height:5px;border-radius:50%;background:var(--txt3);animation:blink 2.5s infinite}
+.chip.live{color:var(--grn);border-color:rgba(74,152,112,.3)}.chip.live .dot{background:var(--grn)}
+.chip.loading{color:var(--amb);border-color:rgba(194,136,72,.3)}.chip.loading .dot{background:var(--amb)}
+.chip.err{color:var(--red);border-color:rgba(181,82,82,.3)}.chip.err .dot{background:var(--red);animation:none}
+.upd{font-size:10px;color:var(--txt3);margin-left:auto}
+.btn-ref{display:flex;align-items:center;gap:7px;padding:8px 18px;background:transparent;border:1px solid var(--gold);color:var(--gold);border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .22s;white-space:nowrap}
+.btn-ref:hover{background:var(--gold);color:var(--ink)}
+.btn-ref:disabled{opacity:.38;cursor:not-allowed}
+.btn-ref .si{display:none}
+.btn-ref.loading .si{display:inline;animation:spin .8s linear infinite}
+.btn-ref.loading .ii{display:none}
+
+/* GRID */
+.grid{position:relative;z-index:1;max-width:1700px;margin:0 auto;padding:32px 44px 64px;display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+.c3{grid-column:span 3}.c4{grid-column:span 4}.c5{grid-column:span 5}.c6{grid-column:span 6}
+.c7{grid-column:span 7}.c8{grid-column:span 8}.c9{grid-column:span 9}.c12{grid-column:span 12}
+.divider{grid-column:1/-1;height:1px;background:linear-gradient(90deg,transparent,var(--line2),transparent);margin:4px 0}
+
+/* CARDS */
+.card{background:var(--s2);border:1px solid var(--line);border-radius:var(--r2);padding:24px 24px 20px;position:relative;overflow:hidden;animation:fadeUp .55s ease both;transition:border-color .25s}
+.card:hover{border-color:var(--line2)}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent,var(--gold),transparent);transform:scaleX(0);transform-origin:left;transition:transform .4s ease}
+.card:hover::before{transform:scaleX(1)}
+.card.gold{background:linear-gradient(140deg,#0e0d09 0%,#141108 100%);border-color:rgba(201,168,92,.38);animation:breathe 5s ease-in-out infinite,fadeUp .55s ease both}
+.card.gold::before{transform:scaleX(1);opacity:.65}
+
+.clabel{font-size:8.5px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:9px}
+.clabel::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
+.slabel{font-size:8.5px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--txt3);margin:16px 0 8px}
+
+/* SKELETON */
+.sk{display:block;border-radius:3px;height:13px;background:linear-gradient(90deg,var(--line) 25%,var(--line2) 50%,var(--line) 75%);background-size:200% 100%;animation:shimmer 1.6s infinite}
+.sk+.sk{margin-top:6px}
+.sk.h20{height:20px}.sk.h32{height:32px}.sk.h40{height:40px}
+.sk.w50{width:50%}.sk.w65{width:65%}.sk.w80{width:80%}.sk.w90{width:90%}
+
+/* SUMMARY */
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:16px}
+.sitem{padding:13px 15px;background:var(--cdim);border:1px solid var(--line);border-radius:var(--r);transition:border-color .2s}
+.sitem:hover{border-color:var(--line2)}
+.sitem.hl{border-color:rgba(201,168,92,.42);background:var(--gdim)}
+.sitem .slb{font-size:8px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:5px}
+.sitem .sv{font-family:'Cormorant Garamond',serif;font-size:14.5px;color:var(--cream);line-height:1.45}
+.plist{list-style:none}
+.plist li{display:flex;align-items:flex-start;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);font-size:12px;color:var(--txt)}
+.plist li:last-child{border-bottom:none}
+.pnum{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:300;color:var(--gold);line-height:1;min-width:20px}
+
+/* KPI */
+.kgrid{display:grid;gap:10px}
+.k2{grid-template-columns:repeat(2,1fr)}.k3{grid-template-columns:repeat(3,1fr)}.k4{grid-template-columns:repeat(4,1fr)}
+.kstat{text-align:center;padding:16px 8px 12px;background:var(--cdim);border:1px solid var(--line);border-radius:var(--r);transition:all .2s;cursor:default}
+.kstat:hover{border-color:var(--gold);background:var(--gdim)}
+.kn{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:var(--cream);line-height:1;margin-bottom:4px}
+.kn.g{color:var(--gold2)}.kn.grn{color:var(--grn)}.kn.red{color:var(--red)}.kn.blu{color:var(--blu)}
+.kl{font-size:8.5px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--txt2)}
+
+/* PROGRESS */
+.prog{margin-top:13px}
+.progrow{display:flex;justify-content:space-between;font-size:10px;color:var(--txt2);margin-bottom:6px}
+.progtrack{height:2px;background:var(--line);border-radius:2px;overflow:hidden}
+.progfill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:2px;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+
+/* ACTION BLOCK */
+.ablock{padding:15px 18px;margin-top:14px;background:linear-gradient(135deg,rgba(201,168,92,.1),rgba(201,168,92,.03));border:1px solid rgba(201,168,92,.42);border-radius:var(--r)}
+.ablock .alb{font-size:8px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:6px;font-weight:600}
+.ablock .atx{font-family:'Cormorant Garamond',serif;font-size:16.5px;color:var(--cream);line-height:1.45}
+
+/* RATES */
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.ritem{padding:13px 14px;background:var(--cdim);border:1px solid var(--line);border-radius:var(--r)}
+.rtype{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--txt2);margin-bottom:4px}
+.rnum{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:300;color:var(--cream);line-height:1}
+.rnum .pct{font-size:14px;color:var(--txt2)}
+.rtrend{font-size:10px;margin-top:3px;color:var(--amb)}
+.rtrend.up{color:var(--red)}.rtrend.dn{color:var(--grn)}
+.tp{padding:9px 13px;border-left:2px solid var(--gold);margin-top:9px;font-size:11.5px;color:var(--txt2);font-style:italic;line-height:1.55}
+
+/* NEWS */
+.ncol{display:flex;flex-direction:column}
+.ni{padding:11px 0;border-bottom:1px solid var(--line)}
+.ni:last-child{border-bottom:none}
+.nreg{font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:2px}
+.nh{font-size:12px;color:var(--cream);line-height:1.4;margin-bottom:2px}
+.nd{font-size:10.5px;color:var(--txt2);line-height:1.45}
+.nl{font-size:10px;color:var(--gold);text-decoration:none;display:inline-block;margin-top:2px;transition:color .2s}
+.nl:hover{color:var(--gold2)}
+.nsrc{font-size:9px;color:var(--txt3);margin-top:1px}
+.n2col{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+
+/* LEADS */
+.litem{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid var(--line)}
+.litem:last-child{border-bottom:none}
+.ldot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.ldot.hot{background:var(--red);box-shadow:0 0 7px var(--red)}
+.ldot.warm{background:var(--amb)}.ldot.cool{background:var(--txt3)}
+.lname{font-size:13px;font-weight:500;color:var(--cream);min-width:125px}
+.lnote{font-size:10.5px;color:var(--txt2);flex:1}
+.lbadge{font-size:8px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:3px 9px;border:1px solid var(--line2);border-radius:12px;color:var(--gold);white-space:nowrap}
+
+/* PIPELINE TABLE */
+.ptable{width:100%;border-collapse:collapse;margin-top:4px}
+.ptable th{font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);padding:7px 8px;text-align:left;border-bottom:1px solid var(--line)}
+.ptable td{font-size:11.5px;color:var(--txt);padding:9px 8px;border-bottom:1px solid var(--line)}
+.ptable tr:last-child td{border-bottom:none}
+.ptable tr:hover td{color:var(--cream);background:var(--cdim)}
+.stage{font-size:8px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:10px;white-space:nowrap}
+.stage.hot{background:var(--reddim);color:var(--red)}
+.stage.warm{background:rgba(194,136,72,.12);color:var(--amb)}
+.stage.active{background:var(--grndim);color:var(--grn)}
+.stage.pending{background:var(--bludim);color:var(--blu)}
+.stage.cold{background:var(--cdim);color:var(--txt2)}
+.stage.closed{background:var(--gdim);color:var(--gold)}
+.overdue{color:var(--red)!important;font-weight:500}
+
+/* TEAM KPI */
+.tgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.tkpi{text-align:center;padding:14px 8px 10px;background:var(--cdim);border:1px solid var(--line);border-radius:var(--r)}
+.tn{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--cream);line-height:1;margin-bottom:3px}
+.tn.red{color:var(--red)}.tn.grn{color:var(--grn)}.tn.g{color:var(--gold2)}
+.tkl{font-size:8px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--txt2)}
+
+/* CALENDAR */
+.cali{display:flex;align-items:flex-start;gap:11px;padding:9px 0;border-bottom:1px solid var(--line)}
+.cali:last-child{border-bottom:none}
+.calt{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:300;color:var(--gold);min-width:65px;line-height:1.2}
+.caln{font-size:12px;font-weight:500;color:var(--cream);margin-bottom:1px}
+.cals{font-size:10px;color:var(--txt2)}
+.catag{font-size:8px;padding:2px 8px;border-radius:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-left:auto;white-space:nowrap;align-self:center}
+.catag.client{background:var(--grndim);color:var(--grn)}
+.catag.pers{background:var(--gdim);color:var(--gold)}
+.catag.school{background:var(--bludim);color:var(--blu)}
+.catag.warn{background:var(--reddim);color:var(--red)}
+
+/* TODO */
+.tcols{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.tgrp h4{font-size:8.5px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold);padding-bottom:7px;border-bottom:1px solid var(--line);margin-bottom:9px}
+.titem{display:flex;align-items:flex-start;gap:8px;padding:4.5px 0;font-size:11.5px;color:var(--txt2);line-height:1.45;cursor:pointer;transition:color .18s}
+.titem:hover{color:var(--txt)}.titem.done{color:var(--txt3);text-decoration:line-through}
+.chk{width:13px;height:13px;border:1px solid var(--line2);border-radius:2px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .18s;font-size:9px;color:transparent}
+.titem:hover .chk{border-color:var(--gold)}.titem.done .chk{background:var(--gold);border-color:var(--gold);color:var(--ink)}
+
+/* POWER 5 */
+.p5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.p5i{padding:16px 11px 12px;background:var(--cdim);border:1px solid var(--line);border-radius:var(--r);text-align:center;cursor:pointer;transition:all .22s}
+.p5i:hover{border-color:var(--gold);background:var(--gdim)}
+.p5i.done{border-color:var(--grn);background:var(--grndim)}
+.p5ico{font-size:19px;margin-bottom:8px}
+.p5lbl{font-size:9px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--txt2);line-height:1.45}
+.p5st{margin-top:8px;font-size:10px;color:var(--txt3)}.p5i.done .p5st{color:var(--grn)}
+
+/* BRAND */
+.ccard{padding:13px 16px;background:var(--cdim);border:1px solid var(--line);border-radius:var(--r);margin-bottom:10px}
+.ccard .ctype{font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:5px}
+.ccard .ctxt{font-size:12.5px;color:var(--txt);line-height:1.5}
+.postrow{display:flex;gap:5px;margin-top:12px}
+.pday{flex:1;height:32px;border:1px solid var(--line);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);cursor:pointer;transition:all .18s}
+.pday:hover{border-color:var(--gold);color:var(--gold)}.pday.done{background:var(--gdim);border-color:var(--gold);color:var(--gold)}
+
+/* VIP */
+.vitem{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}
+.vitem:last-child{border-bottom:none}
+.vico{font-size:16px;min-width:24px;text-align:center}
+.vnm{font-size:12px;font-weight:500;color:var(--cream)}.vact{font-size:10px;color:var(--txt2);margin-top:1px}
+.vbadge{margin-left:auto;font-size:8px;padding:2px 8px;border:1px solid rgba(201,168,92,.35);border-radius:10px;color:var(--gold);letter-spacing:1px;text-transform:uppercase;white-space:nowrap}
+
+/* AI STRATEGY */
+.aigrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.aiitem{padding:13px 15px;background:var(--cdim);border:1px solid var(--line);border-radius:var(--r)}
+.aiitem .ailb{font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.aiitem.focus .ailb{color:var(--grn)}.aiitem.money .ailb{color:var(--gold)}
+.aiitem.ignore .ailb{color:var(--txt2)}.aiitem.risk .ailb{color:var(--red)}
+.aiitem.delg .ailb{color:var(--blu)}.aiitem.dec .ailb{color:var(--amb)}
+.aiitem ul{list-style:none}
+.aiitem ul li{font-size:11.5px;color:var(--txt2);padding:3.5px 0;border-bottom:1px solid var(--line);line-height:1.45}
+.aiitem ul li:last-child{border-bottom:none}
+
+/* WELLNESS */
+.wgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.wi{padding:13px 9px;background:var(--cdim);border:1px solid var(--line);border-radius:var(--r);text-align:center}
+.wico{font-size:19px;margin-bottom:6px}.wlb{font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--txt3);margin-bottom:3px}.wv{font-size:11.5px;color:var(--txt)}
+
+/* COUNTDOWN */
+.cditem{display:flex;align-items:center;gap:13px;padding:9px 0;border-bottom:1px solid var(--line)}
+.cditem:last-child{border-bottom:none}
+.cddays{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;min-width:50px;text-align:center;line-height:1}
+.cddays.now{font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--red)}
+.cddays.soon{color:var(--amb)}.cddays.ahead{color:var(--gold)}
+.cdtitle{font-size:12px;font-weight:500;color:var(--cream);margin-bottom:1px}.cdsub{font-size:10px;color:var(--txt2)}
+
+/* MONEY */
+.malert{display:flex;align-items:flex-start;gap:9px;padding:11px 13px;background:var(--reddim);border:1px solid rgba(181,82,82,.25);border-radius:var(--r);font-size:11px;color:var(--red);line-height:1.5;margin-top:12px}
+
+/* FUB PLACEHOLDER */
+.fub{padding:18px;border:1px dashed rgba(201,168,92,.25);border-radius:var(--r);text-align:center;background:var(--gdim);margin-top:12px}
+.fub .fi{font-size:22px;margin-bottom:7px}.fub .ft{font-size:11px;font-weight:600;color:var(--gold);letter-spacing:1px;margin-bottom:4px}
+.fub .fs{font-size:10.5px;color:var(--txt2);line-height:1.5}
+.fub .fb{display:inline-block;margin-top:8px;font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border:1px solid rgba(201,168,92,.4);border-radius:12px;color:var(--gold)}
+
+/* VISION */
+.vcard{background:linear-gradient(140deg,#0d0b07 0%,#131009 60%,#0d0b07 100%);border:1px solid rgba(201,168,92,.42);position:relative;overflow:hidden}
+.vcard::after{content:'';position:absolute;top:-40%;right:-10%;width:400px;height:400px;background:radial-gradient(circle,rgba(201,168,92,.07) 0%,transparent 65%);pointer-events:none}
+.affirm{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;font-style:italic;color:var(--gold2);line-height:1.35;margin:12px 0 16px}
+.vbody{font-size:12px;color:var(--txt2);line-height:1.7}
+.vpills{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px}
+.vpill{padding:5px 13px;border:1px solid rgba(201,168,92,.25);border-radius:20px;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);font-weight:500}
+
+/* ERROR */
+.errnote{font-size:11px;color:var(--amb);padding:10px 13px;border:1px solid rgba(194,136,72,.25);border-radius:var(--r);margin-top:7px;line-height:1.5}
+
+/* EDITABLE */
+[contenteditable]{outline:none;cursor:text}
+[contenteditable]:focus{border-radius:2px;box-shadow:0 0 0 1px rgba(201,168,92,.4)}
+
+/* FOOTER */
+.ftr{position:relative;z-index:1;border-top:1px solid var(--line);padding:18px 44px;display:flex;justify-content:space-between;align-items:center;font-size:9.5px;color:var(--txt3);letter-spacing:2px;text-transform:uppercase}
+.ftr .brand{font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--gold);letter-spacing:3px;font-style:italic;text-transform:none}
+
+/* RESPONSIVE */
+@media(max-width:1280px){
+  .grid{grid-template-columns:repeat(6,1fr);padding:22px 28px 48px;gap:13px}
+  .c3,.c4{grid-column:span 3}.c5,.c6,.c7,.c8,.c9,.c12{grid-column:span 6}
+  .p5{grid-template-columns:repeat(3,1fr)}.n2col{grid-template-columns:1fr}.tgrid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:768px){
+  .hdr{padding:16px 18px;flex-direction:column;align-items:flex-start;gap:11px}
+  .sbar{padding:9px 18px;flex-direction:column;align-items:flex-start;gap:9px}.upd{margin-left:0}
+  .grid{grid-template-columns:1fr;padding:14px 14px 40px;gap:12px}
+  .c3,.c4,.c5,.c6,.c7,.c8,.c9,.c12{grid-column:span 1}
+  .sgrid,.tcols,.aigrid,.n2col{grid-template-columns:1fr}
+  .kgrid.k3,.kgrid.k4{grid-template-columns:1fr 1fr}
+  .p5{grid-template-columns:repeat(2,1fr)}.wgrid{grid-template-columns:1fr 1fr}.tgrid{grid-template-columns:repeat(2,1fr)}
+  .ftr{flex-direction:column;gap:7px;text-align:center;padding:14px 18px}
+}
+
+/* KPI DELTA TAGS */
+.kpi-delta {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-top: 4px;
+  min-height: 14px;
+  transition: opacity .3s;
+}
+.kpi-delta.up   { color: var(--grn); }
+.kpi-delta.dn   { color: var(--red); }
+.kpi-delta.warn { color: var(--amb); }
+
+/* KPI COUNT-UP FLASH */
+@keyframes kpiPop {
+  0%   { transform: scale(1);    opacity: .5; }
+  50%  { transform: scale(1.12); opacity: 1;  }
+  100% { transform: scale(1);    opacity: 1;  }
+}
+.kpi-val.popping { animation: kpiPop .45s cubic-bezier(.34,1.56,.64,1) both; }
+
+/* KPI SKELETON PULSE (while loading) */
+.kpi-val.loading {
+  color: transparent !important;
+  background: linear-gradient(90deg,var(--line) 25%,var(--line2) 50%,var(--line) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 3px;
+  display: inline-block;
+  min-width: 40px;
+}
+
+/* DEMO SOURCE BADGE */
+.kpi-source {
+  display: block;
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--txt3);
+  margin-top: 3px;
+  font-weight: 500;
+}
+.kpi-source.live  { color: var(--grn); }
+.kpi-source.demo  { color: var(--amb); }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<header class="header">
-  <div class="header-left">
-    <div class="date-label" id="dateLabel"></div>
-    <h1>Good Morning, <em>Bri.</em></h1>
-  </div>
-  <div class="header-right">
-    <div class="time" id="clock"></div>
-    <div class="greeting">Today you lead with intention</div>
-  </div>
+<header class="hdr">
+  <div class="hdr-l">
+    <div class="dtag" id="dtag">Loading…</div>
+    <h1>Good Morning, <em>Bri.</em></h1>
+  </div>
+  <div class="hdr-r">
+    <div class="clk"><span id="clkT">—:——</span><span class="ap" id="clkAP">AM</span></div>
+    <div class="tagline">Wealth · Vision · Execution · Legacy</div>
+  </div>
 </header>
-<div class="gold-rule"></div>
 
-<!-- MAIN DASHBOARD -->
-<div class="main">
+<div class="sbar">
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex:1">
+    <div class="chip" id="chipAI"><span class="dot"></span>AI Briefing</div>
+    <div class="chip" id="chipRates"><span class="dot"></span>FRED · Rates</div>
+    <div class="chip" id="chipNews"><span class="dot"></span>NewsAPI · Live</div>
+    <div class="chip" style="opacity:.45"><span class="dot"></span>Follow Up Boss · Soon</div>
+  </div>
+  <span class="upd" id="updTxt">Not yet loaded</span>
+  <button class="btn-ref" id="btnRef" onclick="loadAll()">
+    <span class="ii">↻</span><span class="si">↻</span> Refresh Briefing
+  </button>
+</div>
 
-  <!-- ============================================
-       ROW 1: EXECUTIVE SUMMARY + REVENUE
-  ============================================ -->
+<div class="grid">
 
-  <!-- 1. MORNING EXECUTIVE SUMMARY -->
-  <div class="card span-2">
-    <div class="card-label">01 — Morning Executive Summary</div>
-    <div class="summary-grid">
-      <div class="summary-item highlight">
-        <div class="label">What Matters Most Today</div>
-        <div class="value" contenteditable="true">Convert your two hottest buyers — follow up before 9 AM. One conversation could mean $12K.</div>
-      </div>
-      <div class="summary-item">
-        <div class="label">Biggest Opportunity</div>
-        <div class="value" contenteditable="true">Rate buydown conversation with the Johnsons — they're on the fence. You have the talking points.</div>
-      </div>
-      <div class="summary-item">
-        <div class="label">Biggest Risk / Distraction</div>
-        <div class="value" contenteditable="true">Avoid rabbit holes. Social media is for output today, not input. Cap scrolling at 10 min.</div>
-      </div>
-      <div class="summary-item">
-        <div class="label">What You Need to Move Forward</div>
-        <div class="value" contenteditable="true">Send the Mansfield listing presentation. Book the CMA appointment. Record one reel.</div>
-      </div>
-    </div>
-    <div style="margin-top: 18px;">
-      <div class="section-label">Top 3 Priorities</div>
-      <ul class="priority-list">
-        <li><span class="priority-num">1</span><span contenteditable="true">Call Marcus & Trina — ready to write an offer on the Midlothian property</span></li>
-        <li><span class="priority-num">2</span><span contenteditable="true">Send listing proposal to the Garcias in Cedar Hill by noon</span></li>
-        <li><span class="priority-num">3</span><span contenteditable="true">Post market update reel — DFW inventory insight with your face on it</span></li>
-      </ul>
-    </div>
-  </div>
+  <!-- ROW 1: SUMMARY + REVENUE -->
+  <div class="card gold c8" style="animation-delay:.04s">
+    <div class="clabel">01 — Morning Executive Summary</div>
+    <div id="summaryBlock">
+      <div class="sgrid">
+        <div class="sitem hl"><div class="slb">What Matters Most</div><div class="sv"><span class="sk w90 h20"></span></div></div>
+        <div class="sitem"><div class="slb">Biggest Opportunity</div><div class="sv"><span class="sk w80"></span><span class="sk w60"></span></div></div>
+        <div class="sitem"><div class="slb">Biggest Risk</div><div class="sv"><span class="sk w80"></span></div></div>
+        <div class="sitem"><div class="slb">Move Forward By</div><div class="sv"><span class="sk w90"></span></div></div>
+      </div>
+      <div class="slabel">Top 3 Priorities</div>
+      <ul class="plist">
+        <li><span class="pnum">1</span><span class="sk w90"></span></li>
+        <li><span class="pnum">2</span><span class="sk w80"></span></li>
+        <li><span class="pnum">3</span><span class="sk w65"></span></li>
+      </ul>
+    </div>
+  </div>
 
-  <!-- 6. REVENUE COMMAND CENTER -->
-  <div class="card">
-    <div class="card-label">06 — Revenue Command</div>
-    <div class="revenue-grid" style="grid-template-columns: repeat(3,1fr);">
-      <div class="revenue-stat">
-        <div class="num gold" contenteditable="true">4</div>
-        <div class="stat-label">Active Buyers</div>
-      </div>
-      <div class="revenue-stat">
-        <div class="num" contenteditable="true">2</div>
-        <div class="stat-label">Active Sellers</div>
-      </div>
-      <div class="revenue-stat">
-        <div class="num" contenteditable="true">7</div>
-        <div class="stat-label">Warm Leads</div>
-      </div>
-      <div class="revenue-stat">
-        <div class="num red" contenteditable="true">3</div>
-        <div class="stat-label">Hot — Follow Up</div>
-      </div>
-      <div class="revenue-stat">
-        <div class="num red" contenteditable="true">2</div>
-        <div class="stat-label">Overdue</div>
-      </div>
-      <div class="revenue-stat">
-        <div class="num green" contenteditable="true">1</div>
-        <div class="stat-label">Closing This Mo.</div>
-      </div>
-    </div>
-    <div class="progress-wrap">
-      <div class="progress-label"><span>Monthly Revenue Goal</span><span>$24K / $40K</span></div>
-      <div class="progress-bar"><div class="progress-fill" style="width: 60%;"></div></div>
-    </div>
-    <div class="revenue-action">
-      <div class="action-label">⚡ Revenue Action — Do This First</div>
-      <div class="action-text" contenteditable="true">Text Marcus: "Good morning! Are you available today to tour the Midlothian property? I have a window at 2 PM."</div>
-    </div>
-  </div>
+  <div class="card c4" style="animation-delay:.08s">
+    <div class="clabel">06 — Revenue Command</div>
+    <div class="kgrid k3">
+      <div class="kstat" id="kpiWrap-activeBuyers">
+        <div class="kn g kpi-val" id="kpi-activeBuyers" data-demo="4">—</div>
+        <div class="kl">Active Buyers</div>
+        <div class="kpi-delta" id="kpid-activeBuyers"></div>
+      </div>
+      <div class="kstat" id="kpiWrap-activeSellers">
+        <div class="kn kpi-val" id="kpi-activeSellers" data-demo="2">—</div>
+        <div class="kl">Active Sellers</div>
+        <div class="kpi-delta" id="kpid-activeSellers"></div>
+      </div>
+      <div class="kstat" id="kpiWrap-warmLeads">
+        <div class="kn kpi-val" id="kpi-warmLeads" data-demo="9">—</div>
+        <div class="kl">Warm Leads</div>
+        <div class="kpi-delta" id="kpid-warmLeads"></div>
+      </div>
+      <div class="kstat" id="kpiWrap-hotFollowUps">
+        <div class="kn red kpi-val" id="kpi-hotFollowUps" data-demo="3">—</div>
+        <div class="kl">Hot Follow-Ups</div>
+        <div class="kpi-delta" id="kpid-hotFollowUps"></div>
+      </div>
+      <div class="kstat" id="kpiWrap-overdue">
+        <div class="kn red kpi-val" id="kpi-overdue" data-demo="2">—</div>
+        <div class="kl">Overdue</div>
+        <div class="kpi-delta" id="kpid-overdue"></div>
+      </div>
+      <div class="kstat" id="kpiWrap-closingThisMo">
+        <div class="kn grn kpi-val" id="kpi-closingThisMo" data-demo="1">—</div>
+        <div class="kl">Closing This Mo.</div>
+        <div class="kpi-delta" id="kpid-closingThisMo"></div>
+      </div>
+    </div>
+    <div class="prog">
+      <div class="progrow">
+        <span>Monthly GCI Goal</span>
+        <span id="revProgLabel">Loading…</span>
+      </div>
+      <div class="progtrack"><div class="progfill" id="revProgFill" style="width:0%"></div></div>
+    </div>
+    <div class="ablock">
+      <div class="alb">⚡ First Revenue Action — Right Now</div>
+      <div class="atx" id="revAction" contenteditable="true"><span class="sk w90"></span></div>
+    </div>
+  </div>
 
-  <div class="section-divider"></div>
+  <div class="divider"></div>
 
-  <!-- ============================================
-       ROW 2: RATES + LEADS + CALENDAR
-  ============================================ -->
+  <!-- ROW 2: RATES + LEADS + CALENDAR -->
+  <div class="card c4" style="animation-delay:.12s">
+    <div class="clabel">02 — Rate &amp; Mortgage Snapshot</div>
+    <div class="rgrid">
+      <div class="ritem"><div class="rtype">30-Year Fixed</div><div class="rnum" id="r30"><span class="sk w65 h32"></span></div><div class="rtrend" id="t30">Loading…</div></div>
+      <div class="ritem"><div class="rtype">15-Year Fixed</div><div class="rnum" id="r15"><span class="sk w65 h32"></span></div><div class="rtrend" id="t15">Loading…</div></div>
+      <div class="ritem"><div class="rtype">FHA 30-Year</div><div class="rnum" id="rFHA"><span class="sk w65 h32"></span></div><div class="rtrend">~0.3% below conventional</div></div>
+      <div class="ritem"><div class="rtype">VA / USDA</div><div class="rnum" id="rVA"><span class="sk w65 h32"></span></div><div class="rtrend dn">Best for eligible buyers</div></div>
+    </div>
+    <div class="slabel">Client Talking Points</div>
+    <div class="tp" id="tpRate">"Buyers who lock now protect against upward movement. Builders are offering 2-1 buydowns that bring effective rates into the 4s."</div>
+    <div class="tp">"For sellers — serious buyers have adjusted. Inventory and right-pricing is the story right now."</div>
+  </div>
 
-  <!-- 2. INTEREST RATES -->
-  <div class="card">
-    <div class="card-label">02 — Rate & Mortgage Snapshot</div>
-    <div class="rate-grid">
-      <div class="rate-item">
-        <div class="rate-type">30-Year Fixed</div>
-        <div class="rate-num">6.82<span style="font-size:16px; color: var(--muted)">%</span></div>
-        <div class="rate-trend">▲ +0.04 this week</div>
-      </div>
-      <div class="rate-item">
-        <div class="rate-type">15-Year Fixed</div>
-        <div class="rate-num">6.14<span style="font-size:16px; color: var(--muted)">%</span></div>
-        <div class="rate-trend down">▼ Slight dip</div>
-      </div>
-      <div class="rate-item">
-        <div class="rate-type">FHA 30-Year</div>
-        <div class="rate-num">6.54<span style="font-size:16px; color: var(--muted)">%</span></div>
-        <div class="rate-trend">→ Holding steady</div>
-      </div>
-      <div class="rate-item">
-        <div class="rate-type">VA / USDA</div>
-        <div class="rate-num">6.29<span style="font-size:16px; color: var(--muted)">%</span></div>
-        <div class="rate-trend down">▼ Best option now</div>
-      </div>
-    </div>
-    <div class="section-label">Client Talking Points</div>
-    <div class="talking-point">"Rates have been holding in the mid-6s — buyers who lock now are protecting against any upward movement. Builders are offering 2-1 buydowns that get you into the 4s effectively."</div>
-    <div class="talking-point">"For sellers: serious buyers are still in the market. They've adjusted to these rates. Inventory is the story right now."</div>
-  </div>
+  <div class="card c4" style="animation-delay:.16s">
+    <div class="clabel">07 — Lead Follow-Up Priorities</div>
+    <div class="litem"><div class="ldot hot"></div><div class="lname" contenteditable="true">Lead Name</div><div class="lnote" contenteditable="true">Ready to write — no touch in 2 weeks</div><div class="lbadge">Call</div></div>
+    <div class="litem"><div class="ldot hot"></div><div class="lname" contenteditable="true">Lead Name</div><div class="lnote" contenteditable="true">Saw 3 homes, going cold — video now</div><div class="lbadge">Video</div></div>
+    <div class="litem"><div class="ldot hot"></div><div class="lname" contenteditable="true">Lead Name</div><div class="lnote" contenteditable="true">Listing proposal deadline today</div><div class="lbadge">Email</div></div>
+    <div class="litem"><div class="ldot warm"></div><div class="lname" contenteditable="true">Lead Name</div><div class="lnote" contenteditable="true">Pre-approval done — send listings</div><div class="lbadge">Text</div></div>
+    <div class="litem"><div class="ldot warm"></div><div class="lname" contenteditable="true">Lead Name</div><div class="lnote" contenteditable="true">6-month nurture touch</div><div class="lbadge">Text</div></div>
+    <div class="litem"><div class="ldot cool"></div><div class="lname" contenteditable="true">New Referral</div><div class="lnote" contenteditable="true">Introduce yourself today</div><div class="lbadge">Call</div></div>
+    <div class="slabel">AI Suggested Follow-Up Message</div>
+    <div class="tp" id="leadMsg" style="font-style:normal;color:var(--txt)"><span class="sk w90"></span><span class="sk w80"></span></div>
+  </div>
 
-  <!-- 7. LEAD FOLLOW-UP -->
-  <div class="card">
-    <div class="card-label">07 — Lead Follow-Up Priorities</div>
-    <div class="lead-item">
-      <div class="lead-priority hot"></div>
-      <div class="lead-name">Marcus & Trina J.</div>
-      <div class="lead-action">Ready to write offer — 2 weeks no follow-up</div>
-      <div class="lead-method">Call</div>
-    </div>
-    <div class="lead-item">
-      <div class="lead-priority hot"></div>
-      <div class="lead-name">Destiny W.</div>
-      <div class="lead-action">Saw 3 homes, going cold — send video message</div>
-      <div class="lead-method">Video</div>
-    </div>
-    <div class="lead-item">
-      <div class="lead-priority hot"></div>
-      <div class="lead-name">Garcia Family</div>
-      <div class="lead-action">Awaiting listing proposal — deadline today</div>
-      <div class="lead-method">Email</div>
-    </div>
-    <div class="lead-item">
-      <div class="lead-priority warm"></div>
-      <div class="lead-name">Andre B.</div>
-      <div class="lead-action">Pre-approval complete — send curated listings</div>
-      <div class="lead-method">Text</div>
-    </div>
-    <div class="lead-item">
-      <div class="lead-priority warm"></div>
-      <div class="lead-name">Keisha M.</div>
-      <div class="lead-action">6-month check-in — nurture, not sell</div>
-      <div class="lead-method">Text</div>
-    </div>
-    <div class="lead-item">
-      <div class="lead-priority cool"></div>
-      <div class="lead-name">Johnson Referral</div>
-      <div class="lead-action">New — introduce yourself today</div>
-      <div class="lead-method">Call</div>
-    </div>
-    <div style="margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border);">
-      <div class="section-label">Suggested Message — Destiny</div>
-      <div class="talking-point">"Hey Destiny! I've been thinking about you. I know the search has felt heavy — that's normal. I found something that checks your top 3 boxes and I want to walk you through it. Can I send you a quick video?"</div>
-    </div>
-  </div>
+  <div class="card c4" style="animation-delay:.20s">
+    <div class="clabel">08 — Today's Schedule</div>
+    <div class="cali"><div class="calt">6:00 AM</div><div><div class="caln">Morning Briefing + Intention</div><div class="cals">Non-negotiable. You're here. Good.</div></div><div class="catag pers">Self</div></div>
+    <div class="cali"><div class="calt">8:00 AM</div><div><div class="caln" contenteditable="true">Power Hour — Lead Follow-Ups</div><div class="cals" contenteditable="true">Call hot leads before day takes over</div></div><div class="catag client">Revenue</div></div>
+    <div class="cali"><div class="calt" contenteditable="true">10:30 AM</div><div><div class="caln" contenteditable="true">Add your appointment</div><div class="cals" contenteditable="true">Details</div></div><div class="catag client">Client</div></div>
+    <div class="cali"><div class="calt" contenteditable="true">12:00 PM</div><div><div class="caln" contenteditable="true">Family / Personal</div><div class="cals" contenteditable="true">Add details</div></div><div class="catag pers">Family</div></div>
+    <div class="cali"><div class="calt" contenteditable="true">2:00 PM</div><div><div class="caln" contenteditable="true">Add your appointment</div><div class="cals" contenteditable="true">Details</div></div><div class="catag client">Client</div></div>
+    <div class="cali"><div class="calt" contenteditable="true">5:30 PM</div><div><div class="caln" contenteditable="true">Content Creation Window</div><div class="cals" contenteditable="true">Reel — 15 min max. Show your face.</div></div><div class="catag pers">Brand</div></div>
+    <div class="cali"><div class="calt" contenteditable="true">7:00 PM</div><div><div class="caln" contenteditable="true">School / Personal Deadline</div><div class="cals" contenteditable="true">Do not let client work push this.</div></div><div class="catag school">School</div></div>
+  </div>
 
-  <!-- 8. CALENDAR -->
-  <div class="card">
-    <div class="card-label">08 — Today's Schedule</div>
-    <div class="cal-item">
-      <div class="cal-time">6:00</div>
-      <div class="cal-details">
-        <div class="cal-title">Morning Routine — Briefing + Intention Setting</div>
-        <div class="cal-sub">Non-negotiable. Do not skip.</div>
-      </div>
-      <div class="cal-tag personal">Personal</div>
-    </div>
-    <div class="cal-item">
-      <div class="cal-time">8:00</div>
-      <div class="cal-details">
-        <div class="cal-title">Power Hour — Lead Follow-Ups</div>
-        <div class="cal-sub">Call Marcus, text Destiny, email Garcias</div>
-      </div>
-      <div class="cal-tag client">Revenue</div>
-    </div>
-    <div class="cal-item">
-      <div class="cal-time">10:30</div>
-      <div class="cal-details">
-        <div class="cal-title">CMA Prep — Cedar Hill Listing</div>
-        <div class="cal-sub">Garcias presentation due by noon</div>
-      </div>
-      <div class="cal-tag client">Client</div>
-    </div>
-    <div class="cal-item">
-      <div class="cal-time">12:00</div>
-      <div class="cal-details">
-        <div class="cal-title">School Pickup + Lunch</div>
-        <div class="cal-sub">Build in 45-min buffer for traffic</div>
-      </div>
-      <div class="cal-tag personal">Family</div>
-    </div>
-    <div class="cal-item">
-      <div class="cal-time">2:00</div>
-      <div class="cal-details">
-        <div class="cal-title">Property Tour — Midlothian (pending confirm)</div>
-        <div class="cal-sub">Marcus & Trina — confirm by 10 AM</div>
-      </div>
-      <div class="cal-tag warning">Unconfirmed</div>
-    </div>
-    <div class="cal-item">
-      <div class="cal-time">5:30</div>
-      <div class="cal-details">
-        <div class="cal-title">Content Creation Window</div>
-        <div class="cal-sub">Record market update reel — 15 min max</div>
-      </div>
-      <div class="cal-tag personal">Brand</div>
-    </div>
-    <div class="cal-item">
-      <div class="cal-time">7:00</div>
-      <div class="cal-details">
-        <div class="cal-title">⚠ Class / School Deadline</div>
-        <div class="cal-sub">Assignment due — do not let client work push this</div>
-      </div>
-      <div class="cal-tag school">School</div>
-    </div>
-  </div>
+  <div class="divider"></div>
 
-  <div class="section-divider"></div>
+  <!-- ROW 3: POWER 5 -->
+  <div class="card c12" style="animation-delay:.24s">
+    <div class="clabel">10 — Power 5 Daily Non-Negotiables</div>
+    <div class="p5">
+      <div class="p5i" onclick="toggleP5(this)"><div class="p5ico">💬</div><div class="p5lbl">5 Real Estate Conversations</div><div class="p5st">0 / 5 today</div></div>
+      <div class="p5i" onclick="toggleP5(this)"><div class="p5ico">📸</div><div class="p5lbl">1 Visibility / Content Action</div><div class="p5st">Pending</div></div>
+      <div class="p5i" onclick="toggleP5(this)"><div class="p5ico">🤝</div><div class="p5lbl">1 Relationship Touch</div><div class="p5st">Pending</div></div>
+      <div class="p5i" onclick="toggleP5(this)"><div class="p5ico">🎯</div><div class="p5lbl">1 Lead Generation Activity</div><div class="p5st">Pending</div></div>
+      <div class="p5i" onclick="toggleP5(this)"><div class="p5ico">💰</div><div class="p5lbl">1 Wealth-Building Activity</div><div class="p5st">Pending</div></div>
+    </div>
+  </div>
 
-  <!-- ============================================
-       ROW 3: MARKET NEWS + DFW LOCAL
-  ============================================ -->
+  <div class="divider"></div>
 
-  <!-- 3. MARKET NEWS -->
-  <div class="card span-2">
-    <div class="card-label">03 — Real Estate Market Intelligence</div>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-      <div>
-        <div class="section-label">National</div>
-        <div class="news-item">
-          <div class="news-region">National</div>
-          <div class="news-headline">Existing home sales dip 2.3% — inventory tightness persists</div>
-          <div class="news-note">Buyers still outnumber listings in most metros. Strong seller leverage in under-$400K range.</div>
-        </div>
-        <div class="news-item">
-          <div class="news-region">Builder Incentives</div>
-          <div class="news-headline">DR Horton & LGI expanding buydown offers in DFW communities</div>
-          <div class="news-note">Talk to buyers about new construction if resale feels out of reach. Mansfield, Midlothian, Waxahachie active.</div>
-        </div>
-        <div class="news-item">
-          <div class="news-region">Texas</div>
-          <div class="news-headline">Texas leads nation in net migration — third consecutive year</div>
-          <div class="news-note">DFW remains #1 destination. Luxury family move-up segment accelerating in South DFW corridor.</div>
-        </div>
-      </div>
-      <div>
-        <div class="section-label">South DFW — Your Markets</div>
-        <div class="news-item">
-          <div class="news-region">Mansfield / Midlothian</div>
-          <div class="news-headline">DOM averaging 28 days — down from 45 in Q4</div>
-          <div class="news-note">Inventory up slightly. $350K–$500K moving fast. Price reductions under $325K.</div>
-        </div>
-        <div class="news-item">
-          <div class="news-region">Cedar Hill / DeSoto / Duncanville</div>
-          <div class="news-headline">FHA-eligible inventory limited — heavy competition under $300K</div>
-          <div class="news-note">First-time buyers frustrated. Multiple offers common. Position pre-approval as power move.</div>
-        </div>
-        <div class="news-item">
-          <div class="news-region">Arlington / Grand Prairie</div>
-          <div class="news-headline">New development corridor along I-20 attracting luxury townhome buyers</div>
-          <div class="news-note">Luxury family segment: $500K+ townhomes selling in under 3 weeks. Watch this corridor.</div>
-        </div>
-        <div class="news-item">
-          <div class="news-region">Waxahachie</div>
-          <div class="news-headline">Top growth suburb — acreage + new build demand surging</div>
-          <div class="news-note">Buyers priced out of Mansfield moving south. Land + new construction sweet spot.</div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- ROW 4: PIPELINE + TEAM -->
+  <div class="card c8" style="animation-delay:.28s">
+    <div class="clabel">Pipeline Accountability — Active Deals</div>
+    <div style="overflow-x:auto">
+      <table class="ptable">
+        <thead><tr><th>Client</th><th>Stage</th><th>Price Range</th><th>Last Touch</th><th>Next Action</th><th>Due</th></tr></thead>
+        <tbody>
+          <tr><td contenteditable="true">Client Name</td><td><span class="stage hot">Hot Lead</span></td><td contenteditable="true">$350K–$400K</td><td contenteditable="true">3 days ago</td><td contenteditable="true">Call — offer ready</td><td class="overdue" contenteditable="true">Today</td></tr>
+          <tr><td contenteditable="true">Client Name</td><td><span class="stage active">Active Buyer</span></td><td contenteditable="true">$275K–$310K</td><td contenteditable="true">Yesterday</td><td contenteditable="true">Send new listings</td><td contenteditable="true">Today</td></tr>
+          <tr><td contenteditable="true">Client Name</td><td><span class="stage pending">Under Contract</span></td><td contenteditable="true">$425K</td><td contenteditable="true">2 days ago</td><td contenteditable="true">Confirm inspection</td><td contenteditable="true">Thu</td></tr>
+          <tr><td contenteditable="true">Client Name</td><td><span class="stage warm">Warm Lead</span></td><td contenteditable="true">$500K+</td><td contenteditable="true">1 week ago</td><td contenteditable="true">Nurture text</td><td contenteditable="true">Fri</td></tr>
+          <tr><td contenteditable="true">Client Name</td><td><span class="stage closed">Closed</span></td><td contenteditable="true">$389K</td><td contenteditable="true">Last week</td><td contenteditable="true">Review request + gift</td><td contenteditable="true">This week</td></tr>
+          <tr><td contenteditable="true">Client Name</td><td><span class="stage cold">Cold</span></td><td contenteditable="true">$300K</td><td contenteditable="true">3 weeks ago</td><td contenteditable="true">Re-engagement sequence</td><td contenteditable="true">This week</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:10px;font-size:10px;color:var(--txt3);font-style:italic">✦ Follow Up Boss integration coming — pipeline will auto-populate when connected.</div>
+  </div>
 
-  <!-- 5. DFW LOCAL -->
-  <div class="card">
-    <div class="card-label">05 — DFW + Local Intelligence</div>
-    <div class="news-item">
-      <div class="news-region">Economic Development</div>
-      <div class="news-headline">Midlothian industrial expansion — 2,000 jobs announced</div>
-      <div class="news-note">Future housing demand signal. Get ahead of the buyer wave now.</div>
-    </div>
-    <div class="news-item">
-      <div class="news-region">School Districts</div>
-      <div class="news-headline">Mansfield ISD rated "A" — top 10 in DFW metro</div>
-      <div class="news-note">Lead with this for families. Schools sell homes.</div>
-    </div>
-    <div class="news-item">
-      <div class="news-region">Infrastructure</div>
-      <div class="news-headline">SH 360 expansion phase complete Q3 — reduces Mansfield commute</div>
-      <div class="news-note">Commuter buyers: this is your talking point for Mansfield/Midlothian.</div>
-    </div>
-    <div class="news-item">
-      <div class="news-region">Local Events</div>
-      <div class="news-headline">Waxahachie Heritage Festival — this weekend</div>
-      <div class="news-note">Community engagement opportunity. Attend or share on stories.</div>
-    </div>
-    <div class="news-item">
-      <div class="news-region">Construction</div>
-      <div class="news-headline">I-35E widening — delays near DeSoto/Cedar Hill exits</div>
-      <div class="news-note">Build extra drive time for showings in that corridor.</div>
-    </div>
-  </div>
+  <div class="card c4" style="animation-delay:.32s">
+    <div class="clabel">13 — Team Command + ISA KPIs</div>
+    <div class="tgrid">
+      <div class="tkpi"><div class="tn g" contenteditable="true">—</div><div class="tkl">Calls Made</div></div>
+      <div class="tkpi"><div class="tn grn" contenteditable="true">—</div><div class="tkl">Appts Booked</div></div>
+      <div class="tkpi"><div class="tn red" contenteditable="true">—</div><div class="tkl">Overdue Follows</div></div>
+      <div class="tkpi"><div class="tn" contenteditable="true">—m</div><div class="tkl">Avg Response</div></div>
+    </div>
+    <div class="slabel">ISA Priorities Today</div>
+    <ul class="plist" style="margin-top:0">
+      <li><span class="pnum" style="font-size:15px">·</span><span contenteditable="true">All internet leads — 5-min response window</span></li>
+      <li><span class="pnum" style="font-size:15px">·</span><span contenteditable="true">Update all lead statuses in CRM by EOD</span></li>
+      <li><span class="pnum" style="font-size:15px">·</span><span contenteditable="true">Book 2 buyer consultations this week</span></li>
+      <li><span class="pnum" style="font-size:15px">·</span><span contenteditable="true">Re-engage cold leads from last 30 days</span></li>
+    </ul>
+    <div class="slabel">AI Team Direction</div>
+    <div class="tp" id="teamDir" style="font-style:normal;color:var(--txt)"><span class="sk w90"></span><span class="sk w75"></span></div>
+    <div class="fub"><div class="fi">🔗</div><div class="ft">Follow Up Boss Integration</div><div class="fs">When connected, this section auto-pulls lead counts, response times, pipeline stages, and appointment data from FUB.</div><div class="fb">Coming Soon — API Ready</div></div>
+  </div>
 
-  <div class="section-divider"></div>
+  <div class="divider"></div>
 
-  <!-- ============================================
-       ROW 4: POWER 5 + BRAND + WELLNESS
-  ============================================ -->
+  <!-- ROW 5: MARKET NEWS + LOCAL -->
+  <div class="card c8" style="animation-delay:.36s">
+    <div class="clabel">03 — Real Estate Market Intelligence</div>
+    <div class="n2col">
+      <div>
+        <div class="slabel" style="margin-top:0">National + Texas</div>
+        <div class="ncol" id="newsNat"><div class="ni"><span class="sk"></span><span class="sk w80"></span></div><div class="ni"><span class="sk"></span><span class="sk w65"></span></div></div>
+      </div>
+      <div>
+        <div class="slabel" style="margin-top:0">South DFW — Your Markets</div>
+        <div class="ncol" id="newsDFW"><div class="ni"><span class="sk"></span><span class="sk w80"></span></div><div class="ni"><span class="sk"></span><span class="sk w65"></span></div></div>
+      </div>
+    </div>
+    <div class="slabel">Builder Incentives + Market Movement</div>
+    <div class="ncol" id="newsBld"><div class="ni"><span class="sk"></span><span class="sk w65"></span></div></div>
+    <div class="slabel">Market Insight — AI</div>
+    <div class="tp" id="mktInsight"><span class="sk w90"></span><span class="sk w75"></span></div>
+  </div>
 
-  <!-- 10. POWER 5 -->
-  <div class="card span-3">
-    <div class="card-label">10 — Power 5 Daily Non-Negotiables</div>
-    <div class="power5-grid" style="grid-template-columns: repeat(5,1fr);">
-      <div class="power5-item" onclick="toggleDone(this)">
-        <div class="power5-icon">💬</div>
-        <div class="power5-label">5 Real Estate Conversations</div>
-        <div class="power5-status">0 / 5 today</div>
-      </div>
-      <div class="power5-item" onclick="toggleDone(this)">
-        <div class="power5-icon">📸</div>
-        <div class="power5-label">1 Visibility / Content Action</div>
-        <div class="power5-status">Pending</div>
-      </div>
-      <div class="power5-item" onclick="toggleDone(this)">
-        <div class="power5-icon">🤝</div>
-        <div class="power5-label">1 Relationship Touch</div>
-        <div class="power5-status">Pending</div>
-      </div>
-      <div class="power5-item" onclick="toggleDone(this)">
-        <div class="power5-icon">🎯</div>
-        <div class="power5-label">1 Lead Generation Activity</div>
-        <div class="power5-status">Pending</div>
-      </div>
-      <div class="power5-item" onclick="toggleDone(this)">
-        <div class="power5-icon">💰</div>
-        <div class="power5-label">1 Wealth-Building Activity</div>
-        <div class="power5-status">Pending</div>
-      </div>
-    </div>
-  </div>
+  <div class="card c4" style="animation-delay:.40s">
+    <div class="clabel">05 — DFW + Local Intelligence</div>
+    <div class="ncol" id="newsLoc">
+      <div class="ni"><span class="sk"></span><span class="sk w80"></span></div>
+      <div class="ni"><span class="sk"></span><span class="sk w65"></span></div>
+      <div class="ni"><span class="sk w80"></span></div>
+    </div>
+  </div>
 
-  <!-- 9. TO-DO MATRIX -->
-  <div class="card span-2">
-    <div class="card-label">09 — Priority Matrix</div>
-    <div class="todo-columns">
-      <div>
-        <div class="todo-col">
-          <h4>Must Do Today — Revenue</h4>
-          <div class="todo-item"><div class="todo-check" onclick="checkTodo(this)"></div>Call Marcus & Trina — offer conversation</div>
-          <div class="todo-item"><div class="todo-check" onclick="checkTodo(this)"></div>Send Garcia listing proposal</div>
-          <div class="todo-item"><div class="todo-check" onclick="checkTodo(this)"></div>Video message to Destiny</div>
-          <div class="todo-item"><div class="todo-check" onclick="checkTodo(this)"></div>Post market update reel</div>
-        </div>
-        <div class="todo-col" style="margin-top: 16px;">
-          <h4>Should Do — Business Dev</h4>
-          <div class="todo-item"><div class="todo-check" onclick="checkTodo(this)"></div>Send Andre curated listings</div>
-          <div class="todo-item"><div class="todo-check" onclick="checkTodo(this)"></div>Review CRM — update lead statuses</div>
-          <div class="todo-item"><div class="todo-check" onclick="checkTodo(this)"></div>Request review from last closing</div>
-        </div>
-      </div>
-      <div>
-        <div class="todo-col">
-          <h4>Must Do — Personal / School</h4>
-          <div class="todo-item"><div class="todo-check" onclick="checkTodo(this)"></div>Submit school assignment by 7 PM</div>
-          <div class="todo-item"><div class="todo-check" onclick="checkTodo(this)"></div>School pickup at noon</div>
-          <div class="todo-item"><div class="todo-check" onclick="checkTodo(this)"></div>Meal prep — don't skip dinner</div>
-        </div>
-        <div class="todo-col" style="margin-top: 16px;">
-          <h4>Delegate or Move</h4>
-          <div class="todo-item"><div class="todo-check" onclick="checkTodo(this)"></div>ISA: follow up with 4 online leads</div>
-          <div class="todo-item"><div class="todo-check" onclick="checkTodo(this)"></div>VA: schedule social media posts</div>
-          <div class="todo-item"><div class="todo-check" onclick="checkTodo(this)"></div>Admin: scan & upload receipts</div>
-          <div class="todo-item"><div class="todo-check" onclick="checkTodo(this)"></div>Email inbox — batch process at 4 PM</div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div class="divider"></div>
 
-  <!-- 15. WELLNESS -->
-  <div class="card">
-    <div class="card-label">15 — Wellness + Energy Check</div>
-    <div class="wellness-grid">
-      <div class="wellness-item">
-        <div class="wellness-emoji">😴</div>
-        <div class="wellness-label">Sleep</div>
-        <div class="wellness-value" contenteditable="true">6.5 hrs</div>
-      </div>
-      <div class="wellness-item">
-        <div class="wellness-emoji">💧</div>
-        <div class="wellness-label">Water</div>
-        <div class="wellness-value" contenteditable="true">0 / 8 cups</div>
-      </div>
-      <div class="wellness-item">
-        <div class="wellness-emoji">🏃‍♀️</div>
-        <div class="wellness-label">Movement</div>
-        <div class="wellness-value" contenteditable="true">Walk 20 min</div>
-      </div>
-      <div class="wellness-item">
-        <div class="wellness-emoji">⚡</div>
-        <div class="wellness-label">Energy</div>
-        <div class="wellness-value" contenteditable="true">7 / 10</div>
-      </div>
-    </div>
-    <div class="section-label" style="margin-top: 16px;">How Do I Need to Show Up Today?</div>
-    <div class="talking-point" contenteditable="true" style="font-style: normal; color: var(--text);">Grounded, decisive, and magnetic. You don't have to be perfect — just present and moving. Wear something that makes you feel like the version of you that already has everything she's working toward.</div>
-    <div style="margin-top: 14px; padding: 10px 14px; background: var(--gold-dim); border: 1px solid rgba(201,168,76,0.2); border-radius: 2px; font-size: 11px; color: var(--gold);">
-      👗 Outfit / Presentation — Dress for your next level today. You're being watched by who you're becoming.
-    </div>
-  </div>
+  <!-- ROW 6: TODO + WELLNESS -->
+  <div class="card c8" style="animation-delay:.44s">
+    <div class="clabel">09 — Priority Matrix</div>
+    <div class="tcols">
+      <div>
+        <div class="tgrp">
+          <h4>Must Do — Revenue</h4>
+          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">Your top revenue task</span></div>
+          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">Second revenue task</span></div>
+          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">Third revenue task</span></div>
+          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">Content / visibility post</span></div>
+        </div>
+        <div class="tgrp" style="margin-top:16px">
+          <h4>Should Do — Business Dev</h4>
+          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">CRM — update all lead statuses</span></div>
+          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">Request review from last closing</span></div>
+          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">Send curated listings to warm lead</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="tgrp">
+          <h4>Must Do — Personal / School</h4>
+          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">School assignment — check deadline</span></div>
+          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">School / family pickup</span></div>
+          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">Meal prep + self-care</span></div>
+        </div>
+        <div class="tgrp" style="margin-top:16px">
+          <h4>Delegate or Move</h4>
+          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">ISA: internet lead follow-ups</span></div>
+          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">VA: schedule social posts</span></div>
+          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">Admin: receipts + CRM data entry</span></div>
+          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">Batch email inbox — 4 PM only</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <div class="section-divider"></div>
+  <div class="card c4" style="animation-delay:.48s">
+    <div class="clabel">15 — Wellness + Energy</div>
+    <div class="wgrid">
+      <div class="wi"><div class="wico">😴</div><div class="wlb">Sleep</div><div class="wv" contenteditable="true">— hrs</div></div>
+      <div class="wi"><div class="wico">💧</div><div class="wlb">Water</div><div class="wv" contenteditable="true">0 / 8 cups</div></div>
+      <div class="wi"><div class="wico">🏃‍♀️</div><div class="wlb">Movement</div><div class="wv" contenteditable="true">Walk 20 min</div></div>
+      <div class="wi"><div class="wico">⚡</div><div class="wlb">Energy</div><div class="wv" contenteditable="true">— / 10</div></div>
+    </div>
+    <div class="slabel">How Do I Need to Show Up Today?</div>
+    <div class="tp" contenteditable="true" style="font-style:normal;color:var(--txt)">Grounded, decisive, and magnetic. You don't have to be perfect — just present and moving.</div>
+    <div style="margin-top:12px;padding:11px 13px;background:var(--gdim);border:1px solid rgba(201,168,92,.2);border-radius:var(--r);font-size:11px;color:var(--gold)">👗 Dress for the version of you that already has everything she's working toward.</div>
+    <div class="slabel">Weekly Posting</div>
+    <div class="postrow">
+      <div class="pday" onclick="this.classList.toggle('done')">M</div><div class="pday" onclick="this.classList.toggle('done')">T</div>
+      <div class="pday" onclick="this.classList.toggle('done')">W</div><div class="pday" onclick="this.classList.toggle('done')">T</div>
+      <div class="pday" onclick="this.classList.toggle('done')">F</div><div class="pday" onclick="this.classList.toggle('done')">S</div>
+      <div class="pday" onclick="this.classList.toggle('done')">S</div>
+    </div>
+    <div style="margin-top:9px;font-size:10.5px;color:var(--txt3);font-style:italic">✨ Show your face. Done > perfect. You are the brand.</div>
+  </div>
 
-  <!-- ============================================
-       ROW 5: BRAND + WEALTH + VIP
-  ============================================ -->
+  <div class="divider"></div>
 
-  <!-- 11. BRAND VISIBILITY -->
-  <div class="card">
-    <div class="card-label">11 — Brand + Visibility Tracker</div>
-    <div class="content-idea">
-      <div class="idea-type">📹 Reel Idea</div>
-      <div class="idea-text" contenteditable="true">"POV: You're buying in South DFW in 2025 — here's what your $350K actually gets you in Mansfield vs Midlothian vs Waxahachie." Walk through 3 neighborhoods, show lifestyle, not just stats.</div>
-    </div>
-    <div class="content-idea">
-      <div class="idea-type">💬 Caption Prompt</div>
-      <div class="idea-text" contenteditable="true">"Nobody talks about this when buying a home in DFW... [hook]. As a luxury family real estate specialist, I see families make this mistake constantly. Here's what to know before you close."</div>
-    </div>
-    <div class="content-idea">
-      <div class="idea-type">📖 Story Idea</div>
-      <div class="idea-text" contenteditable="true">Behind-the-scenes of a listing appointment prep. Show your professionalism + personality. "What goes into a CMA that actually wins listings."</div>
-    </div>
-    <div class="section-label">Weekly Posting Progress</div>
-    <div class="posting-tracker">
-      <div class="post-day done" onclick="this.classList.toggle('done')"><div>M</div></div>
-      <div class="post-day done" onclick="this.classList.toggle('done')"><div>T</div></div>
-      <div class="post-day" onclick="this.classList.toggle('done')"><div>W</div></div>
-      <div class="post-day" onclick="this.classList.toggle('done')"><div>T</div></div>
-      <div class="post-day" onclick="this.classList.toggle('done')"><div>F</div></div>
-      <div class="post-day" onclick="this.classList.toggle('done')"><div>S</div></div>
-      <div class="post-day" onclick="this.classList.toggle('done')"><div>S</div></div>
-    </div>
-    <div style="margin-top: 14px; padding: 10px 14px; border: 1px solid var(--border); border-radius: 2px; font-size: 11px; color: var(--muted); font-style: italic;">
-      ✨ Reminder: Show your face. Don't overthink the caption. Done is better than perfect. You are the brand.
-    </div>
-  </div>
+  <!-- ROW 7: BRAND + WORLD NEWS + VIP -->
+  <div class="card c4" style="animation-delay:.52s">
+    <div class="clabel">11 — Brand + Visibility</div>
+    <div class="ccard"><div class="ctype">📹 Reel Idea</div><div class="ctxt" id="reelIdea" contenteditable="true"><span class="sk"></span><span class="sk w80"></span><span class="sk w65"></span></div></div>
+    <div class="ccard"><div class="ctype">💬 Caption Prompt</div><div class="ctxt" id="captionIdea" contenteditable="true"><span class="sk"></span><span class="sk w80"></span></div></div>
+    <div class="ccard"><div class="ctype">📖 Story Idea</div><div class="ctxt" id="storyIdea" contenteditable="true"><span class="sk w90"></span></div></div>
+  </div>
 
-  <!-- 14. WEALTH SECTION -->
-  <div class="card">
-    <div class="card-label">14 — Wealth + CEO Money</div>
-    <div class="money-stats">
-      <div class="money-stat">
-        <div class="m-label">Revenue Goal</div>
-        <div class="m-value" contenteditable="true">$40,000</div>
-      </div>
-      <div class="money-stat">
-        <div class="m-label">Current Revenue</div>
-        <div class="m-value green" contenteditable="true">$24,000</div>
-      </div>
-      <div class="money-stat">
-        <div class="m-label">Pending Commission</div>
-        <div class="m-value gold" contenteditable="true">$11,400</div>
-      </div>
-    </div>
-    <div class="progress-wrap" style="margin-bottom: 16px;">
-      <div class="progress-label"><span>Monthly Revenue Progress</span><span>60% to goal</span></div>
-      <div class="progress-bar"><div class="progress-fill" style="width: 60%;"></div></div>
-    </div>
-    <div class="money-alert">
-      ⚠️ Tax set-aside reminder: Move 25% of any commission received to tax account before spending.
-    </div>
-    <div style="margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-      <div class="money-stat">
-        <div class="m-label">Savings / Investing</div>
-        <div class="m-value" style="font-size: 14px;" contenteditable="true">$500 to index fund this week</div>
-      </div>
-      <div class="money-stat">
-        <div class="m-label">Passive Income Idea</div>
-        <div class="m-value" style="font-size: 14px;" contenteditable="true">Research STR permits in Waxahachie</div>
-      </div>
-    </div>
-  </div>
+  <div class="card c4" style="animation-delay:.56s">
+    <div class="clabel">04 — World + Business — What Affects You</div>
+    <div class="ncol" id="newsWld">
+      <div class="ni"><span class="sk"></span><span class="sk w80"></span></div>
+      <div class="ni"><span class="sk"></span><span class="sk w65"></span></div>
+      <div class="ni"><span class="sk"></span><span class="sk w80"></span></div>
+      <div class="ni"><span class="sk w65"></span></div>
+    </div>
+  </div>
 
-  <!-- 12. CLIENT VIP TOUCHES -->
-  <div class="card">
-    <div class="card-label">12 — Client Experience + VIP Touches</div>
-    <div class="vip-item">
-      <div class="vip-icon">🎂</div>
-      <div class="vip-details">
-        <div class="vip-name">Tamara Lewis</div>
-        <div class="vip-action">Birthday today — send a heartfelt text</div>
-      </div>
-      <div class="vip-badge">Birthday</div>
-    </div>
-    <div class="vip-item">
-      <div class="vip-icon">🏠</div>
-      <div class="vip-details">
-        <div class="vip-name">Williams Family</div>
-        <div class="vip-action">1-year home anniversary this week — send a card</div>
-      </div>
-      <div class="vip-badge">Anniversary</div>
-    </div>
-    <div class="vip-item">
-      <div class="vip-icon">⭐</div>
-      <div class="vip-details">
-        <div class="vip-name">Jackson Closing (last week)</div>
-        <div class="vip-action">Request Google + Zillow review — send template</div>
-      </div>
-      <div class="vip-badge">Review</div>
-    </div>
-    <div class="vip-item">
-      <div class="vip-icon">🎁</div>
-      <div class="vip-details">
-        <div class="vip-name">Chen Family</div>
-        <div class="vip-action">Closing gift — local artisan honey basket ordered?</div>
-      </div>
-      <div class="vip-badge">Closing Gift</div>
-    </div>
-    <div class="vip-item">
-      <div class="vip-icon">💌</div>
-      <div class="vip-details">
-        <div class="vip-name">Referral Opportunity</div>
-        <div class="vip-action">Keisha mentioned her sister is looking — follow up</div>
-      </div>
-      <div class="vip-badge">Referral</div>
-    </div>
-  </div>
+  <div class="card c4" style="animation-delay:.60s">
+    <div class="clabel">12 — Client VIP + Experience</div>
+    <div class="vitem"><div class="vico">🎂</div><div><div class="vnm" contenteditable="true">Client Name</div><div class="vact" contenteditable="true">Birthday today — heartfelt text</div></div><div class="vbadge">Birthday</div></div>
+    <div class="vitem"><div class="vico">🏠</div><div><div class="vnm" contenteditable="true">Client Name</div><div class="vact" contenteditable="true">1-year home anniversary — send card</div></div><div class="vbadge">Anniversary</div></div>
+    <div class="vitem"><div class="vico">⭐</div><div><div class="vnm" contenteditable="true">Recent Closing</div><div class="vact" contenteditable="true">Request Google + Zillow review</div></div><div class="vbadge">Review</div></div>
+    <div class="vitem"><div class="vico">🎁</div><div><div class="vnm" contenteditable="true">Client Name</div><div class="vact" contenteditable="true">Closing gift — confirm ordered</div></div><div class="vbadge">Gift</div></div>
+    <div class="vitem"><div class="vico">💌</div><div><div class="vnm" contenteditable="true">Referral Opportunity</div><div class="vact" contenteditable="true">Follow up on referral mention</div></div><div class="vbadge">Referral</div></div>
+  </div>
 
-  <div class="section-divider"></div>
+  <div class="divider"></div>
 
-  <!-- ============================================
-       ROW 6: TEAM + WORLD NEWS + DATES
-  ============================================ -->
+  <!-- ROW 8: WEALTH + DATES + AI STRATEGY -->
+  <div class="card c4" style="animation-delay:.64s">
+    <div class="clabel">14 — Wealth + CEO Money</div>
+    <div class="kgrid k3">
+      <div class="kstat">
+        <div class="kn kpi-val" style="font-size:22px" id="kpi-monthlyGoal" data-demo="40000" data-prefix="$" data-format="currency">$40K</div>
+        <div class="kl">Monthly Goal</div>
+      </div>
+      <div class="kstat">
+        <div class="kn grn kpi-val" style="font-size:22px" id="kpi-currentRev" data-demo="24000" data-prefix="$" data-format="currency">—</div>
+        <div class="kl">Current Rev.</div>
+        <div class="kpi-delta" id="kpid-currentRev"></div>
+      </div>
+      <div class="kstat">
+        <div class="kn g kpi-val" style="font-size:22px" id="kpi-pendingGCI" data-demo="11400" data-prefix="$" data-format="currency">—</div>
+        <div class="kl">Pending GCI</div>
+        <div class="kpi-delta" id="kpid-pendingGCI"></div>
+      </div>
+    </div>
+    <div class="prog" style="margin-bottom:12px">
+      <div class="progrow">
+        <span>Monthly Progress</span>
+        <span id="wealthProgLabel">Loading…</span>
+      </div>
+      <div class="progtrack"><div class="progfill" id="wealthProgFill" style="width:0%"></div></div>
+    </div>
+    <div class="malert">⚠️ Tax reminder: 25% of every commission → tax account before spending anything else.</div>
+    <div class="kgrid k2" style="margin-top:11px">
+      <div class="kstat"><div class="kn" style="font-size:13px;line-height:1.3" contenteditable="true">$500 index fund this week</div><div class="kl">Invest</div></div>
+      <div class="kstat"><div class="kn" style="font-size:13px;line-height:1.3" id="wealthMove" contenteditable="true"><span class="sk w80"></span></div><div class="kl">Wealth Move</div></div>
+    </div>
+  </div>
 
-  <!-- 13. TEAM COMMAND -->
-  <div class="card">
-    <div class="card-label">13 — Team Command Center</div>
-    <div class="section-label">ISA Priorities</div>
-    <ul class="priority-list">
-      <li><span class="priority-num">·</span><span>Call 8 internet leads — response window under 5 min is goal</span></li>
-      <li><span class="priority-num">·</span><span>Update all lead statuses in CRM by EOD</span></li>
-      <li><span class="priority-num">·</span><span>Book 2 new buyer consultations this week</span></li>
-    </ul>
-    <div class="section-label" style="margin-top: 14px;">Team Accountability</div>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px;">
-      <div class="revenue-stat">
-        <div class="num" contenteditable="true">12</div>
-        <div class="stat-label">Calls Made</div>
-      </div>
-      <div class="revenue-stat">
-        <div class="num" contenteditable="true">3</div>
-        <div class="stat-label">Appts Booked</div>
-      </div>
-      <div class="revenue-stat">
-        <div class="num red" contenteditable="true">6</div>
-        <div class="stat-label">Overdue Follow-Ups</div>
-      </div>
-      <div class="revenue-stat">
-        <div class="num" contenteditable="true">4m</div>
-        <div class="stat-label">Avg Response Time</div>
-      </div>
-    </div>
-    <div class="section-label" style="margin-top: 14px;">Hiring / Vendor Notes</div>
-    <div class="talking-point" contenteditable="true" style="font-style: normal; color: var(--text-dim);">Evaluate transaction coordinator options this week. Systems = scale.</div>
-  </div>
+  <div class="card c4" style="animation-delay:.68s">
+    <div class="clabel">16 — Dates + Countdowns</div>
+    <div class="cditem"><div class="cddays now">TODAY</div><div><div class="cdtitle" contenteditable="true">Urgent deadline</div><div class="cdsub" contenteditable="true">Details</div></div><div class="catag warn">Urgent</div></div>
+    <div class="cditem"><div class="cddays soon" contenteditable="true">3</div><div><div class="cdtitle" contenteditable="true">Upcoming closing</div><div class="cdsub" contenteditable="true">Confirm gift + title</div></div><div class="catag client">Closing</div></div>
+    <div class="cditem"><div class="cddays soon" contenteditable="true">7</div><div><div class="cdtitle" contenteditable="true">School deadline block</div><div class="cdsub" contenteditable="true">Batch work on Sunday</div></div><div class="catag school">School</div></div>
+    <div class="cditem"><div class="cddays ahead" contenteditable="true">11</div><div><div class="cdtitle" contenteditable="true">Monthly revenue deadline</div><div class="cdsub" contenteditable="true">Gap remaining</div></div><div class="catag warn">$$$</div></div>
+    <div class="cditem"><div class="cddays ahead" style="font-size:14px;font-family:'DM Sans',sans-serif;font-weight:300;letter-spacing:1px;color:var(--gold)">Q3</div><div><div class="cdtitle" contenteditable="true">Investment property goal</div><div class="cdsub" contenteditable="true">Identify first STR by August</div></div><div class="catag pers">Goal</div></div>
+  </div>
 
-  <!-- 4. WORLD + BUSINESS NEWS -->
-  <div class="card">
-    <div class="card-label">04 — World + Business — What Matters to You</div>
-    <div class="news-item">
-      <div class="news-region">Federal Reserve</div>
-      <div class="news-headline">Fed signals possible rate hold at next meeting</div>
-      <div class="news-note">Good for buyer confidence. Use as a conversation starter: "Now may be the time before any movement."</div>
-    </div>
-    <div class="news-item">
-      <div class="news-region">Consumer Confidence</div>
-      <div class="news-headline">Consumer sentiment improves slightly — spending resilient</div>
-      <div class="news-note">Buyers are in the market despite hesitation. Don't let them wait for perfect conditions.</div>
-    </div>
-    <div class="news-item">
-      <div class="news-region">Small Business</div>
-      <div class="news-headline">SBA loan access expanding — small business owners as buyers</div>
-      <div class="news-note">Tap into business owner clients who may not realize their purchasing power.</div>
-    </div>
-    <div class="news-item">
-      <div class="news-region">Economy</div>
-      <div class="news-headline">Job market strong in Texas metro areas — DFW unemployment 3.1%</div>
-      <div class="news-note">Strong employment = strong buyer pool. Confidence in the market is warranted.</div>
-    </div>
-    <div class="news-item">
-      <div class="news-region">Investing</div>
-      <div class="news-headline">Real estate remains top wealth vehicle for Black families — NAR data</div>
-      <div class="news-note">Your work is legacy work. You are closing the wealth gap, one closing at a time.</div>
-    </div>
-  </div>
+  <div class="card c4" style="animation-delay:.72s">
+    <div class="clabel">18 — AI Strategy Notes</div>
+    <div class="aigrid">
+      <div class="aiitem focus"><div class="ailb">✦ Focus On</div><ul id="aiFocus"><li><span class="sk w90"></span></li><li><span class="sk w75"></span></li></ul></div>
+      <div class="aiitem money"><div class="ailb">💰 Money Moves</div><ul id="aiMoney"><li><span class="sk w90"></span></li><li><span class="sk w75"></span></li></ul></div>
+      <div class="aiitem ignore"><div class="ailb">✗ Ignore Today</div><ul id="aiIgnore"><li><span class="sk w80"></span></li><li><span class="sk w65"></span></li></ul></div>
+      <div class="aiitem risk"><div class="ailb">⚠ Watch Out</div><ul id="aiRisk"><li><span class="sk w80"></span></li><li><span class="sk w65"></span></li></ul></div>
+      <div class="aiitem delg"><div class="ailb">→ Delegate</div><ul id="aiDelegate"><li><span class="sk w90"></span></li><li><span class="sk w75"></span></li></ul></div>
+      <div class="aiitem dec"><div class="ailb">◆ Decide Today</div><ul id="aiDecide"><li><span class="sk w80"></span></li><li><span class="sk w65"></span></li></ul></div>
+    </div>
+  </div>
 
-  <!-- 16. IMPORTANT DATES -->
-  <div class="card">
-    <div class="card-label">16 — Important Dates + Countdowns</div>
-    <div class="cal-item" style="border-bottom: 1px solid var(--border);">
-      <div class="cal-time" style="font-size: 12px; color: var(--gold);">TODAY</div>
-      <div class="cal-details">
-        <div class="cal-title">Garcia Proposal Deadline</div>
-        <div class="cal-sub">Must send by noon</div>
-      </div>
-      <div class="cal-tag warning">Urgent</div>
-    </div>
-    <div class="cal-item" style="border-bottom: 1px solid var(--border);">
-      <div class="cal-time" style="font-size: 12px;">3 days</div>
-      <div class="cal-details">
-        <div class="cal-title">Chen Family Closing</div>
-        <div class="cal-sub">Confirm gift delivery + title confirmation</div>
-      </div>
-      <div class="cal-tag client">Closing</div>
-    </div>
-    <div class="cal-item" style="border-bottom: 1px solid var(--border);">
-      <div class="cal-time" style="font-size: 12px;">7 days</div>
-      <div class="cal-details">
-        <div class="cal-title">School Assignment Block</div>
-        <div class="cal-sub">3 assignments due — batch on Sunday</div>
-      </div>
-      <div class="cal-tag school">School</div>
-    </div>
-    <div class="cal-item" style="border-bottom: 1px solid var(--border);">
-      <div class="cal-time" style="font-size: 12px;">11 days</div>
-      <div class="cal-details">
-        <div class="cal-title">Monthly Revenue Goal Deadline</div>
-        <div class="cal-sub">$16K gap remaining — 11 days</div>
-      </div>
-      <div class="cal-tag warning">$$$</div>
-    </div>
-    <div class="cal-item">
-      <div class="cal-time" style="font-size: 12px;">Q3</div>
-      <div class="cal-details">
-        <div class="cal-title">Investment Property Research Complete</div>
-        <div class="cal-sub">Goal: identify first STR property by August</div>
-      </div>
-      <div class="cal-tag personal">Goal</div>
-    </div>
-  </div>
+  <div class="divider"></div>
 
-  <div class="section-divider"></div>
+  <!-- ROW 9: VISION -->
+  <div class="card vcard c12" style="animation-delay:.76s">
+    <div class="clabel">17 — Vision + Identity</div>
+    <div class="affirm" id="affirm" contenteditable="true">"I am building a life so beautiful and abundant that my children will never question their worth. I am not just a realtor — I am a legacy architect."</div>
+    <div class="vbody" contenteditable="true">You are becoming a woman who leads with excellence, builds generational wealth through real estate, and shows other women — especially Black women and mothers — that it is possible to have it all with grace. The luxury family real estate space was made for you. Keep going.</div>
+    <div class="vpills">
+      <div class="vpill">Generational Wealth</div><div class="vpill">Family Legacy</div><div class="vpill">Luxury Real Estate</div>
+      <div class="vpill">Business Ownership</div><div class="vpill">Financial Freedom</div><div class="vpill">Leadership</div>
+      <div class="vpill">Discipline</div><div class="vpill">Elegance</div>
+      <div class="vpill" id="closingPill" contenteditable="true">You're ready, Bri. Go make it happen.</div>
+    </div>
+  </div>
 
-  <!-- ============================================
-       ROW 7: VISION + AI STRATEGY
-  ============================================ -->
+</div>
 
-  <!-- 17. VISION PANEL -->
-  <div class="card span-2 vision-card">
-    <div class="card-label">17 — Vision + Identity</div>
-    <div class="affirmation" contenteditable="true">"I am building a life so beautiful and abundant that my children will never question their worth. I am not just a realtor — I am a legacy architect."</div>
-    <div style="font-size: 12px; color: var(--text-dim); line-height: 1.7;" contenteditable="true">
-      You are becoming a woman who leads with excellence, builds generational wealth through real estate, and shows other women — especially Black women and mothers — that it is possible to have it all with grace. The luxury family real estate space was made for you. Keep going.
-    </div>
-    <div class="vision-pillars">
-      <div class="vision-pill">Generational Wealth</div>
-      <div class="vision-pill">Family Legacy</div>
-      <div class="vision-pill">Luxury Real Estate</div>
-      <div class="vision-pill">Business Ownership</div>
-      <div class="vision-pill">Financial Freedom</div>
-      <div class="vision-pill">Leadership</div>
-      <div class="vision-pill">Discipline</div>
-      <div class="vision-pill">Elegance</div>
-    </div>
-  </div>
-
-  <!-- 18. AI STRATEGY NOTES -->
-  <div class="card">
-    <div class="card-label">18 — AI Strategy Notes</div>
-    <div class="ai-grid" style="grid-template-columns: 1fr 1fr;">
-      <div class="ai-item focus">
-        <div class="ai-label">✦ Focus On</div>
-        <ul>
-          <li>Marcus & Trina — convert today</li>
-          <li>Garcia proposal — noon deadline</li>
-          <li>One piece of visible content</li>
-        </ul>
-      </div>
-      <div class="ai-item money">
-        <div class="ai-label">💰 Could Make You Money</div>
-        <ul>
-          <li>Builder referral for Andre — get a fee</li>
-          <li>Keisha's sister referral</li>
-          <li>Rate buydown conversion call</li>
-        </ul>
-      </div>
-      <div class="ai-item ignore">
-        <div class="ai-label">✗ Ignore Today</div>
-        <ul>
-          <li>Inbox before 8 AM</li>
-          <li>Social scrolling for more than 10 min</li>
-          <li>Non-revenue admin tasks</li>
-        </ul>
-      </div>
-      <div class="ai-item risk">
-        <div class="ai-label">⚠ Could Damage Momentum</div>
-        <ul>
-          <li>Missing Destiny follow-up — she's cold</li>
-          <li>Skipping content post again</li>
-          <li>School assignment — don't let it slip</li>
-        </ul>
-      </div>
-      <div class="ai-item delegate">
-        <div class="ai-label">→ Delegate</div>
-        <ul>
-          <li>ISA — 8 internet lead calls</li>
-          <li>VA — post scheduling + email</li>
-          <li>Admin: receipts, data entry</li>
-        </ul>
-      </div>
-      <div class="ai-item decide">
-        <div class="ai-label">◆ Decision Needed</div>
-        <ul>
-          <li>Accept Garcia listing at this price?</li>
-          <li>Confirm Midlothian tour with Marcus?</li>
-          <li>Hire TC or wait until Q3?</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-</div><!-- end main -->
-
-<div class="gold-rule"></div>
-<footer class="footer">
-  <span class="brand">Your Morning Briefing</span>
-  <span>Wealth · Vision · Execution</span>
-  <span id="footerDate"></span>
+<footer class="ftr">
+  <span class="brand">Bri's Command Center</span>
+  <span>Wealth · Vision · Execution · Legacy</span>
+  <span id="ftrDate"></span>
 </footer>
 
 <script>
-  // Clock
-  function updateClock() {
-    const now = new Date();
-    let h = now.getHours();
-    const m = now.getMinutes().toString().padStart(2,'0');
-    const ampm = h >= 12 ? 'PM' : 'AM';
-    h = h % 12 || 12;
-    document.getElementById('clock').innerHTML = `${h}:${m}<span style="font-size:18px; letter-spacing:2px; color:var(--gold); margin-left:6px;">${ampm}</span>`;
+'use strict';
 
-    const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-    const label = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
-    document.getElementById('dateLabel').textContent = label;
-    document.getElementById('footerDate').textContent = label;
-  }
-  updateClock();
-  setInterval(updateClock, 10000);
+/* ═══════════════════════════════════════════════════════════════
+   CLOCK
+═══════════════════════════════════════════════════════════════ */
+(function initClock() {
+  const DAYS   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  function tick() {
+    const n  = new Date();
+    let   h  = n.getHours();
+    const m  = n.getMinutes().toString().padStart(2, '0');
+    const ap = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    setText('clkT',    `${h}:${m}`);
+    setText('clkAP',   ap);
+    const label = `${DAYS[n.getDay()]}  ·  ${MONTHS[n.getMonth()]} ${n.getDate()}, ${n.getFullYear()}`;
+    setText('dtag',    label);
+    setText('ftrDate', `${MONTHS[n.getMonth()]} ${n.getDate()}, ${n.getFullYear()}`);
+  }
+  tick();
+  setInterval(tick, 10000);
+})();
 
-  // Toggle Power5 done state
-  function toggleDone(el) {
-    el.classList.toggle('done');
-    const status = el.querySelector('.power5-status');
-    if (el.classList.contains('done')) {
-      status.textContent = '✓ Complete';
-      status.classList.add('done');
-    } else {
-      status.textContent = 'Pending';
-      status.classList.remove('done');
-    }
-  }
+/* ═══════════════════════════════════════════════════════════════
+   NULL-SAFE DOM HELPERS
+═══════════════════════════════════════════════════════════════ */
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = String(value || '');
+}
+function setHTML(id, html) {
+  const el = document.getElementById(id);
+  if (el) el.innerHTML = html;
+}
+function esc(s) {
+  return String(s || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g,  '&lt;')
+    .replace(/>/g,  '&gt;')
+    .replace(/"/g,  '&quot;');
+}
 
-  // Toggle todo checkbox
-  function checkTodo(el) {
-    el.classList.toggle('done');
-    if (el.classList.contains('done')) {
-      el.innerHTML = '✓';
-      el.parentElement.style.textDecoration = 'line-through';
-      el.parentElement.style.color = 'var(--muted2)';
-    } else {
-      el.innerHTML = '';
-      el.parentElement.style.textDecoration = 'none';
-      el.parentElement.style.color = 'var(--text-dim)';
-    }
-  }
+/* ═══════════════════════════════════════════════════════════════
+   STATUS CHIPS
+═══════════════════════════════════════════════════════════════ */
+function setChip(id, state) {
+  const el = document.getElementById(id);
+  if (el) el.className = 'chip ' + state;
+}
 
-  // Stagger card animations
-  document.querySelectorAll('.card').forEach((card, i) => {
-    card.style.animationDelay = `${0.05 + i * 0.04}s`;
-  });
+/* ═══════════════════════════════════════════════════════════════
+   LOADING LOCK
+═══════════════════════════════════════════════════════════════ */
+let busy = false;
+function setLoading(on) {
+  busy = on;
+  const btn = document.getElementById('btnRef');
+  if (!btn) return;
+  btn.disabled = on;
+  btn.classList.toggle('loading', on);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FETCH WRAPPER — always resolves, never throws to caller
+═══════════════════════════════════════════════════════════════ */
+async function apiFetch(url, options) {
+  try {
+    const response = await fetch(url, options);
+    const text     = await response.text();
+    const first    = text.trim()[0];
+    if (first !== '{' && first !== '[') {
+      return {
+        ok:    false,
+        error: `${url} returned HTML not JSON (HTTP ${response.status}). ` +
+               `Confirm the file is in your GitHub /api/ folder and Vercel has redeployed.`
+      };
+    }
+    let parsed;
+    try { parsed = JSON.parse(text); }
+    catch { return { ok: false, error: `${url} returned malformed JSON.` }; }
+    if (parsed.ok === false) return { ok: false, error: parsed.error || `${url} returned ok:false` };
+    return { ok: true, data: parsed };
+  } catch (err) {
+    return { ok: false, error: `Network error reaching ${url}: ${err.message}` };
+  }
+}
+
+function fallbackNote(msg) {
+  return `<div class="errnote">${esc(msg)}</div>`;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   KPI ENGINE
+   Drives all numeric dashboard cards with:
+     • skeleton loading state
+     • count-up animation
+     • delta badge (vs yesterday's demo baseline)
+     • source badge (live | demo)
+     • realistic fallback values via data-demo attribute
+     • currency formatting when data-format="currency"
+═══════════════════════════════════════════════════════════════ */
+
+// Format a raw number for display
+function fmtKPI(value, el) {
+  const fmt    = el.dataset.format || 'number';
+  const prefix = el.dataset.prefix || '';
+  const num    = parseFloat(value);
+  if (isNaN(num)) return String(value);
+
+  if (fmt === 'currency') {
+    if (num >= 1000000) return `${prefix}${(num / 1000000).toFixed(1)}M`;
+    if (num >= 1000)    return `${prefix}${(num / 1000).toFixed(0)}K`;
+    return `${prefix}${num.toLocaleString('en-US')}`;
+  }
+  return `${prefix}${num.toLocaleString('en-US')}`;
+}
+
+// Count-up animation from 0 (or current) to target
+function animateKPI(el, target, duration) {
+  const start    = performance.now();
+  const startVal = 0;
+  const fmt      = el.dataset.format || 'number';
+  const isNum    = !isNaN(parseFloat(target));
+
+  if (!isNum) { el.textContent = target; return; }
+
+  const endVal = parseFloat(target);
+
+  function step(now) {
+    const elapsed  = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    // ease out cubic
+    const eased    = 1 - Math.pow(1 - progress, 3);
+    const current  = startVal + (endVal - startVal) * eased;
+
+    if (fmt === 'currency') {
+      if (endVal >= 1000) {
+        el.textContent = `${el.dataset.prefix || ''}${Math.round(current / 1000)}K`;
+      } else {
+        el.textContent = `${el.dataset.prefix || ''}${Math.round(current)}`;
+      }
+    } else {
+      el.textContent = Math.round(current).toString();
+    }
+
+    if (progress < 1) requestAnimationFrame(step);
+    else {
+      el.textContent = fmtKPI(target, el);
+      el.classList.add('popping');
+      setTimeout(() => el.classList.remove('popping'), 500);
+    }
+  }
+  requestAnimationFrame(step);
+}
+
+// Show a delta badge next to the number
+function setDelta(deltaId, current, previous, invertBad) {
+  const el = document.getElementById(deltaId);
+  if (!el || previous === null || previous === undefined) return;
+  const diff = parseFloat(current) - parseFloat(previous);
+  if (diff === 0) { el.textContent = ''; return; }
+  const up = diff > 0;
+  // For "hot follows" and "overdue", going up is BAD
+  const good = invertBad ? !up : up;
+  el.textContent  = `${up ? '▲' : '▼'} ${Math.abs(diff)} vs yesterday`;
+  el.className    = `kpi-delta ${good ? 'up' : 'dn'}`;
+}
+
+// Apply a source badge ("live" or "demo") inside a kstat wrapper
+function setSourceBadge(wrapId, source) {
+  const wrap = document.getElementById(wrapId);
+  if (!wrap) return;
+  let badge = wrap.querySelector('.kpi-source');
+  if (!badge) {
+    badge = document.createElement('div');
+    badge.className = 'kpi-source';
+    wrap.appendChild(badge);
+  }
+  badge.textContent = source === 'live' ? '● live' : '◌ demo';
+  badge.className   = `kpi-source ${source}`;
+}
+
+// Put all KPIs into skeleton state while fetching
+function kpiLoadingState() {
+  document.querySelectorAll('.kpi-val').forEach(el => el.classList.add('loading'));
+}
+
+// Master function — writes all KPI values in one shot
+function renderKPIs(values, source) {
+  /*
+    values = {
+      activeBuyers, activeSellers, warmLeads, hotFollowUps, overdue, closingThisMo,
+      monthlyGoal, currentRev, pendingGCI
+    }
+    source = 'live' | 'demo'
+  */
+
+  // Yesterday baselines for delta display (demo approximations)
+  const yesterday = {
+    activeBuyers:   3,
+    activeSellers:  2,
+    warmLeads:      7,
+    hotFollowUps:   2,
+    overdue:        3,
+    closingThisMo:  1,
+    currentRev:     20000,
+    pendingGCI:     9000
+  };
+
+  const fields = [
+    { id: 'activeBuyers',   invertBad: false },
+    { id: 'activeSellers',  invertBad: false },
+    { id: 'warmLeads',      invertBad: false },
+    { id: 'hotFollowUps',   invertBad: true  },
+    { id: 'overdue',        invertBad: true  },
+    { id: 'closingThisMo',  invertBad: false },
+    { id: 'monthlyGoal',    invertBad: false },
+    { id: 'currentRev',     invertBad: false },
+    { id: 'pendingGCI',     invertBad: false },
+  ];
+
+  fields.forEach(({ id, invertBad }) => {
+    const el = document.getElementById(`kpi-${id}`);
+    if (!el) return;
+
+    const raw = values[id];
+    if (raw === undefined || raw === null) return;
+
+    el.classList.remove('loading');
+
+    animateKPI(el, raw, 900);
+    setDelta(`kpid-${id}`, raw, yesterday[id], invertBad);
+    setSourceBadge(`kpiWrap-${id}`, source);
+  });
+
+  // Progress bars
+  const goal    = parseFloat(values.monthlyGoal) || 40000;
+  const current = parseFloat(values.currentRev)  || 0;
+  const pending = parseFloat(values.pendingGCI)  || 0;
+  const pct     = Math.min(Math.round((current / goal) * 100), 100);
+
+  // Revenue command bar
+  const revFill  = document.getElementById('revProgFill');
+  const revLabel = document.getElementById('revProgLabel');
+  if (revFill)  setTimeout(() => revFill.style.width = `${pct}%`, 300);
+  if (revLabel) revLabel.textContent = `$${Math.round(current / 1000)}K of $${Math.round(goal / 1000)}K · ${pct}%`;
+
+  // Wealth card bar
+  const wFill  = document.getElementById('wealthProgFill');
+  const wLabel = document.getElementById('wealthProgLabel');
+  if (wFill)  setTimeout(() => wFill.style.width = `${pct}%`, 300);
+  if (wLabel) wLabel.textContent = `${pct}% to goal · $${Math.round(pending / 1000)}K pending`;
+}
+
+// Read demo values from data-demo attributes and render immediately
+function renderDemoKPIs() {
+  const demo = {};
+  document.querySelectorAll('.kpi-val[data-demo]').forEach(el => {
+    const key = el.id.replace('kpi-', '');
+    demo[key]  = parseFloat(el.dataset.demo);
+  });
+  // Fill any gaps with sensible defaults
+  demo.monthlyGoal  = demo.monthlyGoal  || 40000;
+  demo.currentRev   = demo.currentRev   || 24000;
+  demo.pendingGCI   = demo.pendingGCI   || 11400;
+  renderKPIs(demo, 'demo');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RATE HELPERS
+═══════════════════════════════════════════════════════════════ */
+function rateHTML(val) {
+  if (!val) return '—';
+  return `${esc(val)}<span class="pct">%</span>`;
+}
+function trendText(d) {
+  if (!d || d.change === undefined) return '—';
+  const arrow = d.direction === 'up' ? '▲' : d.direction === 'down' ? '▼' : '→';
+  return `${arrow} ${Math.abs(parseFloat(d.change) || 0).toFixed(2)}% vs last week`;
+}
+function trendClass(d) {
+  if (!d) return 'rtrend';
+  if (d.direction === 'up')   return 'rtrend up';
+  if (d.direction === 'down') return 'rtrend dn';
+  return 'rtrend';
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   NEWS HELPERS
+═══════════════════════════════════════════════════════════════ */
+function buildNewsHTML(articles, region) {
+  if (!Array.isArray(articles) || articles.length === 0) {
+    return fallbackNote(`No articles loaded for "${region}". NewsAPI free tier may restrict some queries — try refreshing.`);
+  }
+  return articles.map(a => {
+    const title  = esc(a.title || 'Untitled');
+    const desc   = a.description ? `<div class="nd">${esc(a.description.substring(0, 130))}…</div>` : '';
+    const link   = a.url    ? `<a class="nl" href="${esc(a.url)}" target="_blank" rel="noopener noreferrer">Read →</a>` : '';
+    const source = a.source ? `<div class="nsrc">${esc(a.source)}</div>` : '';
+    return `<div class="ni"><div class="nreg">${esc(region)}</div><div class="nh">${title}</div>${desc}${link}${source}</div>`;
+  }).join('');
+}
+
+function buildListHTML(arr) {
+  if (!Array.isArray(arr) || arr.length === 0) return '<li>Loading…</li>';
+  return arr.map(item => `<li>${esc(item)}</li>`).join('');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LOAD RATES  →  /api/rates
+═══════════════════════════════════════════════════════════════ */
+async function loadRates() {
+  setChip('chipRates', 'loading');
+
+  const { ok, data, error } = await apiFetch('/api/rates');
+
+  if (!ok) {
+    setChip('chipRates', 'err');
+    const note = `<span style="font-size:11px;color:var(--amb)">Rates unavailable — ${esc(error)}</span>`;
+    setHTML('r30',  note);
+    setHTML('r15',  note);
+    setHTML('rFHA', note);
+    setHTML('rVA',  note);
+    return null;
+  }
+
+  if (data.thirtyYear) {
+    setHTML('r30', rateHTML(data.thirtyYear.rate));
+    const t30 = document.getElementById('t30');
+    if (t30) { t30.textContent = trendText(data.thirtyYear); t30.className = trendClass(data.thirtyYear); }
+  } else {
+    setHTML('r30', '<span style="color:var(--txt2)">N/A</span>');
+  }
+
+  if (data.fifteenYear) {
+    setHTML('r15', rateHTML(data.fifteenYear.rate));
+    const t15 = document.getElementById('t15');
+    if (t15) { t15.textContent = trendText(data.fifteenYear); t15.className = trendClass(data.fifteenYear); }
+  } else {
+    setHTML('r15', '<span style="color:var(--txt2)">N/A</span>');
+  }
+
+  if (data.fha) setHTML('rFHA', rateHTML(data.fha.rate));
+  if (data.va)  setHTML('rVA',  rateHTML(data.va.rate));
+
+  setChip('chipRates', 'live');
+  return data;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LOAD NEWS  →  /api/news
+═══════════════════════════════════════════════════════════════ */
+async function loadNews() {
+  setChip('chipNews', 'loading');
+
+  const { ok, data, error } = await apiFetch('/api/news');
+
+  if (!ok) {
+    setChip('chipNews', 'err');
+    const note = fallbackNote(`News unavailable — ${error}`);
+    ['newsNat','newsDFW','newsLoc','newsWld','newsBld'].forEach(id => setHTML(id, note));
+    return null;
+  }
+
+  setHTML('newsNat', buildNewsHTML(data.national, 'National / Texas'));
+  setHTML('newsDFW', buildNewsHTML(data.dfw,      'South DFW Markets'));
+  setHTML('newsLoc', buildNewsHTML(data.local,    'DFW Local'));
+  setHTML('newsWld', buildNewsHTML(data.world,    'Economy / Rates'));
+  setHTML('newsBld', buildNewsHTML(data.builders, 'Builders'));
+
+  setChip('chipNews', 'live');
+  return data;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LOAD SUMMARY  →  /api/summary
+   Also extracts any pipeline KPI data returned by AI and renders
+   it as live values if present, otherwise demo values stay.
+═══════════════════════════════════════════════════════════════ */
+async function loadSummary(ratesData, newsData) {
+  setChip('chipAI', 'loading');
+
+  let ratesContext = '';
+  if (ratesData && ratesData.thirtyYear) {
+    const r = ratesData;
+    ratesContext = [
+      `30yr fixed: ${r.thirtyYear.rate}% (${r.thirtyYear.direction}, change: ${r.thirtyYear.change})`,
+      `15yr fixed: ${r.fifteenYear ? r.fifteenYear.rate + '%' : 'N/A'}`,
+      `FHA: ~${r.fha ? r.fha.rate + '%' : 'N/A'}`,
+      `VA/USDA: ~${r.va ? r.va.rate + '%' : 'N/A'}`
+    ].join(' | ');
+  }
+
+  let newsContext = '';
+  if (newsData) {
+    const headlines = [...(newsData.national || []), ...(newsData.dfw || [])]
+      .slice(0, 6).map(a => a.title).filter(Boolean);
+    newsContext = headlines.join(' | ');
+  }
+
+  const { ok, data: ai, error } = await apiFetch('/api/summary', {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body:    JSON.stringify({ ratesContext, newsContext })
+  });
+
+  if (!ok) {
+    setChip('chipAI', 'err');
+    setHTML('summaryBlock', fallbackNote(
+      `AI briefing unavailable — ${error} ` +
+      `Verify ANTHROPIC_API_KEY is set in Vercel → Settings → Environment Variables ` +
+      `and that you have billing credits at console.anthropic.com.`
+    ));
+    return;
+  }
+
+  /* ── EXECUTIVE SUMMARY ── */
+  setHTML('summaryBlock', `
+    <div class="sgrid">
+      <div class="sitem hl">
+        <div class="slb">What Matters Most</div>
+        <div class="sv">${esc(ai.whatMattersMost)}</div>
+      </div>
+      <div class="sitem">
+        <div class="slb">Biggest Opportunity</div>
+        <div class="sv">${esc(ai.biggestOpportunity)}</div>
+      </div>
+      <div class="sitem">
+        <div class="slb">Biggest Risk / Distraction</div>
+        <div class="sv">${esc(ai.biggestRisk)}</div>
+      </div>
+      <div class="sitem">
+        <div class="slb">Move Forward By</div>
+        <div class="sv">${esc(ai.moveForwardBy)}</div>
+      </div>
+    </div>
+    <div class="slabel">Top 3 Priorities</div>
+    <ul class="plist">
+      <li><span class="pnum">1</span><span>${esc(ai.priority1)}</span></li>
+      <li><span class="pnum">2</span><span>${esc(ai.priority2)}</span></li>
+      <li><span class="pnum">3</span><span>${esc(ai.priority3)}</span></li>
+    </ul>`);
+
+  /* ── REVENUE + CONTENT + STRATEGY ── */
+  setText('revAction', ai.revenueAction      || '');
+  if (ai.ratesTalkingPoint) setText('tpRate',     `"${ai.ratesTalkingPoint}"`);
+  if (ai.marketInsight)     setText('mktInsight',  ai.marketInsight);
+  if (ai.leadMessage)       setText('leadMsg',     ai.leadMessage);
+  if (ai.reelIdea)          setText('reelIdea',    ai.reelIdea);
+  if (ai.captionPrompt)     setText('captionIdea', ai.captionPrompt);
+  if (ai.storyIdea)         setText('storyIdea',   ai.storyIdea);
+  if (ai.wealthMove)        setText('wealthMove',  ai.wealthMove);
+  if (ai.teamPriority)      setText('teamDir',     ai.teamPriority);
+  if (ai.affirmation)       setText('affirm',      `"${ai.affirmation}"`);
+  if (ai.closingLine)       setText('closingPill', ai.closingLine);
+
+  /* ── AI STRATEGY GRID ── */
+  if (Array.isArray(ai.focusOn))     setHTML('aiFocus',    buildListHTML(ai.focusOn));
+  if (Array.isArray(ai.moneyMoves))  setHTML('aiMoney',    buildListHTML(ai.moneyMoves));
+  if (Array.isArray(ai.ignoreToday)) setHTML('aiIgnore',   buildListHTML(ai.ignoreToday));
+  if (Array.isArray(ai.watchOut))    setHTML('aiRisk',     buildListHTML(ai.watchOut));
+  if (Array.isArray(ai.delegate))    setHTML('aiDelegate', buildListHTML(ai.delegate));
+  if (Array.isArray(ai.decideToday)) setHTML('aiDecide',   buildListHTML(ai.decideToday));
+
+  /* ── KPI UPGRADE: if AI returned pipeline numbers, promote from demo → live ──
+     The /api/summary prompt returns optional pipeline fields when it has context.
+     If they're present and numeric, render them as live. Otherwise demo stays.    */
+  const liveKPIs = {};
+  const kpiKeys  = ['activeBuyers','activeSellers','warmLeads','hotFollowUps',
+                    'overdue','closingThisMo','currentRev','pendingGCI','monthlyGoal'];
+  let hasLive = false;
+
+  kpiKeys.forEach(key => {
+    if (ai[key] !== undefined && ai[key] !== null && !isNaN(parseFloat(ai[key]))) {
+      liveKPIs[key] = parseFloat(ai[key]);
+      hasLive = true;
+    }
+  });
+
+  if (hasLive) {
+    // Merge with demo for any fields AI didn't return
+    document.querySelectorAll('.kpi-val[data-demo]').forEach(el => {
+      const k = el.id.replace('kpi-', '');
+      if (liveKPIs[k] === undefined) liveKPIs[k] = parseFloat(el.dataset.demo);
+    });
+    renderKPIs(liveKPIs, 'live');
+  }
+  // If AI returned no KPI data, demo values from DOMContentLoaded still showing — that's fine.
+
+  setChip('chipAI', 'live');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LOAD ALL
+═══════════════════════════════════════════════════════════════ */
+async function loadAll() {
+  if (busy) return;
+  setLoading(true);
+  setText('updTxt', 'Loading live data…');
+
+  // Show skeleton on KPIs while fetching
+  kpiLoadingState();
+
+  // Rates + news in parallel, then AI (uses both as context)
+  const [ratesData, newsData] = await Promise.all([loadRates(), loadNews()]);
+  await loadSummary(ratesData, newsData);
+
+  const now = new Date();
+  setText('updTxt', `Updated ${now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}`);
+  setLoading(false);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   INTERACTIONS
+═══════════════════════════════════════════════════════════════ */
+function toggleP5(el) {
+  el.classList.toggle('done');
+  const s = el.querySelector('.p5st');
+  if (s) s.textContent = el.classList.contains('done') ? '✓ Complete' : 'Pending';
+}
+function toggleTodo(el) {
+  if (window.getSelection && window.getSelection().type === 'Range') return;
+  el.classList.toggle('done');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════════════ */
+window.addEventListener('DOMContentLoaded', () => {
+  // Stagger card animations
+  document.querySelectorAll('.card').forEach((card, i) => {
+    if (!card.style.animationDelay) {
+      card.style.animationDelay = `${0.04 + i * 0.03}s`;
+    }
+  });
+
+  // Show realistic demo KPIs immediately (before API returns)
+  // so the dashboard never shows "—" for more than a flash
+  renderDemoKPIs();
+
+  // Kick off all live data fetches
+  loadAll();
+});
 </script>
-
 </body>
 </html>
