@@ -3,1929 +3,1209 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Morning Briefing — Executive Command Center</title>
+<title>Daily Executive Brief — Bri's Command Center</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --black: #0a0a0a;
-    --charcoal: #1a1a1a;
-    --dark: #111111;
-    --panel: #161616;
-    --border: #2a2a2a;
-    --border-light: #333333;
-    --gold: #c9a84c;
-    --gold-light: #e2c97e;
-    --gold-dim: rgba(201,168,76,0.15);
-    --cream: #f5f0e8;
-    --cream-dim: rgba(245,240,232,0.07);
-    --white: #ffffff;
-    --muted: #666666;
-    --muted2: #444444;
-    --text: #d4cfc8;
-    --text-dim: #888888;
-    --green: #4a9a6e;
-    --red: #c05a5a;
-    --amber: #c9914c;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: 'Montserrat', sans-serif;
-    background: var(--black);
-    color: var(--text);
-    min-height: 100vh;
-    font-size: 13px;
-    line-height: 1.6;
-  }
-
-  /* HEADER */
-  .header {
-    background: var(--dark);
-    border-bottom: 1px solid var(--border);
-    padding: 28px 48px 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-
-  .header-left .date-label {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 4px;
-  }
-
-  .header-left h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 38px;
-    font-weight: 300;
-    color: var(--cream);
-    letter-spacing: -0.5px;
-    line-height: 1;
-  }
-
-  .header-left h1 em {
-    font-style: italic;
-    color: var(--gold-light);
-  }
-
-  .header-right {
-    text-align: right;
-  }
-
-  .header-right .time {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 42px;
-    font-weight: 300;
-    color: var(--cream);
-    letter-spacing: 2px;
-    line-height: 1;
-  }
-
-  .header-right .greeting {
-    font-size: 10px;
-    font-weight: 300;
-    letter-spacing: 2px;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin-top: 4px;
-  }
-
-  /* GOLD RULE */
-  .gold-rule {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    margin: 0;
-  }
-
-  /* MAIN LAYOUT */
-  .main {
-    max-width: 1600px;
-    margin: 0 auto;
-    padding: 40px 48px;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 20px;
-  }
-
-  /* CARDS */
-  .card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    padding: 28px 28px 24px;
-    position: relative;
-    overflow: hidden;
-    animation: fadeUp 0.6s ease both;
-  }
-
-  .card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--gold), transparent);
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-
-  .card:hover::before { opacity: 1; }
-
-  .card.span-2 { grid-column: span 2; }
-  .card.span-3 { grid-column: span 3; }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .card:nth-child(1) { animation-delay: 0.05s; }
-  .card:nth-child(2) { animation-delay: 0.1s; }
-  .card:nth-child(3) { animation-delay: 0.15s; }
-  .card:nth-child(4) { animation-delay: 0.2s; }
-  .card:nth-child(5) { animation-delay: 0.25s; }
-  .card:nth-child(6) { animation-delay: 0.3s; }
-  .card:nth-child(7) { animation-delay: 0.35s; }
-  .card:nth-child(8) { animation-delay: 0.4s; }
-
-  /* CARD HEADER */
-  .card-label {
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 18px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .card-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .card-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 300;
-    color: var(--cream);
-    margin-bottom: 18px;
-    line-height: 1.2;
-  }
-
-  /* SECTION LABEL */
-  .section-label {
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 6px;
-    margin-top: 16px;
-  }
-
-  /* =========================================
-     SECTION 1: MORNING EXECUTIVE SUMMARY
-  ========================================= */
-
-  .summary-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-top: 4px;
-  }
-
-  .summary-item {
-    padding: 14px 16px;
-    background: var(--cream-dim);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-  }
-
-  .summary-item .label {
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 6px;
-  }
-
-  .summary-item .value {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 16px;
-    font-weight: 400;
-    color: var(--cream);
-    line-height: 1.4;
-  }
-
-  .summary-item.highlight {
-    border-color: var(--gold);
-    background: var(--gold-dim);
-  }
-
-  .priority-list {
-    list-style: none;
-    margin-top: 4px;
-  }
-
-  .priority-list li {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 12px;
-    color: var(--text);
-  }
-
-  .priority-list li:last-child { border-bottom: none; }
-
-  .priority-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    font-weight: 300;
-    color: var(--gold);
-    line-height: 1;
-    min-width: 20px;
-  }
-
-  /* =========================================
-     SECTION 6: REVENUE COMMAND CENTER
-  ========================================= */
-
-  .revenue-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-
-  .revenue-stat {
-    text-align: center;
-    padding: 16px 8px;
-    background: var(--cream-dim);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    transition: border-color 0.2s;
-  }
-
-  .revenue-stat:hover { border-color: var(--gold); }
-
-  .revenue-stat .num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 32px;
-    font-weight: 300;
-    color: var(--cream);
-    line-height: 1;
-    margin-bottom: 4px;
-  }
-
-  .revenue-stat .num.gold { color: var(--gold-light); }
-  .revenue-stat .num.green { color: var(--green); }
-  .revenue-stat .num.red { color: var(--red); }
-
-  .revenue-stat .stat-label {
-    font-size: 9px;
-    font-weight: 500;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  .revenue-action {
-    padding: 16px 20px;
-    background: linear-gradient(135deg, rgba(201,168,76,0.1), rgba(201,168,76,0.03));
-    border: 1px solid var(--gold);
-    border-radius: 2px;
-    margin-top: 16px;
-  }
-
-  .revenue-action .action-label {
-    font-size: 9px;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 6px;
-    font-weight: 600;
-  }
-
-  .revenue-action .action-text {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 17px;
-    color: var(--cream);
-    line-height: 1.4;
-  }
-
-  /* Progress bar */
-  .progress-wrap {
-    margin-top: 16px;
-  }
-
-  .progress-label {
-    display: flex;
-    justify-content: space-between;
-    font-size: 10px;
-    color: var(--muted);
-    margin-bottom: 6px;
-    letter-spacing: 1px;
-  }
-
-  .progress-bar {
-    height: 3px;
-    background: var(--border);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--gold), var(--gold-light));
-    border-radius: 2px;
-    transition: width 1s ease;
-  }
-
-  /* =========================================
-     SECTION 2: INTEREST RATES
-  ========================================= */
-
-  .rate-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 16px;
-  }
-
-  .rate-item {
-    padding: 14px 16px;
-    background: var(--cream-dim);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-  }
-
-  .rate-item .rate-type {
-    font-size: 9px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 4px;
-  }
-
-  .rate-item .rate-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 30px;
-    font-weight: 300;
-    color: var(--cream);
-    line-height: 1;
-  }
-
-  .rate-item .rate-trend {
-    font-size: 10px;
-    color: var(--amber);
-    margin-top: 3px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .rate-item .rate-trend.up { color: var(--red); }
-  .rate-item .rate-trend.down { color: var(--green); }
-
-  .talking-point {
-    padding: 10px 14px;
-    border-left: 2px solid var(--gold);
-    margin-top: 8px;
-    font-size: 12px;
-    color: var(--text-dim);
-    font-style: italic;
-    line-height: 1.5;
-  }
-
-  /* =========================================
-     SECTION 7: LEAD FOLLOW-UP
-  ========================================= */
-
-  .lead-item {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .lead-item:last-child { border-bottom: none; }
-
-  .lead-priority {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .lead-priority.hot { background: var(--red); box-shadow: 0 0 6px var(--red); }
-  .lead-priority.warm { background: var(--amber); }
-  .lead-priority.cool { background: var(--muted2); }
-
-  .lead-name {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--cream);
-    min-width: 120px;
-  }
-
-  .lead-action {
-    font-size: 10px;
-    color: var(--muted);
-    flex: 1;
-  }
-
-  .lead-method {
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 3px 8px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    color: var(--gold);
-  }
-
-  /* =========================================
-     SECTION 8: CALENDAR
-  ========================================= */
-
-  .cal-item {
-    display: flex;
-    gap: 16px;
-    padding: 11px 0;
-    border-bottom: 1px solid var(--border);
-    align-items: flex-start;
-  }
-
-  .cal-item:last-child { border-bottom: none; }
-
-  .cal-time {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 16px;
-    font-weight: 300;
-    color: var(--gold);
-    min-width: 60px;
-    line-height: 1.2;
-  }
-
-  .cal-details .cal-title {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--cream);
-    margin-bottom: 2px;
-  }
-
-  .cal-details .cal-sub {
-    font-size: 10px;
-    color: var(--muted);
-    letter-spacing: 0.5px;
-  }
-
-  .cal-tag {
-    font-size: 9px;
-    padding: 2px 7px;
-    border-radius: 10px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-left: auto;
-    white-space: nowrap;
-    align-self: center;
-  }
-
-  .cal-tag.client { background: rgba(74,154,110,0.15); color: var(--green); }
-  .cal-tag.personal { background: rgba(201,168,76,0.12); color: var(--gold); }
-  .cal-tag.school { background: rgba(100,140,200,0.12); color: #8ab0e8; }
-  .cal-tag.warning { background: rgba(192,90,90,0.12); color: var(--red); }
-
-  /* =========================================
-     SECTION 9: TO-DO MATRIX
-  ========================================= */
-
-  .todo-columns {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-
-  .todo-col h4 {
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--gold);
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 10px;
-  }
-
-  .todo-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    padding: 5px 0;
-    font-size: 11px;
-    color: var(--text-dim);
-    line-height: 1.4;
-  }
-
-  .todo-check {
-    width: 12px;
-    height: 12px;
-    border: 1px solid var(--border-light);
-    border-radius: 2px;
-    flex-shrink: 0;
-    margin-top: 1px;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .todo-check:hover { border-color: var(--gold); }
-  .todo-check.done { background: var(--gold); border-color: var(--gold); }
-
-  /* =========================================
-     SECTION 10: POWER 5
-  ========================================= */
-
-  .power5-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
-  }
-
-  .power5-item {
-    padding: 16px 12px;
-    background: var(--cream-dim);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .power5-item:hover { border-color: var(--gold); }
-  .power5-item.done { border-color: var(--green); background: rgba(74,154,110,0.08); }
-
-  .power5-icon {
-    font-size: 18px;
-    margin-bottom: 8px;
-  }
-
-  .power5-label {
-    font-size: 9px;
-    font-weight: 500;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--muted);
-    line-height: 1.4;
-  }
-
-  .power5-status {
-    margin-top: 8px;
-    font-size: 10px;
-    color: var(--muted);
-  }
-
-  .power5-status.done { color: var(--green); }
-
-  /* =========================================
-     SECTION 11: BRAND VISIBILITY
-  ========================================= */
-
-  .content-idea {
-    padding: 16px 20px;
-    background: var(--cream-dim);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    margin-bottom: 12px;
-  }
-
-  .content-idea .idea-type {
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 6px;
-  }
-
-  .content-idea .idea-text {
-    font-size: 13px;
-    color: var(--text);
-    line-height: 1.5;
-  }
-
-  .posting-tracker {
-    display: flex;
-    gap: 6px;
-    margin-top: 14px;
-  }
-
-  .post-day {
-    flex: 1;
-    height: 32px;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2px;
-    font-size: 8px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--muted);
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .post-day:hover { border-color: var(--gold); }
-  .post-day.done { background: var(--gold-dim); border-color: var(--gold); color: var(--gold); }
-
-  /* =========================================
-     SECTION 15: WELLNESS
-  ========================================= */
-
-  .wellness-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-  }
-
-  .wellness-item {
-    padding: 14px 12px;
-    background: var(--cream-dim);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    text-align: center;
-  }
-
-  .wellness-emoji { font-size: 20px; margin-bottom: 6px; }
-
-  .wellness-label {
-    font-size: 9px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 4px;
-  }
-
-  .wellness-value {
-    font-size: 11px;
-    color: var(--text);
-  }
-
-  /* =========================================
-     SECTION 17: VISION PANEL
-  ========================================= */
-
-  .vision-card {
-    background: linear-gradient(135deg, #0f0f0f, #161610);
-    border: 1px solid var(--gold);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .vision-card::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -20%;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
-    pointer-events: none;
-  }
-
-  .affirmation {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 28px;
-    font-weight: 300;
-    font-style: italic;
-    color: var(--gold-light);
-    line-height: 1.3;
-    margin: 16px 0 20px;
-  }
-
-  .vision-pillars {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 16px;
-  }
-
-  .vision-pill {
-    padding: 5px 14px;
-    border: 1px solid rgba(201,168,76,0.3);
-    border-radius: 20px;
-    font-size: 10px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--gold);
-    font-weight: 500;
-  }
-
-  /* =========================================
-     SECTION 18: AI STRATEGY
-  ========================================= */
-
-  .ai-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 12px;
-  }
-
-  .ai-item {
-    padding: 16px;
-    background: var(--cream-dim);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-  }
-
-  .ai-item .ai-label {
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-
-  .ai-item.focus .ai-label { color: var(--green); }
-  .ai-item.ignore .ai-label { color: var(--muted); }
-  .ai-item.money .ai-label { color: var(--gold); }
-  .ai-item.risk .ai-label { color: var(--red); }
-  .ai-item.delegate .ai-label { color: #8ab0e8; }
-  .ai-item.decide .ai-label { color: var(--amber); }
-
-  .ai-item ul {
-    list-style: none;
-  }
-
-  .ai-item ul li {
-    font-size: 11px;
-    color: var(--text-dim);
-    padding: 4px 0;
-    border-bottom: 1px solid var(--border);
-    line-height: 1.4;
-  }
-
-  .ai-item ul li:last-child { border-bottom: none; }
-
-  /* =========================================
-     SECTION 14: WEALTH / MONEY
-  ========================================= */
-
-  .money-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 16px;
-  }
-
-  .money-stat {
-    padding: 14px;
-    background: var(--cream-dim);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-  }
-
-  .money-stat .m-label {
-    font-size: 9px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 4px;
-  }
-
-  .money-stat .m-value {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 24px;
-    font-weight: 300;
-    color: var(--cream);
-  }
-
-  .money-stat .m-value.green { color: var(--green); }
-  .money-stat .m-value.gold { color: var(--gold-light); }
-
-  .money-alert {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    background: rgba(192,90,90,0.07);
-    border: 1px solid rgba(192,90,90,0.3);
-    border-radius: 2px;
-    font-size: 11px;
-    color: var(--red);
-  }
-
-  /* =========================================
-     MARKET NEWS
-  ========================================= */
-
-  .news-item {
-    padding: 11px 0;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .news-item:last-child { border-bottom: none; }
-
-  .news-region {
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 3px;
-  }
-
-  .news-headline {
-    font-size: 12px;
-    color: var(--cream);
-    line-height: 1.4;
-    margin-bottom: 3px;
-  }
-
-  .news-note {
-    font-size: 10px;
-    color: var(--muted);
-    line-height: 1.4;
-  }
-
-  /* VIP */
-  .vip-item {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .vip-item:last-child { border-bottom: none; }
-
-  .vip-icon { font-size: 16px; min-width: 24px; text-align: center; }
-
-  .vip-details .vip-name {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--cream);
-  }
-
-  .vip-details .vip-action {
-    font-size: 10px;
-    color: var(--muted);
-    margin-top: 1px;
-  }
-
-  .vip-badge {
-    margin-left: auto;
-    font-size: 9px;
-    padding: 2px 8px;
-    border: 1px solid var(--gold);
-    border-radius: 10px;
-    color: var(--gold);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-
-  /* FOOTER */
-  .footer {
-    border-top: 1px solid var(--border);
-    padding: 20px 48px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 10px;
-    color: var(--muted);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-
-  .footer .brand {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 14px;
-    color: var(--gold);
-    letter-spacing: 3px;
-    font-style: italic;
-    text-transform: none;
-  }
-
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: var(--black); }
-  ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 2px; }
-
-  /* RESPONSIVE */
-  @media (max-width: 1200px) {
-    .main { grid-template-columns: 1fr 1fr; padding: 24px; }
-    .revenue-grid { grid-template-columns: repeat(3, 1fr); }
-    .power5-grid { grid-template-columns: repeat(3, 1fr); }
-    .ai-grid { grid-template-columns: 1fr 1fr; }
-    .card.span-3 { grid-column: span 2; }
-  }
-
-  @media (max-width: 768px) {
-    .header { padding: 20px 24px; flex-direction: column; gap: 12px; align-items: flex-start; }
-    .main { grid-template-columns: 1fr; padding: 16px; }
-    .card.span-2, .card.span-3 { grid-column: span 1; }
-    .revenue-grid { grid-template-columns: repeat(3, 1fr); }
-    .summary-grid { grid-template-columns: 1fr; }
-    .money-stats { grid-template-columns: 1fr 1fr; }
-    .rate-grid { grid-template-columns: 1fr 1fr; }
-  }
-
-  /* INTERACTIVE */
-  .editable {
-    cursor: pointer;
-    border-bottom: 1px dashed var(--border-light);
-    transition: border-color 0.2s;
-  }
-  .editable:focus {
-    outline: none;
-    border-bottom-color: var(--gold);
-  }
-
-  .btn {
-    padding: 8px 18px;
-    background: transparent;
-    border: 1px solid var(--gold);
-    color: var(--gold);
-    font-family: 'Montserrat', sans-serif;
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.2s;
-    border-radius: 1px;
-  }
-
-  .btn:hover {
-    background: var(--gold);
-    color: var(--black);
-  }
-
-  .section-divider {
-    grid-column: 1 / -1;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--border-light), transparent);
-    margin: 8px 0;
-  }
+:root {
+  --black:      #080808;
+  --s1:         #0f0f0f;
+  --s2:         #141414;
+  --s3:         #1a1a1a;
+  --s4:         #222222;
+  --line:       #1e1e1e;
+  --line2:      #282828;
+  --gold:       #c9a84c;
+  --gold2:      #dfc070;
+  --gold3:      #f0d898;
+  --golddim:    rgba(201,168,76,0.09);
+  --goldborder: rgba(201,168,76,0.22);
+  --goldglow:   rgba(201,168,76,0.18);
+  --cream:      #ede8de;
+  --creamdim:   rgba(237,232,222,0.055);
+  --txt:        #c8c3bb;
+  --txt2:       #7a756e;
+  --txt3:       #3e3b37;
+  --green:      #4d9e72;
+  --greendim:   rgba(77,158,114,0.12);
+  --red:        #b85555;
+  --reddim:     rgba(184,85,85,0.10);
+  --amber:      #c28a44;
+  --blue:       #6a9dce;
+  --bluedim:    rgba(106,157,206,0.11);
+  --r:          4px;
+  --r2:         8px;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--black);
+  color:var(--txt);
+  font-size:13px;
+  line-height:1.65;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+body::after{
+  content:'';
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.025'/%3E%3C/svg%3E");
+  opacity:.5;
+}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes breathe{0%,100%{box-shadow:0 0 28px var(--goldglow)}50%{box-shadow:0 0 52px rgba(201,168,76,.3)}}
+@keyframes affirmIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── HEADER ─────────────────────────────── */
+.hdr{
+  position:sticky;top:0;z-index:300;
+  background:rgba(8,8,8,.97);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--line);
+  padding:20px 44px 18px;
+  display:flex;justify-content:space-between;align-items:flex-end;
+}
+.hdr::after{
+  content:'';
+  position:absolute;bottom:-1px;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent 0%,var(--gold) 25%,var(--gold2) 50%,var(--gold) 75%,transparent 100%);
+  opacity:.45;
+}
+.hdr-l .dtag{
+  font-size:9px;font-weight:500;letter-spacing:3.5px;
+  text-transform:uppercase;color:var(--gold);margin-bottom:4px;
+}
+.hdr-l h1{
+  font-family:'Cormorant Garamond',serif;
+  font-size:34px;font-weight:300;color:var(--cream);
+  letter-spacing:-.4px;line-height:1;
+}
+.hdr-l h1 em{font-style:italic;color:var(--gold2)}
+.hdr-r{text-align:right}
+.clk{
+  font-family:'Cormorant Garamond',serif;
+  font-size:40px;font-weight:300;color:var(--cream);
+  letter-spacing:2px;line-height:1;
+}
+.clk .ap{
+  font-family:'DM Sans',sans-serif;font-size:13px;
+  letter-spacing:2.5px;color:var(--gold);margin-left:5px;font-weight:300;
+}
+.hdr-r .tagline{
+  font-size:9px;font-weight:300;letter-spacing:3px;
+  text-transform:uppercase;color:var(--txt2);margin-top:4px;
+}
+.hdr-r .last-ref{
+  font-size:9px;letter-spacing:1px;color:var(--txt3);
+  margin-top:3px;min-height:13px;
+}
+
+/* ── STATUS BAR ─────────────────────────── */
+.sbar{
+  position:relative;z-index:1;
+  background:var(--s1);border-bottom:1px solid var(--line);
+  padding:10px 44px;
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+}
+.chip{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:8.5px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;
+  padding:4px 10px;border-radius:20px;
+  border:1px solid var(--line2);color:var(--txt2);transition:all .3s;
+}
+.chip .dot{width:5px;height:5px;border-radius:50%;background:var(--txt3);animation:blink 2.5s infinite}
+.chip.live{color:var(--green);border-color:rgba(77,158,114,.3)}.chip.live .dot{background:var(--green)}
+.chip.loading{color:var(--amber);border-color:rgba(194,138,68,.3)}.chip.loading .dot{background:var(--amber)}
+.chip.err{color:var(--red);border-color:rgba(184,85,85,.3)}.chip.err .dot{background:var(--red);animation:none}
+.sbar .spacer{flex:1}
+.btn-ref{
+  display:flex;align-items:center;gap:7px;
+  padding:8px 18px;background:transparent;
+  border:1px solid var(--gold);color:var(--gold);
+  border-radius:var(--r);font-family:'DM Sans',sans-serif;
+  font-size:8.5px;font-weight:600;letter-spacing:2px;text-transform:uppercase;
+  cursor:pointer;transition:all .22s;white-space:nowrap;
+}
+.btn-ref:hover{background:var(--gold);color:var(--black)}
+.btn-ref:disabled{opacity:.38;cursor:not-allowed}
+.btn-ref .si{display:none}
+.btn-ref.loading .si{display:inline;animation:spin .8s linear infinite}
+.btn-ref.loading .ii{display:none}
+
+/* ── GOLD RULE ───────────────────────────── */
+.gold-rule{
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  opacity:.4;
+}
+
+/* ── GRID ────────────────────────────────── */
+.grid{
+  position:relative;z-index:1;
+  max-width:1680px;margin:0 auto;
+  padding:32px 44px 64px;
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  gap:16px;
+}
+.c3{grid-column:span 3}.c4{grid-column:span 4}.c5{grid-column:span 5}
+.c6{grid-column:span 6}.c7{grid-column:span 7}.c8{grid-column:span 8}
+.c9{grid-column:span 9}.c12{grid-column:span 12}
+.divider{
+  grid-column:1/-1;height:1px;
+  background:linear-gradient(90deg,transparent,var(--line2),transparent);
+  margin:4px 0;
+}
+
+/* ── CARDS ───────────────────────────────── */
+.card{
+  background:var(--s2);border:1px solid var(--line);
+  border-radius:var(--r2);
+  padding:24px 24px 20px;
+  position:relative;overflow:hidden;
+  animation:fadeUp .5s ease both;
+  transition:border-color .25s;
+}
+.card:hover{border-color:var(--line2)}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1.5px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  transform:scaleX(0);transform-origin:left;transition:transform .4s ease;
+}
+.card:hover::before{transform:scaleX(1)}
+.card.gold{
+  background:linear-gradient(140deg,#0e0d09 0%,#131108 100%);
+  border-color:var(--goldborder);
+  animation:breathe 5s ease-in-out infinite,fadeUp .5s ease both;
+}
+.card.gold::before{transform:scaleX(1);opacity:.7}
+.card.dark{background:var(--s1)}
+
+.clabel{
+  font-size:8.5px;font-weight:600;letter-spacing:3px;
+  text-transform:uppercase;color:var(--gold);
+  margin-bottom:14px;
+  display:flex;align-items:center;gap:9px;
+}
+.clabel::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
+.slabel{
+  font-size:8.5px;font-weight:600;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--txt3);
+  margin:16px 0 8px;
+}
+
+/* ── AFFIRMATION CARD ────────────────────── */
+.affirm-card{
+  background:linear-gradient(135deg,#0d0c08 0%,#141109 100%);
+  border:1px solid var(--goldborder);
+  padding:20px 26px;
+}
+.affirm-text{
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;font-weight:300;font-style:italic;
+  color:var(--gold2);line-height:1.45;
+  animation:affirmIn .6s ease;
+}
+.affirm-sub{
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--txt3);margin-top:8px;
+}
+
+/* ── SKELETON ────────────────────────────── */
+.sk{
+  display:block;border-radius:3px;height:13px;
+  background:linear-gradient(90deg,var(--line) 25%,var(--line2) 50%,var(--line) 75%);
+  background-size:200% 100%;animation:shimmer 1.6s infinite;
+}
+.sk+.sk{margin-top:6px}
+.sk.h20{height:20px}.sk.h32{height:32px}
+.sk.w60{width:60%}.sk.w75{width:75%}.sk.w85{width:85%}
+
+/* ── SUMMARY GRID ────────────────────────── */
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:16px}
+.sitem{
+  padding:13px 15px;background:var(--creamdim);
+  border:1px solid var(--line);border-radius:var(--r);transition:border-color .2s;
+}
+.sitem:hover{border-color:var(--line2)}
+.sitem.hl{border-color:var(--goldborder);background:var(--golddim)}
+.sitem .slb{font-size:8px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:5px}
+.sitem .sv{font-family:'Cormorant Garamond',serif;font-size:14.5px;color:var(--cream);line-height:1.45}
+.plist{list-style:none}
+.plist li{display:flex;align-items:flex-start;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);font-size:12px;color:var(--txt)}
+.plist li:last-child{border-bottom:none}
+.pnum{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:300;color:var(--gold);line-height:1;min-width:20px}
+
+/* ── KPI STATS ───────────────────────────── */
+.kgrid{display:grid;gap:10px}
+.k3{grid-template-columns:repeat(3,1fr)}.k2{grid-template-columns:repeat(2,1fr)}.k4{grid-template-columns:repeat(4,1fr)}
+.kstat{
+  text-align:center;padding:15px 8px 11px;
+  background:var(--creamdim);border:1px solid var(--line);border-radius:var(--r);
+  transition:all .2s;
+}
+.kstat:hover{border-color:var(--gold);background:var(--golddim)}
+.kn{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:var(--cream);line-height:1;margin-bottom:4px}
+.kn.g{color:var(--gold2)}.kn.grn{color:var(--green)}.kn.red{color:var(--red)}.kn.blu{color:var(--blue)}
+.kl{font-size:8.5px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--txt2)}
+
+/* ── PROGRESS ────────────────────────────── */
+.prog{margin-top:13px}
+.progrow{display:flex;justify-content:space-between;font-size:10px;color:var(--txt2);margin-bottom:6px}
+.progtrack{height:2px;background:var(--line);border-radius:2px;overflow:hidden}
+.progfill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:2px;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+
+/* ── ACTION BLOCK ────────────────────────── */
+.ablock{padding:14px 18px;margin-top:14px;background:linear-gradient(135deg,rgba(201,168,76,.1),rgba(201,168,76,.03));border:1px solid var(--goldborder);border-radius:var(--r)}
+.ablock .alb{font-size:8px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:6px;font-weight:600}
+.ablock .atx{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--cream);line-height:1.45}
+
+/* ── RATES ───────────────────────────────── */
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.ritem{padding:13px 14px;background:var(--creamdim);border:1px solid var(--line);border-radius:var(--r)}
+.rtype{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--txt2);margin-bottom:4px}
+.rnum{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--cream);line-height:1}
+.rnum .pct{font-size:13px;color:var(--txt2)}
+.rtrend{font-size:10px;margin-top:3px;color:var(--amber)}
+.rtrend.up{color:var(--red)}.rtrend.dn{color:var(--green)}
+.tp{padding:9px 13px;border-left:2px solid var(--gold);margin-top:9px;font-size:11.5px;color:var(--txt2);font-style:italic;line-height:1.55}
+
+/* ── NEWS ────────────────────────────────── */
+.ncol{display:flex;flex-direction:column}
+.ni{padding:11px 0;border-bottom:1px solid var(--line)}
+.ni:last-child{border-bottom:none}
+.nreg{font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:2px}
+.nh{font-size:12px;color:var(--cream);line-height:1.4;margin-bottom:2px}
+.nd{font-size:10.5px;color:var(--txt2);line-height:1.45}
+.nl{font-size:10px;color:var(--gold);text-decoration:none;display:inline-block;margin-top:2px;transition:color .2s}
+.nl:hover{color:var(--gold2)}
+.n2col{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+
+/* ── LEADS ───────────────────────────────── */
+.litem{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid var(--line)}
+.litem:last-child{border-bottom:none}
+.ldot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.ldot.hot{background:var(--red);box-shadow:0 0 7px var(--red)}
+.ldot.warm{background:var(--amber)}.ldot.cool{background:var(--txt3)}
+.lname{font-size:13px;font-weight:500;color:var(--cream);min-width:125px}
+.lnote{font-size:10.5px;color:var(--txt2);flex:1}
+.lbadge{font-size:8px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:3px 9px;border:1px solid var(--line2);border-radius:12px;color:var(--gold);white-space:nowrap}
+
+/* ── PIPELINE TABLE ──────────────────────── */
+.ptable{width:100%;border-collapse:collapse;margin-top:4px}
+.ptable th{font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);padding:6px 8px;text-align:left;border-bottom:1px solid var(--line)}
+.ptable td{font-size:11.5px;color:var(--txt);padding:8px 8px;border-bottom:1px solid var(--line)}
+.ptable tr:last-child td{border-bottom:none}
+.ptable tr:hover td{color:var(--cream);background:var(--creamdim)}
+.stage{font-size:8px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:10px;white-space:nowrap}
+.stage.hot{background:var(--reddim);color:var(--red)}
+.stage.warm{background:rgba(194,138,68,.12);color:var(--amber)}
+.stage.active{background:var(--greendim);color:var(--green)}
+.stage.pending{background:var(--bluedim);color:var(--blue)}
+.stage.cold{background:var(--creamdim);color:var(--txt2)}
+.stage.closed{background:var(--golddim);color:var(--gold)}
+.overdue{color:var(--red)!important;font-weight:500}
+
+/* ── CALENDAR ────────────────────────────── */
+.cali{display:flex;align-items:flex-start;gap:11px;padding:9px 0;border-bottom:1px solid var(--line)}
+.cali:last-child{border-bottom:none}
+.calt{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:300;color:var(--gold);min-width:65px;line-height:1.2}
+.caln{font-size:12px;font-weight:500;color:var(--cream);margin-bottom:1px}
+.cals{font-size:10px;color:var(--txt2)}
+.ctag{font-size:8px;padding:2px 8px;border-radius:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-left:auto;white-space:nowrap;align-self:center}
+.ctag.client{background:var(--greendim);color:var(--green)}
+.ctag.pers{background:var(--golddim);color:var(--gold)}
+.ctag.school{background:var(--bluedim);color:var(--blue)}
+.ctag.warn{background:var(--reddim);color:var(--red)}
+
+/* ── TODO ────────────────────────────────── */
+.tcols{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.tgrp h4{font-size:8.5px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold);padding-bottom:7px;border-bottom:1px solid var(--line);margin-bottom:9px}
+.titem{display:flex;align-items:flex-start;gap:8px;padding:4.5px 0;font-size:11.5px;color:var(--txt2);line-height:1.45;cursor:pointer;transition:color .18s}
+.titem:hover{color:var(--txt)}.titem.done{color:var(--txt3);text-decoration:line-through}
+.chk{width:13px;height:13px;border:1px solid var(--line2);border-radius:2px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .18s;font-size:9px;color:transparent}
+.titem:hover .chk{border-color:var(--gold)}.titem.done .chk{background:var(--gold);border-color:var(--gold);color:var(--black)}
+
+/* ── POWER 5 ─────────────────────────────── */
+.p5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.p5i{padding:15px 11px 12px;background:var(--creamdim);border:1px solid var(--line);border-radius:var(--r);text-align:center;cursor:pointer;transition:all .22s}
+.p5i:hover{border-color:var(--gold);background:var(--golddim)}
+.p5i.done{border-color:var(--green);background:var(--greendim)}
+.p5ico{font-size:19px;margin-bottom:8px}
+.p5lbl{font-size:9px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--txt2);line-height:1.45}
+.p5st{margin-top:8px;font-size:10px;color:var(--txt3)}.p5i.done .p5st{color:var(--green)}
+
+/* ── BRAND CONTENT ───────────────────────── */
+.ccard{padding:13px 16px;background:var(--creamdim);border:1px solid var(--line);border-radius:var(--r);margin-bottom:10px}
+.ccard .ctype{font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:5px}
+.ccard .ctxt{font-size:12.5px;color:var(--txt);line-height:1.5}
+.postrow{display:flex;gap:5px;margin-top:12px}
+.pday{flex:1;height:30px;border:1px solid var(--line);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);cursor:pointer;transition:all .18s}
+.pday:hover{border-color:var(--gold);color:var(--gold)}.pday.done{background:var(--golddim);border-color:var(--gold);color:var(--gold)}
+
+/* ── VIP TOUCHES ─────────────────────────── */
+.vitem{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}
+.vitem:last-child{border-bottom:none}
+.vico{font-size:16px;min-width:24px;text-align:center}
+.vnm{font-size:12px;font-weight:500;color:var(--cream)}.vact{font-size:10px;color:var(--txt2);margin-top:1px}
+.vbadge{margin-left:auto;font-size:8px;padding:2px 8px;border:1px solid var(--goldborder);border-radius:10px;color:var(--gold);letter-spacing:1px;text-transform:uppercase;white-space:nowrap}
+
+/* ── TEAM KPI ────────────────────────────── */
+.tgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.tkpi{text-align:center;padding:13px 8px 10px;background:var(--creamdim);border:1px solid var(--line);border-radius:var(--r)}
+.tn{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--cream);line-height:1;margin-bottom:3px}
+.tn.red{color:var(--red)}.tn.grn{color:var(--green)}.tn.g{color:var(--gold2)}
+.tkl{font-size:8px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--txt2)}
+
+/* ── AI STRATEGY ─────────────────────────── */
+.aigrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.aiitem{padding:13px 15px;background:var(--creamdim);border:1px solid var(--line);border-radius:var(--r)}
+.aiitem .ailb{font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.aiitem.focus .ailb{color:var(--green)}.aiitem.money .ailb{color:var(--gold)}
+.aiitem.ignore .ailb{color:var(--txt2)}.aiitem.risk .ailb{color:var(--red)}
+.aiitem.delg .ailb{color:var(--blue)}.aiitem.dec .ailb{color:var(--amber)}
+.aiitem ul{list-style:none}
+.aiitem ul li{font-size:11.5px;color:var(--txt2);padding:3.5px 0;border-bottom:1px solid var(--line);line-height:1.45}
+.aiitem ul li:last-child{border-bottom:none}
+
+/* ── WELLNESS ────────────────────────────── */
+.wgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.wi{padding:13px 9px;background:var(--creamdim);border:1px solid var(--line);border-radius:var(--r);text-align:center}
+.wico{font-size:19px;margin-bottom:6px}.wlb{font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--txt3);margin-bottom:3px}.wv{font-size:11.5px;color:var(--txt)}
+
+/* ── COUNTDOWN ───────────────────────────── */
+.cditem{display:flex;align-items:center;gap:13px;padding:9px 0;border-bottom:1px solid var(--line)}
+.cditem:last-child{border-bottom:none}
+.cddays{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;min-width:50px;text-align:center;line-height:1}
+.cddays.now{font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--red)}
+.cddays.soon{color:var(--amber)}.cddays.ahead{color:var(--gold)}
+.cdtitle{font-size:12px;font-weight:500;color:var(--cream);margin-bottom:1px}.cdsub{font-size:10px;color:var(--txt2)}
+
+/* ── MONEY ───────────────────────────────── */
+.mstats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.mstat{padding:13px 14px;background:var(--creamdim);border:1px solid var(--line);border-radius:var(--r)}
+.mlb{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--txt2);margin-bottom:4px}
+.mv{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--cream)}
+.mv.green{color:var(--green)}.mv.gold{color:var(--gold2)}
+.malert{display:flex;align-items:flex-start;gap:9px;padding:11px 13px;background:var(--reddim);border:1px solid rgba(184,85,85,.25);border-radius:var(--r);font-size:11px;color:var(--red);line-height:1.5;margin-top:12px}
+
+/* ── FUB PLACEHOLDER ─────────────────────── */
+.fub{padding:16px;border:1px dashed var(--goldborder);border-radius:var(--r);text-align:center;background:var(--golddim);margin-top:12px}
+.fub .fi{font-size:20px;margin-bottom:6px}.fub .ft{font-size:11px;font-weight:600;color:var(--gold);letter-spacing:1px;margin-bottom:4px}
+.fub .fs{font-size:10.5px;color:var(--txt2);line-height:1.5}
+.fub .fb{display:inline-block;margin-top:7px;font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:3px 11px;border:1px solid var(--goldborder);border-radius:12px;color:var(--gold)}
+
+/* ── VISION ──────────────────────────────── */
+.vcard{background:linear-gradient(140deg,#0d0b07 0%,#131009 60%,#0d0b07 100%);border:1px solid var(--goldborder);position:relative;overflow:hidden}
+.vcard::after{content:'';position:absolute;top:-40%;right:-10%;width:400px;height:400px;background:radial-gradient(circle,rgba(201,168,76,.07) 0%,transparent 65%);pointer-events:none}
+.vaff{font-family:'Cormorant Garamond',serif;font-size:23px;font-weight:300;font-style:italic;color:var(--gold2);line-height:1.35;margin:12px 0 16px}
+.vbody{font-size:12px;color:var(--txt2);line-height:1.7}
+.vpills{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px}
+.vpill{padding:4px 13px;border:1px solid var(--goldborder);border-radius:20px;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);font-weight:500}
+
+/* ── ERROR ───────────────────────────────── */
+.errnote{font-size:11px;color:var(--amber);padding:10px 13px;border:1px solid rgba(194,138,68,.25);border-radius:var(--r);margin-top:7px;line-height:1.5}
+
+/* ── EDITABLE ────────────────────────────── */
+[contenteditable]{outline:none;cursor:text}
+[contenteditable]:focus{border-radius:2px;box-shadow:0 0 0 1px var(--goldborder)}
+
+/* ── FOOTER ──────────────────────────────── */
+.footer{
+  position:relative;z-index:1;
+  border-top:1px solid var(--line);
+  padding:18px 44px;
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:9.5px;color:var(--txt3);letter-spacing:2px;text-transform:uppercase;
+  background:var(--s1);
+}
+.footer .brand{font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--gold);letter-spacing:3px;font-style:italic;text-transform:none}
+
+/* ── SCROLLBAR ───────────────────────────── */
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--black)}::-webkit-scrollbar-thumb{background:var(--line2);border-radius:2px}
+
+/* ── RESPONSIVE ──────────────────────────── */
+@media(max-width:1280px){
+  .grid{grid-template-columns:repeat(6,1fr);padding:22px 28px 48px;gap:13px}
+  .c3,.c4{grid-column:span 3}.c5,.c6,.c7,.c8,.c9,.c12{grid-column:span 6}
+  .p5{grid-template-columns:repeat(3,1fr)}.n2col{grid-template-columns:1fr}
+  .tgrid{grid-template-columns:repeat(2,1fr)}.aigrid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  .hdr{padding:16px 18px;flex-direction:column;align-items:flex-start;gap:11px}
+  .sbar{padding:9px 18px;flex-direction:column;align-items:flex-start;gap:9px}
+  .grid{grid-template-columns:1fr;padding:14px 14px 40px;gap:12px}
+  .c3,.c4,.c5,.c6,.c7,.c8,.c9,.c12{grid-column:span 1}
+  .sgrid,.tcols,.aigrid,.n2col{grid-template-columns:1fr}
+  .kgrid.k3,.kgrid.k4{grid-template-columns:1fr 1fr}
+  .p5{grid-template-columns:repeat(2,1fr)}.wgrid{grid-template-columns:1fr 1fr}
+  .tgrid{grid-template-columns:repeat(2,1fr)}.mstats{grid-template-columns:1fr 1fr}
+  .footer{flex-direction:column;gap:7px;text-align:center;padding:14px 18px}
+}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<header class="header">
-  <div class="header-left">
-    <div class="date-label" id="dateLabel"></div>
+<!-- ═══════════════════════════════
+     HEADER
+═══════════════════════════════ -->
+<header class="hdr">
+  <div class="hdr-l">
+    <div class="dtag" id="dateLabel">Loading…</div>
     <h1 id="greeting">Good Morning, <em>Bri.</em></h1>
   </div>
-  <div class="header-right">
-    <div class="time" id="clock"></div>
-   <div class="greeting">Today you lead with intention</div>
-    <div id="lastRefreshed" style="font-size:9px;letter-spacing:1.5px;color:var(--muted);margin-top:6px;text-transform:uppercase;text-align:right;min-height:14px;"></div>
-    <button id="btnRefresh" onclick="refreshDashboard()" style="margin-top:10px;padding:7px 16px;background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:'Montserrat',sans-serif;font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:1px;transition:all 0.2s;" onmouseover="this.style.background='var(--gold)';this.style.color='var(--black)'" onmouseout="this.style.background='transparent';this.style.color='var(--gold)'">
-      <span id="btnLabel">↻ &nbsp;Refresh Briefing</span>
-    </button>
+  <div class="hdr-r">
+    <div class="clk" id="clock"><span id="clkTime">—:——</span><span class="ap" id="clkAP">AM</span></div>
+    <div class="tagline">Daily Executive Brief · Command Center</div>
+    <div class="last-ref" id="lastRef"></div>
   </div>
 </header>
+
+<!-- ═══════════════════════════════
+     STATUS BAR
+═══════════════════════════════ -->
+<div class="sbar">
+  <div class="chip" id="chipAI"><span class="dot"></span>AI Briefing</div>
+  <div class="chip" id="chipRates"><span class="dot"></span>FRED · Rates</div>
+  <div class="chip" id="chipNews"><span class="dot"></span>NewsAPI · Live</div>
+  <div class="chip" style="opacity:.45"><span class="dot"></span>Follow Up Boss · Soon</div>
+  <div class="spacer"></div>
+  <button class="btn-ref" id="btnRef" onclick="refreshAll()">
+    <span class="ii">↻</span><span class="si">↻</span>&nbsp; Refresh Briefing
+  </button>
+</div>
+
 <div class="gold-rule"></div>
 
-<!-- MAIN DASHBOARD -->
-<div class="main">
+<!-- ═══════════════════════════════
+     MAIN GRID
+═══════════════════════════════ -->
+<div class="grid">
 
-  <!-- ============================================
-       ROW 1: EXECUTIVE SUMMARY + REVENUE
-  ============================================ -->
+  <!-- ── AFFIRMATION ── -->
+  <div class="card affirm-card c12" style="animation-delay:.02s">
+    <div class="clabel">Daily Affirmation</div>
+    <div class="affirm-text" id="affirmText">Loading your affirmation…</div>
+    <div class="affirm-sub" id="affirmSub">Updates each session</div>
+  </div>
 
-  <!-- 1. MORNING EXECUTIVE SUMMARY -->
-  <div class="card span-2">
-    <div class="card-label">01 — Morning Executive Summary</div>
-    <div class="summary-grid">
-      <div class="summary-item highlight">
-        <div class="label">What Matters Most Today</div>
-        <div class="value" contenteditable="true">Convert your two hottest buyers — follow up before 9 AM. One conversation could mean $12K.</div>
-      </div>
-      <div class="summary-item">
-        <div class="label">Biggest Opportunity</div>
-        <div class="value" contenteditable="true">Rate buydown conversation with the Johnsons — they're on the fence. You have the talking points.</div>
-      </div>
-      <div class="summary-item">
-        <div class="label">Biggest Risk / Distraction</div>
-        <div class="value" contenteditable="true">Avoid rabbit holes. Social media is for output today, not input. Cap scrolling at 10 min.</div>
-      </div>
-      <div class="summary-item">
-        <div class="label">What You Need to Move Forward</div>
-        <div class="value" contenteditable="true">Send the Mansfield listing presentation. Book the CMA appointment. Record one reel.</div>
-      </div>
+  <div class="divider"></div>
+
+  <!-- ── ROW 1: SUMMARY + REVENUE ── -->
+
+  <!-- 01 EXECUTIVE SUMMARY -->
+  <div class="card gold c8" style="animation-delay:.04s">
+    <div class="clabel">01 — Executive Summary</div>
+    <div class="sgrid" id="summaryGrid">
+      <div class="sitem hl"><div class="slb">What Matters Most</div><div class="sv" id="sum-matters"><span class="sk w85 h20"></span></div></div>
+      <div class="sitem"><div class="slb">Biggest Opportunity</div><div class="sv" id="sum-opportunity"><span class="sk w85"></span><span class="sk w60"></span></div></div>
+      <div class="sitem"><div class="slb">Biggest Risk / Distraction</div><div class="sv" id="sum-risk"><span class="sk w85"></span></div></div>
+      <div class="sitem"><div class="slb">Move Forward By</div><div class="sv" id="sum-forward"><span class="sk w85"></span><span class="sk w60"></span></div></div>
     </div>
-    <div style="margin-top: 18px;">
-      <div class="section-label">Top 3 Priorities</div>
-      <ul class="priority-list">
-        <li><span class="priority-num">1</span><span contenteditable="true">Call Marcus & Trina — ready to write an offer on the Midlothian property</span></li>
-        <li><span class="priority-num">2</span><span contenteditable="true">Send listing proposal to the Garcias in Cedar Hill by noon</span></li>
-        <li><span class="priority-num">3</span><span contenteditable="true">Post market update reel — DFW inventory insight with your face on it</span></li>
+    <div style="margin-top:16px">
+      <div class="slabel">Top 3 Priorities</div>
+      <ul class="plist">
+        <li><span class="pnum">1</span><span id="pri-1" contenteditable="true">Call Marcus &amp; Trina — ready to write an offer on the Midlothian property</span></li>
+        <li><span class="pnum">2</span><span id="pri-2" contenteditable="true">Send listing proposal to the Garcias in Cedar Hill by noon</span></li>
+        <li><span class="pnum">3</span><span id="pri-3" contenteditable="true">Post market update reel — DFW inventory insight with your face on it</span></li>
       </ul>
     </div>
   </div>
 
-  <!-- 6. REVENUE COMMAND CENTER -->
-  <div class="card">
-    <div class="card-label">06 — Revenue Command</div>
-    <div class="revenue-grid" style="grid-template-columns: repeat(3,1fr);">
-      <div class="revenue-stat">
-        <div class="num gold" id="kpi-activeBuyers" contenteditable="true">4</div>
-        <div class="stat-label">Active Buyers</div>
-      </div>
-      <div class="revenue-stat">
-        <div class="num" contenteditable="true">2</div>
-        <div class="stat-label">Active Sellers</div>
-      </div>
-      <div class="revenue-stat">
-        <div class="num" contenteditable="true">7</div>
-        <div class="stat-label">Warm Leads</div>
-      </div>
-      <div class="revenue-stat">
-        <div class="num red" contenteditable="true">3</div>
-        <div class="stat-label">Hot — Follow Up</div>
-      </div>
-      <div class="revenue-stat">
-        <div class="num red" contenteditable="true">2</div>
-        <div class="stat-label">Overdue</div>
-      </div>
-      <div class="revenue-stat">
-        <div class="num green" contenteditable="true">1</div>
-        <div class="stat-label">Closing This Mo.</div>
-      </div>
+  <!-- 06 REVENUE COMMAND -->
+  <div class="card c4" style="animation-delay:.08s">
+    <div class="clabel">06 — Revenue Command</div>
+    <div class="kgrid k3">
+      <div class="kstat"><div class="kn g" contenteditable="true">4</div><div class="kl">Active Buyers</div></div>
+      <div class="kstat"><div class="kn" contenteditable="true">2</div><div class="kl">Active Sellers</div></div>
+      <div class="kstat"><div class="kn" contenteditable="true">7</div><div class="kl">Warm Leads</div></div>
+      <div class="kstat"><div class="kn red" contenteditable="true">3</div><div class="kl">Hot Follow-Ups</div></div>
+      <div class="kstat"><div class="kn red" contenteditable="true">2</div><div class="kl">Overdue</div></div>
+      <div class="kstat"><div class="kn grn" contenteditable="true">1</div><div class="kl">Closing This Mo.</div></div>
     </div>
-    <div class="progress-wrap">
-      <div class="progress-label"><span>Monthly Revenue Goal</span><span>$24K / $40K</span></div>
-      <div class="progress-bar"><div class="progress-fill" style="width: 60%;"></div></div>
+    <div class="prog">
+      <div class="progrow"><span>Monthly GCI Goal</span><span>$24K / $40K</span></div>
+      <div class="progtrack"><div class="progfill" style="width:60%"></div></div>
     </div>
-    <div class="revenue-action">
-      <div class="action-label">⚡ Revenue Action — Do This First</div>
-      <div class="action-text" contenteditable="true">Text Marcus: "Good morning! Are you available today to tour the Midlothian property? I have a window at 2 PM."</div>
+    <div class="ablock">
+      <div class="alb">⚡ Revenue Action — Do This First</div>
+      <div class="atx" id="rev-action" contenteditable="true"><span class="sk w85"></span></div>
     </div>
   </div>
 
-  <div class="section-divider"></div>
+  <div class="divider"></div>
 
-  <!-- ============================================
-       ROW 2: RATES + LEADS + CALENDAR
-  ============================================ -->
+  <!-- ── ROW 2: RATES + LEADS + CALENDAR ── -->
 
-  <!-- 2. INTEREST RATES -->
-  <div class="card">
-    <div class="card-label">02 — Rate & Mortgage Snapshot</div>
-    <div class="rate-grid">
-      <div class="rate-item">
-        <div class="rate-type">30-Year Fixed</div>
-        <div class="rate-num">6.82<span style="font-size:16px; color: var(--muted)">%</span></div>
-        <div class="rate-trend">▲ +0.04 this week</div>
-      </div>
-      <div class="rate-item">
-        <div class="rate-type">15-Year Fixed</div>
-        <div class="rate-num">6.14<span style="font-size:16px; color: var(--muted)">%</span></div>
-        <div class="rate-trend down">▼ Slight dip</div>
-      </div>
-      <div class="rate-item">
-        <div class="rate-type">FHA 30-Year</div>
-        <div class="rate-num">6.54<span style="font-size:16px; color: var(--muted)">%</span></div>
-        <div class="rate-trend">→ Holding steady</div>
-      </div>
-      <div class="rate-item">
-        <div class="rate-type">VA / USDA</div>
-        <div class="rate-num">6.29<span style="font-size:16px; color: var(--muted)">%</span></div>
-        <div class="rate-trend down">▼ Best option now</div>
-      </div>
+  <!-- 02 RATES -->
+  <div class="card c4" style="animation-delay:.12s">
+    <div class="clabel">02 — Rate &amp; Mortgage Snapshot</div>
+    <div class="rgrid">
+      <div class="ritem"><div class="rtype">30-Year Fixed</div><div class="rnum" id="rate-30yr"><span class="sk w60 h32"></span></div><div class="rtrend" id="trend-30yr">Loading…</div></div>
+      <div class="ritem"><div class="rtype">15-Year Fixed</div><div class="rnum" id="rate-15yr"><span class="sk w60 h32"></span></div><div class="rtrend" id="trend-15yr">Loading…</div></div>
+      <div class="ritem"><div class="rtype">FHA 30-Year</div><div class="rnum" id="rate-fha"><span class="sk w60 h32"></span></div><div class="rtrend" id="trend-fha">~0.3% below conv.</div></div>
+      <div class="ritem"><div class="rtype">VA / USDA</div><div class="rnum" id="rate-va"><span class="sk w60 h32"></span></div><div class="rtrend dn" id="trend-va">Best for eligible buyers</div></div>
     </div>
-    <div class="section-label">Client Talking Points</div>
-    <div class="talking-point">"Rates have been holding in the mid-6s — buyers who lock now are protecting against any upward movement. Builders are offering 2-1 buydowns that get you into the 4s effectively."</div>
-    <div class="talking-point">"For sellers: serious buyers are still in the market. They've adjusted to these rates. Inventory is the story right now."</div>
+    <div class="slabel">Client Talking Points</div>
+    <div class="tp" id="tp-buyers">"Buyers who lock now are protecting against upward movement. Builders are offering 2-1 buydowns that bring effective rates into the 4s."</div>
+    <div class="tp" id="tp-sellers">"For sellers — serious buyers have adjusted. Inventory and right-pricing is the story right now."</div>
   </div>
 
-  <!-- 7. LEAD FOLLOW-UP -->
-  <div class="card">
-    <div class="card-label">07 — Lead Follow-Up Priorities</div>
-    <div class="lead-item">
-      <div class="lead-priority hot"></div>
-      <div class="lead-name">Marcus & Trina J.</div>
-      <div class="lead-action">Ready to write offer — 2 weeks no follow-up</div>
-      <div class="lead-method">Call</div>
-    </div>
-    <div class="lead-item">
-      <div class="lead-priority hot"></div>
-      <div class="lead-name">Destiny W.</div>
-      <div class="lead-action">Saw 3 homes, going cold — send video message</div>
-      <div class="lead-method">Video</div>
-    </div>
-    <div class="lead-item">
-      <div class="lead-priority hot"></div>
-      <div class="lead-name">Garcia Family</div>
-      <div class="lead-action">Awaiting listing proposal — deadline today</div>
-      <div class="lead-method">Email</div>
-    </div>
-    <div class="lead-item">
-      <div class="lead-priority warm"></div>
-      <div class="lead-name">Andre B.</div>
-      <div class="lead-action">Pre-approval complete — send curated listings</div>
-      <div class="lead-method">Text</div>
-    </div>
-    <div class="lead-item">
-      <div class="lead-priority warm"></div>
-      <div class="lead-name">Keisha M.</div>
-      <div class="lead-action">6-month check-in — nurture, not sell</div>
-      <div class="lead-method">Text</div>
-    </div>
-    <div class="lead-item">
-      <div class="lead-priority cool"></div>
-      <div class="lead-name">Johnson Referral</div>
-      <div class="lead-action">New — introduce yourself today</div>
-      <div class="lead-method">Call</div>
-    </div>
-    <div style="margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border);">
-      <div class="section-label">Suggested Message — Destiny</div>
-      <div class="talking-point">"Hey Destiny! I've been thinking about you. I know the search has felt heavy — that's normal. I found something that checks your top 3 boxes and I want to walk you through it. Can I send you a quick video?"</div>
+  <!-- 07 LEADS -->
+  <div class="card c4" style="animation-delay:.16s">
+    <div class="clabel">07 — Lead Follow-Up Priorities</div>
+    <div class="litem"><div class="ldot hot"></div><div class="lname" contenteditable="true">Marcus &amp; Trina J.</div><div class="lnote" contenteditable="true">Ready to write — no touch in 2 weeks</div><div class="lbadge">Call</div></div>
+    <div class="litem"><div class="ldot hot"></div><div class="lname" contenteditable="true">Destiny W.</div><div class="lnote" contenteditable="true">Saw 3 homes, going cold — video now</div><div class="lbadge">Video</div></div>
+    <div class="litem"><div class="ldot hot"></div><div class="lname" contenteditable="true">Garcia Family</div><div class="lnote" contenteditable="true">Listing proposal deadline today</div><div class="lbadge">Email</div></div>
+    <div class="litem"><div class="ldot warm"></div><div class="lname" contenteditable="true">Andre B.</div><div class="lnote" contenteditable="true">Pre-approval done — send listings</div><div class="lbadge">Text</div></div>
+    <div class="litem"><div class="ldot warm"></div><div class="lname" contenteditable="true">Keisha M.</div><div class="lnote" contenteditable="true">6-month nurture — don't sell</div><div class="lbadge">Text</div></div>
+    <div class="litem"><div class="ldot cool"></div><div class="lname" contenteditable="true">New Referral</div><div class="lnote" contenteditable="true">Introduce yourself today</div><div class="lbadge">Call</div></div>
+    <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--line)">
+      <div class="slabel" style="margin-top:0">AI Suggested Message</div>
+      <div class="tp" id="lead-msg" style="font-style:normal;color:var(--txt)"><span class="sk w85"></span><span class="sk w75"></span></div>
     </div>
   </div>
 
-  <!-- 8. CALENDAR -->
-  <div class="card">
-    <div class="card-label">08 — Today's Schedule</div>
-    <div class="cal-item">
-      <div class="cal-time">6:00</div>
-      <div class="cal-details">
-        <div class="cal-title">Morning Routine — Briefing + Intention Setting</div>
-        <div class="cal-sub">Non-negotiable. Do not skip.</div>
-      </div>
-      <div class="cal-tag personal">Personal</div>
-    </div>
-    <div class="cal-item">
-      <div class="cal-time">8:00</div>
-      <div class="cal-details">
-        <div class="cal-title">Power Hour — Lead Follow-Ups</div>
-        <div class="cal-sub">Call Marcus, text Destiny, email Garcias</div>
-      </div>
-      <div class="cal-tag client">Revenue</div>
-    </div>
-    <div class="cal-item">
-      <div class="cal-time">10:30</div>
-      <div class="cal-details">
-        <div class="cal-title">CMA Prep — Cedar Hill Listing</div>
-        <div class="cal-sub">Garcias presentation due by noon</div>
-      </div>
-      <div class="cal-tag client">Client</div>
-    </div>
-    <div class="cal-item">
-      <div class="cal-time">12:00</div>
-      <div class="cal-details">
-        <div class="cal-title">School Pickup + Lunch</div>
-        <div class="cal-sub">Build in 45-min buffer for traffic</div>
-      </div>
-      <div class="cal-tag personal">Family</div>
-    </div>
-    <div class="cal-item">
-      <div class="cal-time">2:00</div>
-      <div class="cal-details">
-        <div class="cal-title">Property Tour — Midlothian (pending confirm)</div>
-        <div class="cal-sub">Marcus & Trina — confirm by 10 AM</div>
-      </div>
-      <div class="cal-tag warning">Unconfirmed</div>
-    </div>
-    <div class="cal-item">
-      <div class="cal-time">5:30</div>
-      <div class="cal-details">
-        <div class="cal-title">Content Creation Window</div>
-        <div class="cal-sub">Record market update reel — 15 min max</div>
-      </div>
-      <div class="cal-tag personal">Brand</div>
-    </div>
-    <div class="cal-item">
-      <div class="cal-time">7:00</div>
-      <div class="cal-details">
-        <div class="cal-title">⚠ Class / School Deadline</div>
-        <div class="cal-sub">Assignment due — do not let client work push this</div>
-      </div>
-      <div class="cal-tag school">School</div>
+  <!-- 08 CALENDAR -->
+  <div class="card c4" style="animation-delay:.20s">
+    <div class="clabel">08 — Today's Schedule</div>
+    <div class="cali"><div class="calt">6:00 AM</div><div><div class="caln">Morning Brief + Intention</div><div class="cals">Non-negotiable. You're here. Good.</div></div><div class="ctag pers">Self</div></div>
+    <div class="cali"><div class="calt">8:00 AM</div><div><div class="caln" contenteditable="true">Power Hour — Lead Follow-Ups</div><div class="cals" contenteditable="true">Call hot leads before day takes over</div></div><div class="ctag client">Revenue</div></div>
+    <div class="cali"><div class="calt" contenteditable="true">10:30 AM</div><div><div class="caln" contenteditable="true">Add your appointment</div><div class="cals" contenteditable="true">Details</div></div><div class="ctag client">Client</div></div>
+    <div class="cali"><div class="calt" contenteditable="true">12:00 PM</div><div><div class="caln" contenteditable="true">Family / Personal</div><div class="cals" contenteditable="true">Add details</div></div><div class="ctag pers">Family</div></div>
+    <div class="cali"><div class="calt" contenteditable="true">2:00 PM</div><div><div class="caln" contenteditable="true">Add your appointment</div><div class="cals" contenteditable="true">Details</div></div><div class="ctag client">Client</div></div>
+    <div class="cali"><div class="calt" contenteditable="true">5:30 PM</div><div><div class="caln" contenteditable="true">Content Creation Window</div><div class="cals" contenteditable="true">Reel — 15 min max. Show your face.</div></div><div class="ctag pers">Brand</div></div>
+    <div class="cali"><div class="calt" contenteditable="true">7:00 PM</div><div><div class="caln" contenteditable="true">Evening Review + School Deadline</div><div class="cals" contenteditable="true">What got done? What carries to tomorrow?</div></div><div class="ctag school">Review</div></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── ROW 3: POWER 5 ── -->
+  <div class="card c12" style="animation-delay:.24s">
+    <div class="clabel">10 — Power 5 Daily Non-Negotiables</div>
+    <div class="p5">
+      <div class="p5i" onclick="toggleDone(this)"><div class="p5ico">💬</div><div class="p5lbl">5 Real Estate Conversations</div><div class="p5st">0 / 5 today</div></div>
+      <div class="p5i" onclick="toggleDone(this)"><div class="p5ico">📸</div><div class="p5lbl">1 Visibility / Content Action</div><div class="p5st">Pending</div></div>
+      <div class="p5i" onclick="toggleDone(this)"><div class="p5ico">🤝</div><div class="p5lbl">1 Relationship Touch</div><div class="p5st">Pending</div></div>
+      <div class="p5i" onclick="toggleDone(this)"><div class="p5ico">🎯</div><div class="p5lbl">1 Lead Generation Activity</div><div class="p5st">Pending</div></div>
+      <div class="p5i" onclick="toggleDone(this)"><div class="p5ico">💰</div><div class="p5lbl">1 Wealth-Building Activity</div><div class="p5st">Pending</div></div>
     </div>
   </div>
 
-  <div class="section-divider"></div>
+  <div class="divider"></div>
 
-  <!-- ============================================
-       ROW 3: MARKET NEWS + DFW LOCAL
-  ============================================ -->
+  <!-- ── ROW 4: PIPELINE + TEAM ── -->
 
-  <!-- 3. MARKET NEWS -->
-  <div class="card span-2">
-    <div class="card-label">03 — Real Estate Market Intelligence</div>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-      <div>
-        <div class="section-label">National</div>
-        <div class="news-item">
-          <div class="news-region">National</div>
-          <div class="news-headline">Existing home sales dip 2.3% — inventory tightness persists</div>
-          <div class="news-note">Buyers still outnumber listings in most metros. Strong seller leverage in under-$400K range.</div>
-        </div>
-        <div class="news-item">
-          <div class="news-region">Builder Incentives</div>
-          <div class="news-headline">DR Horton & LGI expanding buydown offers in DFW communities</div>
-          <div class="news-note">Talk to buyers about new construction if resale feels out of reach. Mansfield, Midlothian, Waxahachie active.</div>
-        </div>
-        <div class="news-item">
-          <div class="news-region">Texas</div>
-          <div class="news-headline">Texas leads nation in net migration — third consecutive year</div>
-          <div class="news-note">DFW remains #1 destination. Luxury family move-up segment accelerating in South DFW corridor.</div>
-        </div>
-      </div>
-      <div>
-        <div class="section-label">South DFW — Your Markets</div>
-        <div class="news-item">
-          <div class="news-region">Mansfield / Midlothian</div>
-          <div class="news-headline">DOM averaging 28 days — down from 45 in Q4</div>
-          <div class="news-note">Inventory up slightly. $350K–$500K moving fast. Price reductions under $325K.</div>
-        </div>
-        <div class="news-item">
-          <div class="news-region">Cedar Hill / DeSoto / Duncanville</div>
-          <div class="news-headline">FHA-eligible inventory limited — heavy competition under $300K</div>
-          <div class="news-note">First-time buyers frustrated. Multiple offers common. Position pre-approval as power move.</div>
-        </div>
-        <div class="news-item">
-          <div class="news-region">Arlington / Grand Prairie</div>
-          <div class="news-headline">New development corridor along I-20 attracting luxury townhome buyers</div>
-          <div class="news-note">Luxury family segment: $500K+ townhomes selling in under 3 weeks. Watch this corridor.</div>
-        </div>
-        <div class="news-item">
-          <div class="news-region">Waxahachie</div>
-          <div class="news-headline">Top growth suburb — acreage + new build demand surging</div>
-          <div class="news-note">Buyers priced out of Mansfield moving south. Land + new construction sweet spot.</div>
-        </div>
-      </div>
+  <!-- PIPELINE ACCOUNTABILITY -->
+  <div class="card c8" style="animation-delay:.28s">
+    <div class="clabel">Pipeline Accountability — Active Deals</div>
+    <div style="overflow-x:auto">
+      <table class="ptable">
+        <thead><tr><th>Client</th><th>Stage</th><th>Price Range</th><th>Last Touch</th><th>Next Action</th><th>Due</th></tr></thead>
+        <tbody>
+          <tr><td contenteditable="true">Client Name</td><td><span class="stage hot">Hot Lead</span></td><td contenteditable="true">$350K–$400K</td><td contenteditable="true">3 days ago</td><td contenteditable="true">Call — offer ready</td><td class="overdue" contenteditable="true">Today</td></tr>
+          <tr><td contenteditable="true">Client Name</td><td><span class="stage active">Active Buyer</span></td><td contenteditable="true">$275K–$310K</td><td contenteditable="true">Yesterday</td><td contenteditable="true">Send new listings</td><td contenteditable="true">Today</td></tr>
+          <tr><td contenteditable="true">Client Name</td><td><span class="stage pending">Under Contract</span></td><td contenteditable="true">$425K</td><td contenteditable="true">2 days ago</td><td contenteditable="true">Confirm inspection</td><td contenteditable="true">Thu</td></tr>
+          <tr><td contenteditable="true">Client Name</td><td><span class="stage warm">Warm Lead</span></td><td contenteditable="true">$500K+</td><td contenteditable="true">1 week ago</td><td contenteditable="true">Nurture text</td><td contenteditable="true">Fri</td></tr>
+          <tr><td contenteditable="true">Client Name</td><td><span class="stage closed">Closed</span></td><td contenteditable="true">$389K</td><td contenteditable="true">Last week</td><td contenteditable="true">Review request + gift</td><td contenteditable="true">This week</td></tr>
+          <tr><td contenteditable="true">Client Name</td><td><span class="stage cold">Cold</span></td><td contenteditable="true">$300K</td><td contenteditable="true">3 weeks ago</td><td contenteditable="true">Re-engagement sequence</td><td contenteditable="true">This week</td></tr>
+        </tbody>
+      </table>
     </div>
+    <div style="margin-top:10px;font-size:10px;color:var(--txt3);font-style:italic">✦ Follow Up Boss integration coming — pipeline will auto-populate when connected.</div>
   </div>
 
-  <!-- 5. DFW LOCAL -->
-  <div class="card">
-    <div class="card-label">05 — DFW + Local Intelligence</div>
-    <div class="news-item">
-      <div class="news-region">Economic Development</div>
-      <div class="news-headline">Midlothian industrial expansion — 2,000 jobs announced</div>
-      <div class="news-note">Future housing demand signal. Get ahead of the buyer wave now.</div>
+  <!-- 13 TEAM COMMAND -->
+  <div class="card c4" style="animation-delay:.32s">
+    <div class="clabel">13 — Team Command + ISA KPIs</div>
+    <div class="tgrid">
+      <div class="tkpi"><div class="tn g" contenteditable="true">—</div><div class="tkl">Calls Made</div></div>
+      <div class="tkpi"><div class="tn grn" contenteditable="true">—</div><div class="tkl">Appts Booked</div></div>
+      <div class="tkpi"><div class="tn red" contenteditable="true">—</div><div class="tkl">Overdue Follows</div></div>
+      <div class="tkpi"><div class="tn" contenteditable="true">—m</div><div class="tkl">Avg Response</div></div>
     </div>
-    <div class="news-item">
-      <div class="news-region">School Districts</div>
-      <div class="news-headline">Mansfield ISD rated "A" — top 10 in DFW metro</div>
-      <div class="news-note">Lead with this for families. Schools sell homes.</div>
-    </div>
-    <div class="news-item">
-      <div class="news-region">Infrastructure</div>
-      <div class="news-headline">SH 360 expansion phase complete Q3 — reduces Mansfield commute</div>
-      <div class="news-note">Commuter buyers: this is your talking point for Mansfield/Midlothian.</div>
-    </div>
-    <div class="news-item">
-      <div class="news-region">Local Events</div>
-      <div class="news-headline">Waxahachie Heritage Festival — this weekend</div>
-      <div class="news-note">Community engagement opportunity. Attend or share on stories.</div>
-    </div>
-    <div class="news-item">
-      <div class="news-region">Construction</div>
-      <div class="news-headline">I-35E widening — delays near DeSoto/Cedar Hill exits</div>
-      <div class="news-note">Build extra drive time for showings in that corridor.</div>
-    </div>
-  </div>
-
-  <div class="section-divider"></div>
-
-  <!-- ============================================
-       ROW 4: POWER 5 + BRAND + WELLNESS
-  ============================================ -->
-
-  <!-- 10. POWER 5 -->
-  <div class="card span-3">
-    <div class="card-label">10 — Power 5 Daily Non-Negotiables</div>
-    <div class="power5-grid" style="grid-template-columns: repeat(5,1fr);">
-      <div class="power5-item" onclick="toggleDone(this)">
-        <div class="power5-icon">💬</div>
-        <div class="power5-label">5 Real Estate Conversations</div>
-        <div class="power5-status">0 / 5 today</div>
-      </div>
-      <div class="power5-item" onclick="toggleDone(this)">
-        <div class="power5-icon">📸</div>
-        <div class="power5-label">1 Visibility / Content Action</div>
-        <div class="power5-status">Pending</div>
-      </div>
-      <div class="power5-item" onclick="toggleDone(this)">
-        <div class="power5-icon">🤝</div>
-        <div class="power5-label">1 Relationship Touch</div>
-        <div class="power5-status">Pending</div>
-      </div>
-      <div class="power5-item" onclick="toggleDone(this)">
-        <div class="power5-icon">🎯</div>
-        <div class="power5-label">1 Lead Generation Activity</div>
-        <div class="power5-status">Pending</div>
-      </div>
-      <div class="power5-item" onclick="toggleDone(this)">
-        <div class="power5-icon">💰</div>
-        <div class="power5-label">1 Wealth-Building Activity</div>
-        <div class="power5-status">Pending</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 9. TO-DO MATRIX -->
-  <div class="card span-2">
-    <div class="card-label">09 — Priority Matrix</div>
-    <div class="todo-columns">
-      <div>
-        <div class="todo-col">
-          <h4>Must Do Today — Revenue</h4>
-          <div class="todo-item"><div class="todo-check" onclick="checkTodo(this)"></div>Call Marcus & Trina — offer conversation</div>
-          <div class="todo-item"><div class="todo-check" onclick="checkTodo(this)"></div>Send Garcia listing proposal</div>
-          <div class="todo-item"><div class="todo-check" onclick="checkTodo(this)"></div>Video message to Destiny</div>
-          <div class="todo-item"><div class="todo-check" onclick="checkTodo(this)"></div>Post market update reel</div>
-        </div>
-        <div class="todo-col" style="margin-top: 16px;">
-          <h4>Should Do — Business Dev</h4>
-          <div class="todo-item"><div class="todo-check" onclick="checkTodo(this)"></div>Send Andre curated listings</div>
-          <div class="todo-item"><div class="todo-check" onclick="checkTodo(this)"></div>Review CRM — update lead statuses</div>
-          <div class="todo-item"><div class="todo-check" onclick="checkTodo(this)"></div>Request review from last closing</div>
-        </div>
-      </div>
-      <div>
-        <div class="todo-col">
-          <h4>Must Do — Personal / School</h4>
-          <div class="todo-item"><div class="todo-check" onclick="checkTodo(this)"></div>Submit school assignment by 7 PM</div>
-          <div class="todo-item"><div class="todo-check" onclick="checkTodo(this)"></div>School pickup at noon</div>
-          <div class="todo-item"><div class="todo-check" onclick="checkTodo(this)"></div>Meal prep — don't skip dinner</div>
-        </div>
-        <div class="todo-col" style="margin-top: 16px;">
-          <h4>Delegate or Move</h4>
-          <div class="todo-item"><div class="todo-check" onclick="checkTodo(this)"></div>ISA: follow up with 4 online leads</div>
-          <div class="todo-item"><div class="todo-check" onclick="checkTodo(this)"></div>VA: schedule social media posts</div>
-          <div class="todo-item"><div class="todo-check" onclick="checkTodo(this)"></div>Admin: scan & upload receipts</div>
-          <div class="todo-item"><div class="todo-check" onclick="checkTodo(this)"></div>Email inbox — batch process at 4 PM</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 15. WELLNESS -->
-  <div class="card">
-    <div class="card-label">15 — Wellness + Energy Check</div>
-    <div class="wellness-grid">
-      <div class="wellness-item">
-        <div class="wellness-emoji">😴</div>
-        <div class="wellness-label">Sleep</div>
-        <div class="wellness-value" contenteditable="true">6.5 hrs</div>
-      </div>
-      <div class="wellness-item">
-        <div class="wellness-emoji">💧</div>
-        <div class="wellness-label">Water</div>
-        <div class="wellness-value" contenteditable="true">0 / 8 cups</div>
-      </div>
-      <div class="wellness-item">
-        <div class="wellness-emoji">🏃‍♀️</div>
-        <div class="wellness-label">Movement</div>
-        <div class="wellness-value" contenteditable="true">Walk 20 min</div>
-      </div>
-      <div class="wellness-item">
-        <div class="wellness-emoji">⚡</div>
-        <div class="wellness-label">Energy</div>
-        <div class="wellness-value" contenteditable="true">7 / 10</div>
-      </div>
-    </div>
-    <div class="section-label" style="margin-top: 16px;">How Do I Need to Show Up Today?</div>
-    <div class="talking-point" contenteditable="true" style="font-style: normal; color: var(--text);">Grounded, decisive, and magnetic. You don't have to be perfect — just present and moving. Wear something that makes you feel like the version of you that already has everything she's working toward.</div>
-    <div style="margin-top: 14px; padding: 10px 14px; background: var(--gold-dim); border: 1px solid rgba(201,168,76,0.2); border-radius: 2px; font-size: 11px; color: var(--gold);">
-      👗 Outfit / Presentation — Dress for your next level today. You're being watched by who you're becoming.
-    </div>
-  </div>
-
-  <div class="section-divider"></div>
-
-  <!-- ============================================
-       ROW 5: BRAND + WEALTH + VIP
-  ============================================ -->
-
-  <!-- 11. BRAND VISIBILITY -->
-  <div class="card">
-    <div class="card-label">11 — Brand + Visibility Tracker</div>
-    <div class="content-idea">
-      <div class="idea-type">📹 Reel Idea</div>
-      <div class="idea-text" contenteditable="true">"POV: You're buying in South DFW in 2025 — here's what your $350K actually gets you in Mansfield vs Midlothian vs Waxahachie." Walk through 3 neighborhoods, show lifestyle, not just stats.</div>
-    </div>
-    <div class="content-idea">
-      <div class="idea-type">💬 Caption Prompt</div>
-      <div class="idea-text" contenteditable="true">"Nobody talks about this when buying a home in DFW... [hook]. As a luxury family real estate specialist, I see families make this mistake constantly. Here's what to know before you close."</div>
-    </div>
-    <div class="content-idea">
-      <div class="idea-type">📖 Story Idea</div>
-      <div class="idea-text" contenteditable="true">Behind-the-scenes of a listing appointment prep. Show your professionalism + personality. "What goes into a CMA that actually wins listings."</div>
-    </div>
-    <div class="section-label">Weekly Posting Progress</div>
-    <div class="posting-tracker">
-      <div class="post-day done" onclick="this.classList.toggle('done')"><div>M</div></div>
-      <div class="post-day done" onclick="this.classList.toggle('done')"><div>T</div></div>
-      <div class="post-day" onclick="this.classList.toggle('done')"><div>W</div></div>
-      <div class="post-day" onclick="this.classList.toggle('done')"><div>T</div></div>
-      <div class="post-day" onclick="this.classList.toggle('done')"><div>F</div></div>
-      <div class="post-day" onclick="this.classList.toggle('done')"><div>S</div></div>
-      <div class="post-day" onclick="this.classList.toggle('done')"><div>S</div></div>
-    </div>
-    <div style="margin-top: 14px; padding: 10px 14px; border: 1px solid var(--border); border-radius: 2px; font-size: 11px; color: var(--muted); font-style: italic;">
-      ✨ Reminder: Show your face. Don't overthink the caption. Done is better than perfect. You are the brand.
-    </div>
-  </div>
-
-  <!-- 14. WEALTH SECTION -->
-  <div class="card">
-    <div class="card-label">14 — Wealth + CEO Money</div>
-    <div class="money-stats">
-      <div class="money-stat">
-        <div class="m-label">Revenue Goal</div>
-       <div class="m-value" id="kpi-monthlyGoal" contenteditable="true">$40,000</div>
-      <div class="m-value green" id="kpi-currentRev" contenteditable="true">$24,000</div>
-      <div class="m-value gold" id="kpi-pendingGCI" contenteditable="true">$11,400</div>
-      </div>
-      <div class="money-stat">
-        <div class="m-label">Pending Commission</div>
-        <div class="m-value gold" contenteditable="true">$11,400</div>
-      </div>
-    </div>
-    <div class="progress-wrap" style="margin-bottom: 16px;">
-      <div class="progress-label"><span>Monthly Revenue Progress</span><span>60% to goal</span></div>
-      <div class="progress-bar"><div class="progress-fill" style="width: 60%;"></div></div>
-    </div>
-    <div class="money-alert">
-      ⚠️ Tax set-aside reminder: Move 25% of any commission received to tax account before spending.
-    </div>
-    <div style="margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-      <div class="money-stat">
-        <div class="m-label">Savings / Investing</div>
-        <div class="m-value" style="font-size: 14px;" contenteditable="true">$500 to index fund this week</div>
-      </div>
-      <div class="money-stat">
-        <div class="m-label">Passive Income Idea</div>
-        <div class="m-value" style="font-size: 14px;" contenteditable="true">Research STR permits in Waxahachie</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 12. CLIENT VIP TOUCHES -->
-  <div class="card">
-    <div class="card-label">12 — Client Experience + VIP Touches</div>
-    <div class="vip-item">
-      <div class="vip-icon">🎂</div>
-      <div class="vip-details">
-        <div class="vip-name">Tamara Lewis</div>
-        <div class="vip-action">Birthday today — send a heartfelt text</div>
-      </div>
-      <div class="vip-badge">Birthday</div>
-    </div>
-    <div class="vip-item">
-      <div class="vip-icon">🏠</div>
-      <div class="vip-details">
-        <div class="vip-name">Williams Family</div>
-        <div class="vip-action">1-year home anniversary this week — send a card</div>
-      </div>
-      <div class="vip-badge">Anniversary</div>
-    </div>
-    <div class="vip-item">
-      <div class="vip-icon">⭐</div>
-      <div class="vip-details">
-        <div class="vip-name">Jackson Closing (last week)</div>
-        <div class="vip-action">Request Google + Zillow review — send template</div>
-      </div>
-      <div class="vip-badge">Review</div>
-    </div>
-    <div class="vip-item">
-      <div class="vip-icon">🎁</div>
-      <div class="vip-details">
-        <div class="vip-name">Chen Family</div>
-        <div class="vip-action">Closing gift — local artisan honey basket ordered?</div>
-      </div>
-      <div class="vip-badge">Closing Gift</div>
-    </div>
-    <div class="vip-item">
-      <div class="vip-icon">💌</div>
-      <div class="vip-details">
-        <div class="vip-name">Referral Opportunity</div>
-        <div class="vip-action">Keisha mentioned her sister is looking — follow up</div>
-      </div>
-      <div class="vip-badge">Referral</div>
-    </div>
-  </div>
-
-  <div class="section-divider"></div>
-
-  <!-- ============================================
-       ROW 6: TEAM + WORLD NEWS + DATES
-  ============================================ -->
-
-  <!-- 13. TEAM COMMAND -->
-  <div class="card">
-    <div class="card-label">13 — Team Command Center</div>
-    <div class="section-label">ISA Priorities</div>
-    <ul class="priority-list">
-      <li><span class="priority-num">·</span><span>Call 8 internet leads — response window under 5 min is goal</span></li>
-      <li><span class="priority-num">·</span><span>Update all lead statuses in CRM by EOD</span></li>
-      <li><span class="priority-num">·</span><span>Book 2 new buyer consultations this week</span></li>
+    <div class="slabel" style="margin-top:0">ISA Priorities Today</div>
+    <ul class="plist" style="margin-top:0">
+      <li><span class="pnum" style="font-size:15px">·</span><span contenteditable="true">All internet leads — 5-min response window</span></li>
+      <li><span class="pnum" style="font-size:15px">·</span><span contenteditable="true">Update all lead statuses in CRM by EOD</span></li>
+      <li><span class="pnum" style="font-size:15px">·</span><span contenteditable="true">Book 2 buyer consultations this week</span></li>
+      <li><span class="pnum" style="font-size:15px">·</span><span id="team-dir" contenteditable="true"><span class="sk w85"></span></span></li>
     </ul>
-    <div class="section-label" style="margin-top: 14px;">Team Accountability</div>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px;">
-      <div class="revenue-stat">
-        <div class="num" contenteditable="true">12</div>
-        <div class="stat-label">Calls Made</div>
-      </div>
-      <div class="revenue-stat">
-        <div class="num" contenteditable="true">3</div>
-        <div class="stat-label">Appts Booked</div>
-      </div>
-      <div class="revenue-stat">
-        <div class="num red" contenteditable="true">6</div>
-        <div class="stat-label">Overdue Follow-Ups</div>
-      </div>
-      <div class="revenue-stat">
-        <div class="num" contenteditable="true">4m</div>
-        <div class="stat-label">Avg Response Time</div>
-      </div>
-    </div>
-    <div class="section-label" style="margin-top: 14px;">Hiring / Vendor Notes</div>
-    <div class="talking-point" contenteditable="true" style="font-style: normal; color: var(--text-dim);">Evaluate transaction coordinator options this week. Systems = scale.</div>
+    <div class="fub"><div class="fi">🔗</div><div class="ft">Follow Up Boss Integration</div><div class="fs">When connected, this auto-pulls lead counts, response times, pipeline stages, and appointment data from FUB.</div><div class="fb">Coming Soon — API Ready</div></div>
   </div>
 
-  <!-- 4. WORLD + BUSINESS NEWS -->
-  <div class="card">
-    <div class="card-label">04 — World + Business — What Matters to You</div>
-    <div class="news-item">
-      <div class="news-region">Federal Reserve</div>
-      <div class="news-headline">Fed signals possible rate hold at next meeting</div>
-      <div class="news-note">Good for buyer confidence. Use as a conversation starter: "Now may be the time before any movement."</div>
+  <div class="divider"></div>
+
+  <!-- ── ROW 5: MARKET NEWS + LOCAL ── -->
+
+  <!-- 03 MARKET INTEL -->
+  <div class="card c8" style="animation-delay:.36s">
+    <div class="clabel">03 — Real Estate Market Intelligence</div>
+    <div class="n2col">
+      <div id="news-national">
+        <div class="slabel" style="margin-top:0">National + Texas</div>
+        <div class="ni"><span class="sk"></span><span class="sk w75"></span></div>
+        <div class="ni"><span class="sk"></span><span class="sk w85"></span></div>
+        <div class="ni"><span class="sk w75"></span></div>
+      </div>
+      <div id="news-dfw">
+        <div class="slabel" style="margin-top:0">South DFW — Your Markets</div>
+        <div class="ni"><span class="sk"></span><span class="sk w75"></span></div>
+        <div class="ni"><span class="sk"></span><span class="sk w85"></span></div>
+        <div class="ni"><span class="sk w75"></span></div>
+      </div>
     </div>
-    <div class="news-item">
-      <div class="news-region">Consumer Confidence</div>
-      <div class="news-headline">Consumer sentiment improves slightly — spending resilient</div>
-      <div class="news-note">Buyers are in the market despite hesitation. Don't let them wait for perfect conditions.</div>
-    </div>
-    <div class="news-item">
-      <div class="news-region">Small Business</div>
-      <div class="news-headline">SBA loan access expanding — small business owners as buyers</div>
-      <div class="news-note">Tap into business owner clients who may not realize their purchasing power.</div>
-    </div>
-    <div class="news-item">
-      <div class="news-region">Economy</div>
-      <div class="news-headline">Job market strong in Texas metro areas — DFW unemployment 3.1%</div>
-      <div class="news-note">Strong employment = strong buyer pool. Confidence in the market is warranted.</div>
-    </div>
-    <div class="news-item">
-      <div class="news-region">Investing</div>
-      <div class="news-headline">Real estate remains top wealth vehicle for Black families — NAR data</div>
-      <div class="news-note">Your work is legacy work. You are closing the wealth gap, one closing at a time.</div>
+    <div class="slabel">Builder Incentives + Market Movement</div>
+    <div id="news-builders"><div class="ni"><span class="sk"></span><span class="sk w60"></span></div></div>
+    <div class="slabel">Market Insight — AI</div>
+    <div class="tp" id="tp-market"><span class="sk w85"></span><span class="sk w75"></span></div>
+  </div>
+
+  <!-- 05 DFW LOCAL -->
+  <div class="card c4" style="animation-delay:.40s">
+    <div class="clabel">05 — DFW + Local Intelligence</div>
+    <div id="news-local">
+      <div class="ni"><span class="sk"></span><span class="sk w75"></span></div>
+      <div class="ni"><span class="sk"></span><span class="sk w85"></span></div>
+      <div class="ni"><span class="sk w75"></span></div>
+      <div class="ni"><span class="sk"></span></div>
     </div>
   </div>
 
-  <!-- 16. IMPORTANT DATES -->
-  <div class="card">
-    <div class="card-label">16 — Important Dates + Countdowns</div>
-    <div class="cal-item" style="border-bottom: 1px solid var(--border);">
-      <div class="cal-time" style="font-size: 12px; color: var(--gold);">TODAY</div>
-      <div class="cal-details">
-        <div class="cal-title">Garcia Proposal Deadline</div>
-        <div class="cal-sub">Must send by noon</div>
-      </div>
-      <div class="cal-tag warning">Urgent</div>
-    </div>
-    <div class="cal-item" style="border-bottom: 1px solid var(--border);">
-      <div class="cal-time" style="font-size: 12px;">3 days</div>
-      <div class="cal-details">
-        <div class="cal-title">Chen Family Closing</div>
-        <div class="cal-sub">Confirm gift delivery + title confirmation</div>
-      </div>
-      <div class="cal-tag client">Closing</div>
-    </div>
-    <div class="cal-item" style="border-bottom: 1px solid var(--border);">
-      <div class="cal-time" style="font-size: 12px;">7 days</div>
-      <div class="cal-details">
-        <div class="cal-title">School Assignment Block</div>
-        <div class="cal-sub">3 assignments due — batch on Sunday</div>
-      </div>
-      <div class="cal-tag school">School</div>
-    </div>
-    <div class="cal-item" style="border-bottom: 1px solid var(--border);">
-      <div class="cal-time" style="font-size: 12px;">11 days</div>
-      <div class="cal-details">
-        <div class="cal-title">Monthly Revenue Goal Deadline</div>
-        <div class="cal-sub">$16K gap remaining — 11 days</div>
-      </div>
-      <div class="cal-tag warning">$$$</div>
-    </div>
-    <div class="cal-item">
-      <div class="cal-time" style="font-size: 12px;">Q3</div>
-      <div class="cal-details">
-        <div class="cal-title">Investment Property Research Complete</div>
-        <div class="cal-sub">Goal: identify first STR property by August</div>
-      </div>
-      <div class="cal-tag personal">Goal</div>
-    </div>
-  </div>
+  <div class="divider"></div>
 
-  <div class="section-divider"></div>
+  <!-- ── ROW 6: TODO + WELLNESS ── -->
 
-  <!-- ============================================
-       ROW 7: VISION + AI STRATEGY
-  ============================================ -->
-
-  <!-- 17. VISION PANEL -->
-  <div class="card span-2 vision-card">
-    <div class="card-label">17 — Vision + Identity</div>
-    <div class="affirmation" contenteditable="true">"I am building a life so beautiful and abundant that my children will never question their worth. I am not just a realtor — I am a legacy architect."</div>
-    <div style="font-size: 12px; color: var(--text-dim); line-height: 1.7;" contenteditable="true">
-      You are becoming a woman who leads with excellence, builds generational wealth through real estate, and shows other women — especially Black women and mothers — that it is possible to have it all with grace. The luxury family real estate space was made for you. Keep going.
-    </div>
-    <div class="vision-pillars">
-      <div class="vision-pill">Generational Wealth</div>
-      <div class="vision-pill">Family Legacy</div>
-      <div class="vision-pill">Luxury Real Estate</div>
-      <div class="vision-pill">Business Ownership</div>
-      <div class="vision-pill">Financial Freedom</div>
-      <div class="vision-pill">Leadership</div>
-      <div class="vision-pill">Discipline</div>
-      <div class="vision-pill">Elegance</div>
-    </div>
-  </div>
-
-  <!-- 18. AI STRATEGY NOTES -->
-  <div class="card">
-    <div class="card-label">18 — AI Strategy Notes</div>
-    <div class="ai-grid" style="grid-template-columns: 1fr 1fr;">
-      <div class="ai-item focus">
-        <div class="ai-label">✦ Focus On</div>
-        <ul>
-          <li>Marcus & Trina — convert today</li>
-          <li>Garcia proposal — noon deadline</li>
-          <li>One piece of visible content</li>
-        </ul>
+  <!-- 09 TODO -->
+  <div class="card c8" style="animation-delay:.44s">
+    <div class="clabel">09 — Priority Matrix</div>
+    <div class="tcols">
+      <div>
+        <div class="tgrp">
+          <h4>Must Do — Revenue</h4>
+          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">Your top revenue task</span></div>
+          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">Second revenue task</span></div>
+          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">Third revenue task</span></div>
+          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">Content / visibility post</span></div>
+        </div>
+        <div class="tgrp" style="margin-top:16px">
+          <h4>Should Do — Business Dev</h4>
+          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">CRM — update all lead statuses</span></div>
+          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">Request review from last closing</span></div>
+          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">Send curated listings to warm lead</span></div>
+        </div>
       </div>
-      <div class="ai-item money">
-        <div class="ai-label">💰 Could Make You Money</div>
-        <ul>
-          <li>Builder referral for Andre — get a fee</li>
-          <li>Keisha's sister referral</li>
-          <li>Rate buydown conversion call</li>
-        </ul>
-      </div>
-      <div class="ai-item ignore">
-        <div class="ai-label">✗ Ignore Today</div>
-        <ul>
-          <li>Inbox before 8 AM</li>
-          <li>Social scrolling for more than 10 min</li>
-          <li>Non-revenue admin tasks</li>
-        </ul>
-      </div>
-      <div class="ai-item risk">
-        <div class="ai-label">⚠ Could Damage Momentum</div>
-        <ul>
-          <li>Missing Destiny follow-up — she's cold</li>
-          <li>Skipping content post again</li>
-          <li>School assignment — don't let it slip</li>
-        </ul>
-      </div>
-      <div class="ai-item delegate">
-        <div class="ai-label">→ Delegate</div>
-        <ul>
-          <li>ISA — 8 internet lead calls</li>
-          <li>VA — post scheduling + email</li>
-          <li>Admin: receipts, data entry</li>
-        </ul>
-      </div>
-      <div class="ai-item decide">
-        <div class="ai-label">◆ Decision Needed</div>
-        <ul>
-          <li>Accept Garcia listing at this price?</li>
-          <li>Confirm Midlothian tour with Marcus?</li>
-          <li>Hire TC or wait until Q3?</li>
-        </ul>
+      <div>
+        <div class="tgrp">
+          <h4>Must Do — Personal / School</h4>
+          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">School assignment — check deadline</span></div>
+          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">School / family pickup</span></div>
+          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">Meal prep + self-care</span></div>
+        </div>
+        <div class="tgrp" style="margin-top:16px">
+          <h4>Delegate or Move</h4>
+          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">ISA: internet lead follow-ups</span></div>
+          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">VA: schedule social posts</span></div>
+          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">Admin: receipts + CRM data entry</span></div>
+          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">Batch email inbox — 4 PM only</span></div>
+        </div>
       </div>
     </div>
   </div>
 
-</div><!-- end main -->
+  <!-- 15 WELLNESS -->
+  <div class="card c4" style="animation-delay:.48s">
+    <div class="clabel">15 — Wellness + Energy</div>
+    <div class="wgrid">
+      <div class="wi"><div class="wico">😴</div><div class="wlb">Sleep</div><div class="wv" contenteditable="true">— hrs</div></div>
+      <div class="wi"><div class="wico">💧</div><div class="wlb">Water</div><div class="wv" contenteditable="true">0 / 8 cups</div></div>
+      <div class="wi"><div class="wico">🏃‍♀️</div><div class="wlb">Movement</div><div class="wv" contenteditable="true">Walk 20 min</div></div>
+      <div class="wi"><div class="wico">⚡</div><div class="wlb">Energy</div><div class="wv" contenteditable="true">— / 10</div></div>
+    </div>
+    <div class="slabel" style="margin-top:16px">How Do I Need to Show Up?</div>
+    <div class="tp" contenteditable="true" style="font-style:normal;color:var(--txt)">Grounded, decisive, and magnetic. You don't have to be perfect — just present and moving.</div>
+    <div style="margin-top:12px;padding:11px 13px;background:var(--golddim);border:1px solid var(--goldborder);border-radius:var(--r);font-size:11px;color:var(--gold)">
+      👗 Dress for the version of you that already has everything she's working toward.
+    </div>
+    <div class="slabel">Weekly Posting</div>
+    <div class="postrow">
+      <div class="pday" onclick="this.classList.toggle('done')">M</div>
+      <div class="pday" onclick="this.classList.toggle('done')">T</div>
+      <div class="pday" onclick="this.classList.toggle('done')">W</div>
+      <div class="pday" onclick="this.classList.toggle('done')">T</div>
+      <div class="pday" onclick="this.classList.toggle('done')">F</div>
+      <div class="pday" onclick="this.classList.toggle('done')">S</div>
+      <div class="pday" onclick="this.classList.toggle('done')">S</div>
+    </div>
+    <div style="margin-top:9px;font-size:10.5px;color:var(--txt3);font-style:italic">✨ Show your face. Done &gt; perfect. You are the brand.</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── ROW 7: BRAND + WORLD NEWS + VIP ── -->
+
+  <!-- 11 BRAND -->
+  <div class="card c4" style="animation-delay:.52s">
+    <div class="clabel">11 — Brand + Visibility</div>
+    <div class="ccard"><div class="ctype">📹 Reel Idea</div><div class="ctxt" id="idea-reel" contenteditable="true"><span class="sk"></span><span class="sk w75"></span><span class="sk w60"></span></div></div>
+    <div class="ccard"><div class="ctype">💬 Caption Prompt</div><div class="ctxt" id="idea-caption" contenteditable="true"><span class="sk"></span><span class="sk w75"></span></div></div>
+    <div class="ccard"><div class="ctype">📖 Story Idea</div><div class="ctxt" id="idea-story" contenteditable="true"><span class="sk w85"></span></div></div>
+  </div>
+
+  <!-- 04 WORLD NEWS -->
+  <div class="card c4" style="animation-delay:.56s">
+    <div class="clabel">04 — World + Business — What Affects You</div>
+    <div id="news-world">
+      <div class="ni"><span class="sk"></span><span class="sk w75"></span></div>
+      <div class="ni"><span class="sk"></span><span class="sk w85"></span></div>
+      <div class="ni"><span class="sk"></span><span class="sk w75"></span></div>
+      <div class="ni"><span class="sk w85"></span></div>
+    </div>
+  </div>
+
+  <!-- 12 VIP TOUCHES -->
+  <div class="card c4" style="animation-delay:.60s">
+    <div class="clabel">12 — Client VIP + Experience</div>
+    <div class="vitem"><div class="vico">🎂</div><div><div class="vnm" contenteditable="true">Client Name</div><div class="vact" contenteditable="true">Birthday today — heartfelt text</div></div><div class="vbadge">Birthday</div></div>
+    <div class="vitem"><div class="vico">🏠</div><div><div class="vnm" contenteditable="true">Client Name</div><div class="vact" contenteditable="true">1-year home anniversary — send card</div></div><div class="vbadge">Anniversary</div></div>
+    <div class="vitem"><div class="vico">⭐</div><div><div class="vnm" contenteditable="true">Recent Closing</div><div class="vact" contenteditable="true">Request Google + Zillow review</div></div><div class="vbadge">Review</div></div>
+    <div class="vitem"><div class="vico">🎁</div><div><div class="vnm" contenteditable="true">Client Name</div><div class="vact" contenteditable="true">Closing gift — confirm ordered</div></div><div class="vbadge">Gift</div></div>
+    <div class="vitem"><div class="vico">💌</div><div><div class="vnm" contenteditable="true">Referral Opportunity</div><div class="vact" contenteditable="true">Follow up on referral mention</div></div><div class="vbadge">Referral</div></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── ROW 8: WEALTH + DATES + AI STRATEGY ── -->
+
+  <!-- 14 WEALTH -->
+  <div class="card c4" style="animation-delay:.64s">
+    <div class="clabel">14 — Wealth + CEO Money</div>
+    <div class="mstats">
+      <div class="mstat"><div class="mlb">Monthly Goal</div><div class="mv" contenteditable="true">$40K</div></div>
+      <div class="mstat"><div class="mlb">Current Rev.</div><div class="mv green" contenteditable="true">$24K</div></div>
+      <div class="mstat"><div class="mlb">Pending GCI</div><div class="mv gold" contenteditable="true">$11.4K</div></div>
+    </div>
+    <div class="prog" style="margin-bottom:12px">
+      <div class="progrow"><span>Monthly Progress</span><span>60% to goal</span></div>
+      <div class="progtrack"><div class="progfill" style="width:60%"></div></div>
+    </div>
+    <div class="malert">⚠️ Tax reminder: 25% of every commission → tax account before spending anything else.</div>
+    <div class="kgrid k2" style="margin-top:11px">
+      <div class="kstat"><div class="kn" style="font-size:13px;line-height:1.3" contenteditable="true">$500 index fund this week</div><div class="kl">Invest</div></div>
+      <div class="kstat"><div class="kn" style="font-size:13px;line-height:1.3" id="wealth-move" contenteditable="true"><span class="sk w75"></span></div><div class="kl">Wealth Move</div></div>
+    </div>
+  </div>
+
+  <!-- 16 DATES + COUNTDOWNS -->
+  <div class="card c4" style="animation-delay:.68s">
+    <div class="clabel">16 — Dates + Countdowns</div>
+    <div class="cditem"><div class="cddays now">TODAY</div><div><div class="cdtitle" contenteditable="true">Urgent deadline</div><div class="cdsub" contenteditable="true">Details</div></div><div class="ctag warn">Urgent</div></div>
+    <div class="cditem"><div class="cddays soon" contenteditable="true">3</div><div><div class="cdtitle" contenteditable="true">Upcoming closing</div><div class="cdsub" contenteditable="true">Confirm gift + title</div></div><div class="ctag client">Closing</div></div>
+    <div class="cditem"><div class="cddays soon" contenteditable="true">7</div><div><div class="cdtitle" contenteditable="true">School deadline block</div><div class="cdsub" contenteditable="true">Batch work on Sunday</div></div><div class="ctag school">School</div></div>
+    <div class="cditem"><div class="cddays ahead" contenteditable="true">11</div><div><div class="cdtitle" contenteditable="true">Monthly revenue deadline</div><div class="cdsub" contenteditable="true">Gap remaining</div></div><div class="ctag warn">$$$</div></div>
+    <div class="cditem"><div class="cddays ahead" style="font-size:14px;font-family:'DM Sans',sans-serif;font-weight:300;letter-spacing:1px;color:var(--gold)">Q3</div><div><div class="cdtitle" contenteditable="true">Investment property goal</div><div class="cdsub" contenteditable="true">Identify first STR by August</div></div><div class="ctag pers">Goal</div></div>
+  </div>
+
+  <!-- 18 AI STRATEGY -->
+  <div class="card c4" style="animation-delay:.72s">
+    <div class="clabel">18 — AI Strategy Notes</div>
+    <div class="aigrid">
+      <div class="aiitem focus"><div class="ailb">✦ Focus On</div><ul id="ai-focus"><li><span class="sk w85"></span></li><li><span class="sk w75"></span></li></ul></div>
+      <div class="aiitem money"><div class="ailb">💰 Money Moves</div><ul id="ai-money"><li><span class="sk w85"></span></li><li><span class="sk w75"></span></li></ul></div>
+      <div class="aiitem ignore"><div class="ailb">✗ Ignore Today</div><ul id="ai-ignore"><li><span class="sk w75"></span></li><li><span class="sk w60"></span></li></ul></div>
+      <div class="aiitem risk"><div class="ailb">⚠ Watch Out</div><ul id="ai-risk"><li><span class="sk w85"></span></li><li><span class="sk w60"></span></li></ul></div>
+      <div class="aiitem delg"><div class="ailb">→ Delegate</div><ul id="ai-delegate"><li><span class="sk w85"></span></li><li><span class="sk w75"></span></li></ul></div>
+      <div class="aiitem dec"><div class="ailb">◆ Decide Today</div><ul id="ai-decide"><li><span class="sk w85"></span></li><li><span class="sk w75"></span></li></ul></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── ROW 9: VISION ── -->
+  <div class="card vcard c12" style="animation-delay:.76s">
+    <div class="clabel">17 — Vision + Identity</div>
+    <div class="vaff" id="vision-affirm" contenteditable="true">"I am building a life so beautiful and abundant that my children will never question their worth. I am not just a realtor — I am a legacy architect."</div>
+    <div class="vbody" contenteditable="true">You are becoming a woman who leads with excellence, builds generational wealth through real estate, and shows other women — especially Black women and mothers — that it is possible to have it all with grace. The luxury family real estate space was made for you. Keep going.</div>
+    <div class="vpills">
+      <div class="vpill">Generational Wealth</div><div class="vpill">Family Legacy</div>
+      <div class="vpill">Luxury Real Estate</div><div class="vpill">Business Ownership</div>
+      <div class="vpill">Financial Freedom</div><div class="vpill">Leadership</div>
+      <div class="vpill">Discipline</div><div class="vpill">Elegance</div>
+      <div class="vpill" id="closing-pill" contenteditable="true">You're ready. Go make it happen.</div>
+    </div>
+  </div>
+
+</div><!-- end grid -->
 
 <div class="gold-rule"></div>
 <footer class="footer">
-  <span class="brand">Your Morning Briefing</span>
-  <span>Wealth · Vision · Execution</span>
+  <span class="brand">Daily Executive Brief — Bri's Command Center</span>
+  <span>Wealth · Vision · Execution · Legacy</span>
   <span id="footerDate"></span>
 </footer>
 
+<!-- ═══════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════ -->
 <script>
- // Clock + live greeting
-  function getGreeting(hour) {
-    if (hour >= 5  && hour < 12) return 'Good Morning';
-    if (hour >= 12 && hour < 17) return 'Good Afternoon';
-    if (hour >= 17 && hour < 24) return 'Good Evening';
-    return 'Still Building';
+'use strict';
+
+/* ── AFFIRMATIONS ──────────────────────────── */
+const AFFIRMATIONS = [
+  { text: "I am building a legacy so powerful that my name will echo through my family for generations. Every decision I make today is an investment in that future.", sub: "Legacy · Generational Wealth" },
+  { text: "I am not waiting for the perfect moment. I am the moment. Every conversation, every call, every showing is me claiming what is already mine.", sub: "Execution · Revenue" },
+  { text: "I lead with excellence. I close with confidence. I show up as the most elevated version of myself because my clients deserve that and so do I.", sub: "Leadership · Excellence" },
+  { text: "My business is growing. My income is expanding. My family is protected. I am exactly where I am supposed to be, doing exactly what I was built to do.", sub: "Abundance · Purpose" },
+  { text: "I am a luxury real estate authority in South DFW. I know my markets, I know my value, and I know how to serve families at the highest level.", sub: "Authority · Expertise" },
+  { text: "Discipline is my love language. Every consistent action I take today compounds into the freedom I am building for tomorrow.", sub: "Discipline · Freedom" },
+  { text: "I am the woman other women look at and say — she made it possible. I carry that responsibility with grace and I show up fully.", sub: "Visibility · Impact" },
+  { text: "My pipeline is healthy. My leads are converting. My income flows to me freely and consistently. I receive abundance with gratitude.", sub: "Pipeline · Prosperity" },
+  { text: "I balance business, motherhood, education, and legacy not because it is easy — but because I was built for this. I rest when I need to and I rise every time.", sub: "Balance · Resilience" },
+  { text: "Every home I close is a family stepping into their future. That is not just a transaction — that is a life changed. I never take that lightly.", sub: "Service · Purpose" },
+  { text: "I invest in myself, my education, my brand, and my business. That investment compounds daily and the return is everything I have ever wanted.", sub: "Investment · Growth" },
+  { text: "I do not chase. I attract. My consistency, my expertise, and my presence magnetize the right clients, the right deals, and the right opportunities.", sub: "Magnetism · Attraction" },
+  { text: "Today I choose revenue-producing actions over busyness. I choose focus over distraction. I choose my future over my comfort zone.", sub: "Focus · Revenue" },
+  { text: "I am building wealth quietly and powerfully. My investment properties, my commissions, my savings — all of it is stacking toward a life of true freedom.", sub: "Wealth · Financial Freedom" }
+];
+
+function getAffirmation() {
+  const now   = new Date();
+  const seed  = now.getFullYear() * 10000 + (now.getMonth()+1) * 100 + now.getDate() + now.getHours();
+  return AFFIRMATIONS[seed % AFFIRMATIONS.length];
+}
+
+function setAffirmation() {
+  const a     = getAffirmation();
+  const el    = document.getElementById('affirmText');
+  const sub   = document.getElementById('affirmSub');
+  if (el) {
+    el.style.animation = 'none';
+    el.offsetHeight;
+    el.style.animation = '';
+    el.textContent = `"${a.text}"`;
   }
+  if (sub) sub.textContent = a.sub;
+}
 
-  function updateClock() {
-    const now  = new Date();
-    const raw  = now.getHours();
-    let h      = raw;
-    const m    = now.getMinutes().toString().padStart(2,'0');
-    const s    = now.getSeconds().toString().padStart(2,'0');
-    const ampm = h >= 12 ? 'PM' : 'AM';
-    h = h % 12 || 12;
+/* ── CLOCK + GREETING ──────────────────────── */
+const DAYS   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
-    // Clock updates every second
-    document.getElementById('clock').innerHTML =
-      `${h}:${m}:${s}<span style="font-size:18px; letter-spacing:2px; color:var(--gold); margin-left:6px;">${ampm}</span>`;
+function getGreeting(h) {
+  if (h >= 5  && h < 12) return 'Good Morning';
+  if (h >= 12 && h < 17) return 'Good Afternoon';
+  if (h >= 17 && h < 24) return 'Good Evening';
+  return 'Still Building';
+}
 
-    // Date labels
-    const days   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-    const label  = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
-    document.getElementById('dateLabel').textContent  = label;
-    document.getElementById('footerDate').textContent = label;
+function updateClock() {
+  const now  = new Date();
+  const raw  = now.getHours();
+  let   h    = raw;
+  const m    = now.getMinutes().toString().padStart(2,'0');
+  const s    = now.getSeconds().toString().padStart(2,'0');
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
 
-    // Time-based greeting
-    const greetEl = document.getElementById('greeting');
-    if (greetEl) {
-      greetEl.innerHTML = `${getGreeting(raw)}, <em>Bri.</em>`;
+  const ct = document.getElementById('clkTime');
+  const ca = document.getElementById('clkAP');
+  if (ct) ct.textContent = `${h}:${m}:${s}`;
+  if (ca) ca.textContent = ampm;
+
+  const label = `${DAYS[now.getDay()]}, ${MONTHS[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
+  const dl = document.getElementById('dateLabel');
+  const fl = document.getElementById('footerDate');
+  if (dl) dl.textContent = label;
+  if (fl) fl.textContent = label;
+
+  const gr = document.getElementById('greeting');
+  if (gr) gr.innerHTML = `${getGreeting(raw)}, <em>Bri.</em>`;
+}
+
+updateClock();
+setInterval(updateClock, 1000);
+
+/* ── DOM HELPERS ───────────────────────────── */
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (el && val != null && String(val).trim() !== '') el.textContent = val;
+}
+function setHTML(id, html) {
+  const el = document.getElementById(id);
+  if (el && html) el.innerHTML = html;
+}
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+/* ── STATUS CHIPS ──────────────────────────── */
+function setChip(id, state) {
+  const el = document.getElementById(id);
+  if (el) el.className = 'chip ' + state;
+}
+
+/* ── REFRESH BUTTON ────────────────────────── */
+function setRefreshing(on) {
+  const btn = document.getElementById('btnRef');
+  if (!btn) return;
+  btn.disabled = on;
+  btn.classList.toggle('loading', on);
+}
+
+/* ── SAFE API FETCH ────────────────────────── */
+async function apiFetch(url, opts) {
+  try {
+    const res  = await fetch(url, opts);
+    const text = await res.text();
+    const ch   = text.trim()[0];
+    if (ch !== '{' && ch !== '[') {
+      return { ok: false, error: `${url} returned HTML not JSON (HTTP ${res.status}). Confirm file is in /api/ folder on GitHub and Vercel has deployed it.` };
     }
+    let parsed;
+    try { parsed = JSON.parse(text); }
+    catch { return { ok: false, error: `${url} returned malformed JSON` }; }
+    if (parsed.ok === false) return { ok: false, error: parsed.error || `${url} returned ok:false` };
+    return { ok: true, data: parsed };
+  } catch (e) {
+    return { ok: false, error: `Network error: ${e.message}` };
+  }
+}
+
+function errNote(msg) {
+  return `<div class="errnote">${esc(msg)}</div>`;
+}
+
+/* ── RATE HELPERS ──────────────────────────── */
+function rateVal(v) {
+  return `${esc(String(v))}<span class="pct">%</span>`;
+}
+function trendTxt(d) {
+  if (!d || d.change == null) return '';
+  const arr = d.direction === 'up' ? '▲' : d.direction === 'down' ? '▼' : '→';
+  return `${arr} ${Math.abs(parseFloat(d.change)||0).toFixed(2)}% vs last week`;
+}
+function trendCls(d) {
+  if (!d) return 'rtrend';
+  if (d.direction === 'up')   return 'rtrend up';
+  if (d.direction === 'down') return 'rtrend dn';
+  return 'rtrend';
+}
+
+/* ── NEWS BUILDER ──────────────────────────── */
+function newsBlock(articles, region) {
+  if (!Array.isArray(articles) || !articles.length) return '';
+  return articles.slice(0,4).map(a => `
+    <div class="ni">
+      <div class="nreg">${esc(region)}</div>
+      <div class="nh">${esc((a.title||'').split(' - ')[0])}</div>
+      ${a.description ? `<div class="nd">${esc(a.description.substring(0,130))}</div>` : ''}
+      ${a.url ? `<a class="nl" href="${esc(a.url)}" target="_blank" rel="noopener">Read →</a>` : ''}
+    </div>`).join('');
+}
+
+function listItems(arr) {
+  if (!Array.isArray(arr) || !arr.length) return '';
+  return arr.map(i => `<li>${esc(i)}</li>`).join('');
+}
+
+/* ── LOAD RATES ────────────────────────────── */
+async function loadRates() {
+  setChip('chipRates', 'loading');
+  const { ok, data, error } = await apiFetch('https://morning-briefing-ashen.vercel.app/api/rates');
+
+  if (!ok) {
+    setChip('chipRates', 'err');
+    ['rate-30yr','rate-15yr','rate-fha','rate-va'].forEach(id =>
+      setHTML(id, `<span style="font-size:11px;color:var(--amber)">Unavailable</span>`)
+    );
+    return null;
   }
 
-  updateClock();
-  setInterval(updateClock, 1000);
+  if (data.thirtyYear) {
+    setHTML('rate-30yr', rateVal(data.thirtyYear.rate));
+    const t = document.getElementById('trend-30yr');
+    if (t) { t.textContent = trendTxt(data.thirtyYear); t.className = trendCls(data.thirtyYear); }
+  }
+  if (data.fifteenYear) {
+    setHTML('rate-15yr', rateVal(data.fifteenYear.rate));
+    const t = document.getElementById('trend-15yr');
+    if (t) { t.textContent = trendTxt(data.fifteenYear); t.className = trendCls(data.fifteenYear); }
+  }
+  if (data.fha) setHTML('rate-fha', rateVal(data.fha.rate));
+  if (data.va)  setHTML('rate-va',  rateVal(data.va.rate));
 
-  // Toggle Power5 done state
-  function toggleDone(el) {
-    el.classList.toggle('done');
-    const status = el.querySelector('.power5-status');
-    if (el.classList.contains('done')) {
-      status.textContent = '✓ Complete';
-      status.classList.add('done');
-    } else {
-      status.textContent = 'Pending';
-      status.classList.remove('done');
-    }
+  setChip('chipRates', 'live');
+  return data;
+}
+
+/* ── LOAD NEWS ─────────────────────────────── */
+async function loadNews() {
+  setChip('chipNews', 'loading');
+  const { ok, data, error } = await apiFetch('https://morning-briefing-ashen.vercel.app/api/news');
+
+  if (!ok) {
+    setChip('chipNews', 'err');
+    ['news-national','news-dfw','news-local','news-world'].forEach(id =>
+      setHTML(id, errNote(`News unavailable — ${error}`))
+    );
+    return null;
   }
 
-  // Toggle todo checkbox
-  function checkTodo(el) {
-    el.classList.toggle('done');
-    if (el.classList.contains('done')) {
-      el.innerHTML = '✓';
-      el.parentElement.style.textDecoration = 'line-through';
-      el.parentElement.style.color = 'var(--muted2)';
-    } else {
-      el.innerHTML = '';
-      el.parentElement.style.textDecoration = 'none';
-      el.parentElement.style.color = 'var(--text-dim)';
-    }
+  const natEl = document.getElementById('news-national');
+  if (natEl) {
+    const nat = newsBlock(data.national, 'National / Texas');
+    if (nat) natEl.innerHTML = `<div class="slabel" style="margin-top:0">National + Texas</div>${nat}`;
   }
 
-// Stagger card animations
-  document.querySelectorAll('.card').forEach((card, i) => {
-    card.style.animationDelay = `${0.05 + i * 0.04}s`;
-  });
+  const dfwEl = document.getElementById('news-dfw');
+  if (dfwEl) {
+    const dfw = newsBlock(data.dfw, 'South DFW Markets');
+    if (dfw) dfwEl.innerHTML = `<div class="slabel" style="margin-top:0">South DFW — Your Markets</div>${dfw}`;
+  }
 
-  // Refresh dashboard — re-fetches all three API endpoints without page reload
-  async function refreshDashboard() {
-    const btn   = document.getElementById('btnRefresh');
-    const label = document.getElementById('btnLabel');
-    if (!btn || btn.disabled) return;
+  const bldEl = document.getElementById('news-builders');
+  if (bldEl && data.builders?.length) bldEl.innerHTML = newsBlock(data.builders, 'Builders');
 
-    btn.disabled        = true;
-    label.textContent   = '↻  Loading…';
+  const locEl = document.getElementById('news-local');
+  if (locEl && data.local?.length) locEl.innerHTML = newsBlock(data.local, 'DFW Local');
 
-    try {
-      // Fetch rates and news in parallel
-      const [ratesData, newsData] = await Promise.all([
-        fetch('/api/rates').then(r => r.json()).catch(() => null),
-        fetch('/api/news').then(r => r.json()).catch(() => null)
-      ]);
+  const wldEl = document.getElementById('news-world');
+  if (wldEl && data.world?.length) wldEl.innerHTML = newsBlock(data.world, 'Economy / Rates');
 
-      // Build context for AI summary
-      const ratesCtx = ratesData?.thirtyYear
-        ? `30yr: ${ratesData.thirtyYear.rate}%, 15yr: ${ratesData.fifteenYear?.rate || 'N/A'}%, FHA: ~${ratesData.fha?.rate || 'N/A'}%, VA: ~${ratesData.va?.rate || 'N/A'}%`
-        : '';
+  setChip('chipNews', 'live');
+  return data;
+}
 
-      const newsCtx = newsData
-        ? [...(newsData.national || []), ...(newsData.dfw || [])]
-            .slice(0, 6).map(a => a.title).filter(Boolean).join(' | ')
-        : '';
+/* ── LOAD SUMMARY ──────────────────────────── */
+async function loadSummary(ratesData, newsData) {
+  setChip('chipAI', 'loading');
 
-      // Fetch AI summary using live context
-      const aiData = await fetch('/api/summary', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ ratesContext: ratesCtx, newsContext: newsCtx })
-      }).then(r => r.json()).catch(() => null);
+  let ratesCtx = '';
+  if (ratesData?.thirtyYear) {
+    ratesCtx = [
+      `30yr: ${ratesData.thirtyYear.rate}% (${ratesData.thirtyYear.direction}, Δ${ratesData.thirtyYear.change})`,
+      `15yr: ${ratesData.fifteenYear?.rate || 'N/A'}%`,
+      `FHA: ~${ratesData.fha?.rate || 'N/A'}%`,
+      `VA: ~${ratesData.va?.rate || 'N/A'}%`
+    ].join(' | ');
+  }
 
-      // Update rate cards if data returned
-      if (ratesData?.ok) {
-        const rateItems = document.querySelectorAll('.rate-item');
-        const rateMap = [
-          { el: rateItems[0], data: ratesData.thirtyYear },
-          { el: rateItems[1], data: ratesData.fifteenYear },
-          { el: rateItems[2], data: ratesData.fha },
-          { el: rateItems[3], data: ratesData.va }
-        ];
-        rateMap.forEach(({ el, data }) => {
-          if (!el || !data?.rate) return;
-          const numEl = el.querySelector('.rate-num');
-          if (numEl) numEl.innerHTML = `${data.rate}<span style="font-size:16px;color:var(--muted)">%</span>`;
-        });
-      }
+  let newsCtx = '';
+  if (newsData) {
+    newsCtx = [...(newsData.national||[]), ...(newsData.dfw||[])]
+      .slice(0,6).map(a => a.title).filter(Boolean).join(' | ');
+  }
 
-      // Update AI-generated fields if summary returned
-      if (aiData?.ok) {
-        const fieldMap = {
-          'greeting':  aiData.affirmation ? null : null,  // greeting stays time-based
-        };
+  const { ok, data: ai, error } = await apiFetch('https://morning-briefing-ashen.vercel.app/api/summary', {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body:    JSON.stringify({ ratesContext: ratesCtx, newsContext: newsCtx })
+  });
 
-        // Summary card values — find by their label text and update sibling value div
-        const summaryItems = document.querySelectorAll('.summary-item .value');
-        const summaryKeys  = [
-          aiData.whatMattersMost,
-          aiData.biggestOpportunity,
-          aiData.biggestRisk,
-          aiData.moveForwardBy
-        ];
-        summaryItems.forEach((el, i) => {
-          if (summaryKeys[i]) el.textContent = summaryKeys[i];
-        });
+  if (!ok) {
+    setChip('chipAI', 'err');
+    const fallback = errNote(`AI briefing unavailable — ${error}. Check ANTHROPIC_API_KEY in Vercel → Settings → Environment Variables and billing credits at console.anthropic.com.`);
+    setHTML('sum-matters', fallback);
+    return;
+  }
 
-        // Priority list items
-        const priorities = document.querySelectorAll('.priority-list li span[contenteditable]');
-        const prioKeys   = [aiData.priority1, aiData.priority2, aiData.priority3];
-        priorities.forEach((el, i) => {
-          if (prioKeys[i]) el.textContent = prioKeys[i];
-        });
+  /* Executive summary */
+  setText('sum-matters',     ai.whatMattersMost);
+  setText('sum-opportunity', ai.biggestOpportunity);
+  setText('sum-risk',        ai.biggestRisk);
+  setText('sum-forward',     ai.moveForwardBy);
 
-        // Revenue action
-        const revAction = document.querySelector('.revenue-action .action-text');
-        if (revAction && aiData.revenueAction) revAction.textContent = aiData.revenueAction;
+  /* Priorities */
+  setText('pri-1', ai.priority1);
+  setText('pri-2', ai.priority2);
+  setText('pri-3', ai.priority3);
 
-        // AI strategy grid items
-        const aiLists = document.querySelectorAll('.ai-item ul');
-        const aiKeys  = [
-          aiData.focusOn,
-          aiData.moneyMoves,
-          aiData.ignoreToday,
-          aiData.watchOut,
-          aiData.delegate,
-          aiData.decideToday
-        ];
-        aiLists.forEach((ul, i) => {
-          if (!Array.isArray(aiKeys[i])) return;
-          ul.innerHTML = aiKeys[i].map(item => `<li>${item}</li>`).join('');
-        });
+  /* Revenue */
+  setText('rev-action', ai.revenueAction);
 
-        // Brand content ideas
-        const ideaTexts = document.querySelectorAll('.idea-text');
-        const ideaKeys  = [aiData.reelIdea, aiData.captionPrompt, aiData.storyIdea];
-        ideaTexts.forEach((el, i) => {
-          if (ideaKeys[i]) el.textContent = ideaKeys[i];
-        });
-      }
+  /* Rates talking points */
+  if (ai.ratesTalkingPoint) setText('tp-buyers',  `"${ai.ratesTalkingPoint}"`);
+  if (ai.marketInsight)     { setText('tp-sellers', `"${ai.marketInsight}"`); setText('tp-market', ai.marketInsight); }
 
-      // Update last-refreshed timestamp
-      const now = new Date();
-      const ts  = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-      const lr  = document.getElementById('lastRefreshed');
-      if (lr) lr.textContent = `Last refreshed at ${ts}`;
+  /* Lead message */
+  if (ai.leadMessage) setText('lead-msg', ai.leadMessage);
 
-    } catch (e) {
-      // Silent fail — dashboard content stays as-is
-    }
+  /* Brand */
+  if (ai.reelIdea)      setText('idea-reel',    ai.reelIdea);
+  if (ai.captionPrompt) setText('idea-caption', ai.captionPrompt);
+  if (ai.storyIdea)     setText('idea-story',   ai.storyIdea);
 
-    btn.disabled      = false;
-    label.textContent = '↻ \u00a0Refresh Briefing';
-  }
+  /* Wealth + team */
+  if (ai.wealthMove)   setText('wealth-move', ai.wealthMove);
+  if (ai.teamPriority) setText('team-dir',    ai.teamPriority);
+
+  /* Vision affirmation from AI (overrides static) */
+  if (ai.affirmation)  setText('vision-affirm', `"${ai.affirmation}"`);
+  if (ai.closingLine)  setText('closing-pill',  ai.closingLine);
+
+  /* AI strategy grid */
+  const listMap = {
+    'ai-focus':    ai.focusOn,
+    'ai-money':    ai.moneyMoves,
+    'ai-ignore':   ai.ignoreToday,
+    'ai-risk':     ai.watchOut,
+    'ai-delegate': ai.delegate,
+    'ai-decide':   ai.decideToday
+  };
+  Object.entries(listMap).forEach(([id, arr]) => {
+    const html = listItems(arr);
+    if (html) setHTML(id, html);
+  });
+
+  setChip('chipAI', 'live');
+}
+
+/* ── REFRESH ALL ───────────────────────────── */
+async function refreshAll() {
+  setRefreshing(true);
+  setText('lastRef', 'Refreshing…');
+  setAffirmation();
+
+  const [ratesData, newsData] = await Promise.all([loadRates(), loadNews()]);
+  await loadSummary(ratesData, newsData);
+
+  const now = new Date();
+  const ts  = now.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit', hour12:true });
+  setText('lastRef', `Last refreshed at ${ts}`);
+  setRefreshing(false);
+}
+
+/* ── INTERACTIONS ──────────────────────────── */
+function toggleDone(el) {
+  el.classList.toggle('done');
+  const s = el.querySelector('.p5st');
+  if (!s) return;
+  s.textContent = el.classList.contains('done') ? '✓ Complete' : 'Pending';
+  if (el.classList.contains('done')) s.classList.add('done');
+  else s.classList.remove('done');
+}
+
+function toggleTodo(el) {
+  if (window.getSelection && window.getSelection().type === 'Range') return;
+  el.classList.toggle('done');
+}
+
+/* ── INIT ──────────────────────────────────── */
+window.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.card').forEach((card, i) => {
+    if (!card.style.animationDelay)
+      card.style.animationDelay = `${0.04 + i * 0.03}s`;
+  });
+  setAffirmation();
+  refreshAll();
+});
 </script>
-
 </body>
 </html>
