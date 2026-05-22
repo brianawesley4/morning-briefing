@@ -1741,23 +1741,43 @@
 </footer>
 
 <script>
-  // Clock
+ // Clock + live greeting
+  function getGreeting(hour) {
+    if (hour >= 5  && hour < 12) return 'Good Morning';
+    if (hour >= 12 && hour < 17) return 'Good Afternoon';
+    if (hour >= 17 && hour < 24) return 'Good Evening';
+    return 'Still Building';
+  }
+
   function updateClock() {
-    const now = new Date();
-    let h = now.getHours();
-    const m = now.getMinutes().toString().padStart(2,'0');
+    const now  = new Date();
+    const raw  = now.getHours();
+    let h      = raw;
+    const m    = now.getMinutes().toString().padStart(2,'0');
+    const s    = now.getSeconds().toString().padStart(2,'0');
     const ampm = h >= 12 ? 'PM' : 'AM';
     h = h % 12 || 12;
-    document.getElementById('clock').innerHTML = `${h}:${m}<span style="font-size:18px; letter-spacing:2px; color:var(--gold); margin-left:6px;">${ampm}</span>`;
 
-    const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    // Clock updates every second
+    document.getElementById('clock').innerHTML =
+      `${h}:${m}:${s}<span style="font-size:18px; letter-spacing:2px; color:var(--gold); margin-left:6px;">${ampm}</span>`;
+
+    // Date labels
+    const days   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-    const label = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
-    document.getElementById('dateLabel').textContent = label;
+    const label  = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
+    document.getElementById('dateLabel').textContent  = label;
     document.getElementById('footerDate').textContent = label;
+
+    // Time-based greeting
+    const greetEl = document.getElementById('greeting');
+    if (greetEl) {
+      greetEl.innerHTML = `${getGreeting(raw)}, <em>Bri.</em>`;
+    }
   }
+
   updateClock();
-  setInterval(updateClock, 10000);
+  setInterval(updateClock, 1000);
 
   // Toggle Power5 done state
   function toggleDone(el) {
@@ -1786,10 +1806,125 @@
     }
   }
 
-  // Stagger card animations
-  document.querySelectorAll('.card').forEach((card, i) => {
-    card.style.animationDelay = `${0.05 + i * 0.04}s`;
-  });
+// Stagger card animations
+  document.querySelectorAll('.card').forEach((card, i) => {
+    card.style.animationDelay = `${0.05 + i * 0.04}s`;
+  });
+
+  // Refresh dashboard — re-fetches all three API endpoints without page reload
+  async function refreshDashboard() {
+    const btn   = document.getElementById('btnRefresh');
+    const label = document.getElementById('btnLabel');
+    if (!btn || btn.disabled) return;
+
+    btn.disabled        = true;
+    label.textContent   = '↻  Loading…';
+
+    try {
+      // Fetch rates and news in parallel
+      const [ratesData, newsData] = await Promise.all([
+        fetch('/api/rates').then(r => r.json()).catch(() => null),
+        fetch('/api/news').then(r => r.json()).catch(() => null)
+      ]);
+
+      // Build context for AI summary
+      const ratesCtx = ratesData?.thirtyYear
+        ? `30yr: ${ratesData.thirtyYear.rate}%, 15yr: ${ratesData.fifteenYear?.rate || 'N/A'}%, FHA: ~${ratesData.fha?.rate || 'N/A'}%, VA: ~${ratesData.va?.rate || 'N/A'}%`
+        : '';
+
+      const newsCtx = newsData
+        ? [...(newsData.national || []), ...(newsData.dfw || [])]
+            .slice(0, 6).map(a => a.title).filter(Boolean).join(' | ')
+        : '';
+
+      // Fetch AI summary using live context
+      const aiData = await fetch('/api/summary', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ ratesContext: ratesCtx, newsContext: newsCtx })
+      }).then(r => r.json()).catch(() => null);
+
+      // Update rate cards if data returned
+      if (ratesData?.ok) {
+        const rateItems = document.querySelectorAll('.rate-item');
+        const rateMap = [
+          { el: rateItems[0], data: ratesData.thirtyYear },
+          { el: rateItems[1], data: ratesData.fifteenYear },
+          { el: rateItems[2], data: ratesData.fha },
+          { el: rateItems[3], data: ratesData.va }
+        ];
+        rateMap.forEach(({ el, data }) => {
+          if (!el || !data?.rate) return;
+          const numEl = el.querySelector('.rate-num');
+          if (numEl) numEl.innerHTML = `${data.rate}<span style="font-size:16px;color:var(--muted)">%</span>`;
+        });
+      }
+
+      // Update AI-generated fields if summary returned
+      if (aiData?.ok) {
+        const fieldMap = {
+          'greeting':  aiData.affirmation ? null : null,  // greeting stays time-based
+        };
+
+        // Summary card values — find by their label text and update sibling value div
+        const summaryItems = document.querySelectorAll('.summary-item .value');
+        const summaryKeys  = [
+          aiData.whatMattersMost,
+          aiData.biggestOpportunity,
+          aiData.biggestRisk,
+          aiData.moveForwardBy
+        ];
+        summaryItems.forEach((el, i) => {
+          if (summaryKeys[i]) el.textContent = summaryKeys[i];
+        });
+
+        // Priority list items
+        const priorities = document.querySelectorAll('.priority-list li span[contenteditable]');
+        const prioKeys   = [aiData.priority1, aiData.priority2, aiData.priority3];
+        priorities.forEach((el, i) => {
+          if (prioKeys[i]) el.textContent = prioKeys[i];
+        });
+
+        // Revenue action
+        const revAction = document.querySelector('.revenue-action .action-text');
+        if (revAction && aiData.revenueAction) revAction.textContent = aiData.revenueAction;
+
+        // AI strategy grid items
+        const aiLists = document.querySelectorAll('.ai-item ul');
+        const aiKeys  = [
+          aiData.focusOn,
+          aiData.moneyMoves,
+          aiData.ignoreToday,
+          aiData.watchOut,
+          aiData.delegate,
+          aiData.decideToday
+        ];
+        aiLists.forEach((ul, i) => {
+          if (!Array.isArray(aiKeys[i])) return;
+          ul.innerHTML = aiKeys[i].map(item => `<li>${item}</li>`).join('');
+        });
+
+        // Brand content ideas
+        const ideaTexts = document.querySelectorAll('.idea-text');
+        const ideaKeys  = [aiData.reelIdea, aiData.captionPrompt, aiData.storyIdea];
+        ideaTexts.forEach((el, i) => {
+          if (ideaKeys[i]) el.textContent = ideaKeys[i];
+        });
+      }
+
+      // Update last-refreshed timestamp
+      const now = new Date();
+      const ts  = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+      const lr  = document.getElementById('lastRefreshed');
+      if (lr) lr.textContent = `Last refreshed at ${ts}`;
+
+    } catch (e) {
+      // Silent fail — dashboard content stays as-is
+    }
+
+    btn.disabled      = false;
+    label.textContent = '↻ \u00a0Refresh Briefing';
+  }
 </script>
 
 </body>
