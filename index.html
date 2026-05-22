@@ -1000,11 +1000,15 @@
 <header class="header">
   <div class="header-left">
     <div class="date-label" id="dateLabel"></div>
-    <h1>Good Morning, <em>Bri.</em></h1>
+    <h1 id="greeting">Good Morning, <em>Bri.</em></h1>
   </div>
   <div class="header-right">
     <div class="time" id="clock"></div>
-    <div class="greeting">Today you lead with intention</div>
+   <div class="greeting">Today you lead with intention</div>
+    <div id="lastRefreshed" style="font-size:9px;letter-spacing:1.5px;color:var(--muted);margin-top:6px;text-transform:uppercase;text-align:right;min-height:14px;"></div>
+    <button id="btnRefresh" onclick="refreshDashboard()" style="margin-top:10px;padding:7px 16px;background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:'Montserrat',sans-serif;font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:1px;transition:all 0.2s;" onmouseover="this.style.background='var(--gold)';this.style.color='var(--black)'" onmouseout="this.style.background='transparent';this.style.color='var(--gold)'">
+      <span id="btnLabel">↻ &nbsp;Refresh Briefing</span>
+    </button>
   </div>
 </header>
 <div class="gold-rule"></div>
