@@ -1,41 +1,36 @@
 // api/pipeline.js
-// Vercel Serverless Function — Node.js 20
-// Reads ISA Daily Activity records from Airtable
-// Env vars required: AIRTABLE_TOKEN, AIRTABLE_BASE_ID
+// Reads ISA Daily Activity from Airtable — Executive Command Center
+// Base ID and Table ID are hardcoded (confirmed live from Airtable)
+// Only requires: AIRTABLE_TOKEN env variable in Vercel
 
 export default async function handler(req, res) {
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const TOKEN   = process.env.AIRTABLE_TOKEN;
-  const BASE_ID = process.env.AIRTABLE_BASE_ID;
-  const TABLE   = 'ISA Daily Activity';
+  const TOKEN = process.env.AIRTABLE_TOKEN;
 
-  if (!TOKEN || !BASE_ID) {
+  if (!TOKEN) {
     return res.status(500).json({
       ok: false,
-      error: 'AIRTABLE_TOKEN or AIRTABLE_BASE_ID not set in Vercel environment variables.'
+      error: 'AIRTABLE_TOKEN is not set in Vercel environment variables.',
+      fix: 'Go to Vercel → Settings → Environment Variables → add AIRTABLE_TOKEN'
     });
   }
 
+  // Confirmed IDs from your live Airtable base — no env variable needed
+  const BASE_ID  = 'appzePtOYiXoG4w1i';
+  const TABLE_ID = 'tblQloWBA4xVtcBbv';  // ISA Daily Activity
+
   try {
-    // Fetch records sorted by Activity Date descending, limit to last 30
-    const url = new URL(
-      `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(TABLE)}`
-    );
+    const url = new URL(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`);
     url.searchParams.set('sort[0][field]',     'Activity Date');
     url.searchParams.set('sort[0][direction]', 'desc');
-    url.searchParams.set('maxRecords',          '30');
-    url.searchParams.set('view',               'Grid view');
+    url.searchParams.set('maxRecords',         '30');
 
     const airtableRes = await fetch(url.toString(), {
-      headers: {
-        'Authorization': `Bearer ${TOKEN}`,
-        'Content-Type':  'application/json'
-      }
+      headers: { 'Authorization': `Bearer ${TOKEN}` }
     });
 
     const raw = await airtableRes.text();
@@ -54,48 +49,50 @@ export default async function handler(req, res) {
       return res.status(502).json({
         ok: false,
         error: parsed.error?.message || 'Airtable request failed',
+        airtableStatus: airtableRes.status,
         detail: parsed
       });
     }
 
+    // Map records — field names match your confirmed Airtable schema
     const records = (parsed.records || []).map(r => {
       const f = r.fields || {};
       return {
         id:              r.id,
-        vaName:          f['VA Name']          || '',
-        activityDate:    f['Activity Date']    || '',
-        callsMade:       f['Calls Made']       || 0,
-        conversations:   f['Conversations']    || 0,
-        leadsContacted:  f['Leads Contacted']  || 0,
-        appointmentsSet: f['Appointments Set'] || 0,
-        followUps:       f['Follow Ups']       || 0,
-        notesFromISA:    f['Notes From ISA']   || '',
-        needsBriReview:  f['Needs Bri\'s Review'] || false,
-        hotLeads:        f['Hot Leads']        || ''
+        vaName:          f['VA Name']             || '',
+        activityDate:    f['Activity Date']        || '',
+        callsMade:       Number(f['Calls Made'])   || 0,
+        conversations:   Number(f['Conversations'])|| 0,
+        leadsContacted:  Number(f['Leads Contacted']) || 0,
+        appointmentsSet: Number(f['Appointments Set']) || 0,
+        followUps:       Number(f['Follow Ups'])   || 0,
+        notesFromISA:    f['Notes From ISA']       || '',
+        needsBriReview:  f["Needs Bri's Review"]  === true,
+        hotLeads:        f['Hot Leads']            === true
       };
     });
 
-    // Aggregate KPIs from all records (today + recent history)
+    // Aggregate KPIs — prefer today's records, fall back to most recent
     const today = new Date().toISOString().split('T')[0];
-    const todayRecords = records.filter(r => r.activityDate === today);
-    const useRecords   = todayRecords.length ? todayRecords : records.slice(0, 5);
+    const todayRecords  = records.filter(r => r.activityDate === today);
+    const sourceRecords = todayRecords.length ? todayRecords : records.slice(0, 5);
 
     const kpis = {
-      callsMade:       useRecords.reduce((s, r) => s + Number(r.callsMade       || 0), 0),
-      conversations:   useRecords.reduce((s, r) => s + Number(r.conversations   || 0), 0),
-      leadsContacted:  useRecords.reduce((s, r) => s + Number(r.leadsContacted  || 0), 0),
-      appointmentsSet: useRecords.reduce((s, r) => s + Number(r.appointmentsSet || 0), 0),
-      followUps:       useRecords.reduce((s, r) => s + Number(r.followUps       || 0), 0)
+      callsMade:       sourceRecords.reduce((s, r) => s + r.callsMade,       0),
+      conversations:   sourceRecords.reduce((s, r) => s + r.conversations,   0),
+      leadsContacted:  sourceRecords.reduce((s, r) => s + r.leadsContacted,  0),
+      appointmentsSet: sourceRecords.reduce((s, r) => s + r.appointmentsSet, 0),
+      followUps:       sourceRecords.reduce((s, r) => s + r.followUps,       0)
     };
 
-    // Items needing Bri's attention
+    // Records flagged for Bri's attention
     const needsAttention = records
-      .filter(r => r.needsBriReview)
+      .filter(r => r.needsBriReview || r.hotLeads)
       .map(r => ({
         vaName:       r.vaName,
         activityDate: r.activityDate,
         notes:        r.notesFromISA,
-        hotLeads:     r.hotLeads
+        isHotLead:    r.hotLeads
       }));
 
     return res.status(200).json({
@@ -104,13 +101,14 @@ export default async function handler(req, res) {
       kpis,
       needsAttention,
       todayCount:     todayRecords.length,
+      totalRecords:   records.length,
       lastUpdated:    new Date().toISOString()
     });
 
   } catch (err) {
     return res.status(500).json({
       ok:     false,
-      error:  'Failed to fetch from Airtable',
+      error:  'Fetch to Airtable failed',
       detail: err.message
     });
   }
