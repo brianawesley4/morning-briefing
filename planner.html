@@ -538,37 +538,35 @@ textarea.brief-field{resize:vertical;min-height:80px}
 'use strict';
 
 // ── CONFIG ────────────────────────────────────────────
-const AIRTABLE_BASE    = 'appzePtOYiXoG4w1i';
-const TABLE_TASKS      = 'tblnTUNZA2tbF8wFa'; // Tasks
-const TABLE_EVENTS     = 'tblJbXr2PBWyOnSnv'; // Calendar Events
-const TABLE_BRIEF      = 'tblBdxEaBg7qMVrF7'; // Daily Brief
-// Follow-ups go into Tasks table with category="Follow-Up"
+const API_BASE   = 'https://morning-briefing-ashen.vercel.app/api';
+const PLANNER_EP = `${API_BASE}/planner`;
 
-// Airtable token — same one used by the dashboard API
-// Reads from the Vercel API proxy so the token is never exposed client-side
-const API_BASE = 'https://morning-briefing-ashen.vercel.app/api';
+// Airtable table IDs (used in POST body)
+const TABLE_TASKS  = 'tblnTUNZA2tbF8wFa';
+const TABLE_EVENTS = 'tblJbXr2PBWyOnSnv';
+const TABLE_BRIEF  = 'tblBdxEaBg7qMVrF7';
+
+// ── IN-MEMORY STORE (source of truth = Airtable, this is just local display cache) ──
+let MEM = { tasks: [], events: [], followups: [], brief: {} };
 
 // ── INIT ─────────────────────────────────────────────
 const DAYS   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const MONTHS = ['January','February','March','April','May','June','July','August',
+                'September','October','November','December'];
 
-window.addEventListener('DOMContentLoaded', () => {
-  // Set today's date label
+window.addEventListener('DOMContentLoaded', async () => {
   const n     = new Date();
   const label = `${DAYS[n.getDay()]}, ${MONTHS[n.getMonth()]} ${n.getDate()}, ${n.getFullYear()}`;
   const dl    = document.getElementById('todayLabel');
   if (dl) dl.textContent = label;
 
-  // Default date inputs to today
   const today = n.toISOString().split('T')[0];
   ['task-date','event-date','fu-date'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = today;
   });
 
-  // Load existing items from local storage + Airtable
-  loadItems();
-  loadBriefFields();
+  await loadAllFromAirtable();
 });
 
 // ── TAB NAVIGATION ────────────────────────────────────
@@ -583,29 +581,20 @@ function showTab(name) {
 function selectPill(el, groupId, selClass) {
   const group = document.getElementById(groupId);
   if (!group) return;
-  // Remove all selection classes
-  group.querySelectorAll('.pill').forEach(p => {
-    p.className = 'pill';
-  });
+  group.querySelectorAll('.pill').forEach(p => { p.className = 'pill'; });
   el.classList.add(selClass);
 }
-
 function selectPrio(el) {
   const group = el.parentElement;
-  group.querySelectorAll('.prio').forEach(p => {
-    p.className = 'prio';
-  });
-  const val = el.dataset.val;
-  el.classList.add('sel-' + val.toLowerCase());
+  group.querySelectorAll('.prio').forEach(p => { p.className = 'prio'; });
+  el.classList.add('sel-' + el.dataset.val.toLowerCase());
 }
-
 function getSelectedPill(groupId) {
   const group = document.getElementById(groupId);
   if (!group) return '';
   const sel = group.querySelector('.pill[class*="sel-"]');
   return sel ? sel.dataset.val : '';
 }
-
 function getSelectedPrio(groupId) {
   const group = document.getElementById(groupId);
   if (!group) return 'Normal';
@@ -613,65 +602,73 @@ function getSelectedPrio(groupId) {
   return sel ? sel.dataset.val : 'Normal';
 }
 
-// ── LOCAL STORAGE (client-side store) ─────────────────
-// Items are stored locally and shown immediately.
-// They also POST to Airtable so the dashboard API can read them.
-const STORE_KEY = 'estem_planner_v1';
-
-function getStore() {
-  try { return JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); }
-  catch { return {}; }
-}
-
-function saveStore(data) {
-  localStorage.setItem(STORE_KEY, JSON.stringify(data));
-}
-
-function getItems(type) {
-  const store = getStore();
-  return (store[type] || []).sort((a,b) => {
-    const po = {Urgent:0,High:1,Normal:2,Low:3};
-    return (po[a.priority]||2) - (po[b.priority]||2);
-  });
-}
-
-function addItem(type, item) {
-  const store = getStore();
-  if (!store[type]) store[type] = [];
-  store[type].unshift(item);
-  saveStore(store);
-}
-
-function updateItem(type, id, changes) {
-  const store = getStore();
-  const arr   = store[type] || [];
-  const idx   = arr.findIndex(i => i.id === id);
-  if (idx > -1) Object.assign(arr[idx], changes);
-  saveStore(store);
-}
-
-function removeItem(type, id) {
-  const store = getStore();
-  if (store[type]) store[type] = store[type].filter(i => i.id !== id);
-  saveStore(store);
-}
-
-// ── AIRTABLE WRITE ────────────────────────────────────
-// Writes through the planner proxy endpoint
-async function writeToAirtable(table, fields) {
+// ── AIRTABLE FETCH ────────────────────────────────────
+async function airtableFetch(url, opts = {}) {
   try {
-    const res = await fetch(`${API_BASE}/planner`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ table, fields })
-    });
-    // If planner API isn't deployed yet, fail silently — local store still works
-    if (!res.ok) return null;
-    const data = await res.json();
-    return data.id || null;
-  } catch {
-    return null; // silent — local store is the source of truth for now
+    const res  = await fetch(url, opts);
+    const text = await res.text();
+    const ch   = text.trim()[0];
+    if (ch !== '{' && ch !== '[') return { ok: false, error: `Non-JSON response (${res.status})` };
+    const data = JSON.parse(text);
+    if (data.ok === false) return { ok: false, error: data.error || 'API error' };
+    return { ok: true, data };
+  } catch (e) {
+    return { ok: false, error: e.message };
   }
+}
+
+// ── LOAD ALL FROM AIRTABLE ────────────────────────────
+async function loadAllFromAirtable() {
+  showLoadingState();
+
+  const [taskRes, eventRes] = await Promise.all([
+    airtableFetch(`${PLANNER_EP}?type=tasks`),
+    airtableFetch(`${PLANNER_EP}?type=events`)
+  ]);
+
+  if (taskRes.ok) {
+    const all          = taskRes.data.records || [];
+    MEM.tasks     = all.filter(r => !r.isFollowUp);
+    MEM.followups = all.filter(r => r.isFollowUp);
+  }
+  if (eventRes.ok) {
+    MEM.events = eventRes.data.records || [];
+  }
+
+  // Load brief fields
+  const briefRes = await airtableFetch(`${PLANNER_EP}?type=brief`);
+  if (briefRes.ok && briefRes.data.records?.length) {
+    const b = briefRes.data.records[0];
+    MEM.brief = b;
+    loadBriefFields(b);
+  }
+
+  renderAll();
+}
+
+function showLoadingState() {
+  const taskList = document.getElementById('task-list');
+  if (taskList) taskList.innerHTML = `
+    <div class="item-card"><div class="item-body">
+      <span class="sk w80"></span><span class="sk w60"></span>
+    </div></div>`;
+  const evList = document.getElementById('event-list');
+  if (evList) evList.innerHTML = `
+    <div class="item-card"><div class="item-body">
+      <span class="sk w80"></span>
+    </div></div>`;
+  const fuList = document.getElementById('fu-list');
+  if (fuList) fuList.innerHTML = `
+    <div class="item-card"><div class="item-body">
+      <span class="sk w80"></span>
+    </div></div>`;
+}
+
+function renderAll() {
+  renderTasks();
+  renderEvents();
+  renderFollowUps();
+  updateCounts();
 }
 
 // ── TOAST ─────────────────────────────────────────────
@@ -685,9 +682,9 @@ function showToast(msg, type = 'success') {
   setTimeout(() => t.remove(), 3200);
 }
 
-// ── LOADING STATE ─────────────────────────────────────
+// ── BUTTON LOADING ────────────────────────────────────
 function setBtnLoading(id, on) {
-  const btn  = document.getElementById(id);
+  const btn = document.getElementById(id);
   if (!btn) return;
   btn.disabled = on;
   const ii = btn.querySelector('.ii');
@@ -696,51 +693,54 @@ function setBtnLoading(id, on) {
   if (si) si.style.display = on ? 'inline' : 'none';
 }
 
-// ── ESC HELPER ────────────────────────────────────────
+// ── ESC ───────────────────────────────────────────────
 function esc(s) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-// ── LOAD ALL ITEMS ────────────────────────────────────
-function loadItems() {
-  renderTasks();
-  renderEvents();
-  renderFollowUps();
-  updateCounts();
-}
-
 // ── RENDER TASKS ──────────────────────────────────────
 function renderTasks() {
-  const list  = document.getElementById('task-list');
-  const items = getItems('tasks');
+  const list = document.getElementById('task-list');
   if (!list) return;
+  const items = [...MEM.tasks].sort((a,b) => {
+    const po = {Urgent:0,High:1,Normal:2,Low:3};
+    return (po[a.priority]||2)-(po[b.priority]||2);
+  });
   if (!items.length) {
-    list.innerHTML = `<div class="empty"><div class="empty-icon">✦</div><div class="empty-title">No tasks yet</div><div class="empty-sub">Add your first task using the form →</div></div>`;
+    list.innerHTML = `<div class="empty"><div class="empty-icon">✦</div>
+      <div class="empty-title">No tasks yet</div>
+      <div class="empty-sub">Add your first task using the form</div></div>`;
     return;
   }
-  list.innerHTML = items.map(item => taskCard(item, 'tasks')).join('');
+  list.innerHTML = items.map(item => itemCard(item, 'tasks')).join('');
 }
 
-function taskCard(item, type) {
+function itemCard(item, type) {
   const cat      = (item.category || 'admin').toLowerCase();
   const prio     = (item.priority || 'normal').toLowerCase();
   const doneClass= item.done ? 'done-card' : '';
-  const dateStr  = item.dueDate ? new Date(item.dueDate).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
+  const dateStr  = item.dueDate
+    ? new Date(item.dueDate+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})
+    : '';
   return `<div class="item-card ${doneClass}" id="card-${esc(item.id)}">
     <div class="item-stripe stripe-${cat}"></div>
     <div class="item-body">
       <div class="item-meta">
         <span class="item-cat cat-${cat}">${esc(item.category||'Task')}</span>
         <span class="item-prio prio-${prio}">${esc(item.priority||'Normal')}</span>
-        ${dateStr ? `<span class="item-time">${esc(dateStr)}</span>` : ''}
+        ${dateStr?`<span class="item-time">${esc(dateStr)}</span>`:''}
       </div>
       <div class="item-title">${esc(item.name)}</div>
-      ${item.notes ? `<div class="item-detail">${esc(item.notes)}</div>` : ''}
+      ${item.notes?`<div class="item-detail">${esc(item.notes)}</div>`:''}
       <div class="item-footer">
-        ${item.assignedTo ? `<span class="item-assigned">👤 ${esc(item.assignedTo)}</span>` : ''}
+        ${item.assignedTo?`<span class="item-assigned">👤 ${esc(item.assignedTo)}</span>`:''}
         <div class="item-actions">
-          <button class="act-btn done-btn" onclick="toggleDone('${type}','${esc(item.id)}',this)">${item.done ? '↩ Reopen' : '✓ Done'}</button>
-          <button class="act-btn del-btn" onclick="deleteItem('${type}','${esc(item.id)}')">✕</button>
+          <button class="act-btn done-btn"
+            onclick="toggleDoneItem('${type}','${esc(item.id)}',${!item.done},this)">
+            ${item.done?'↩ Reopen':'✓ Done'}
+          </button>
+          <button class="act-btn del-btn"
+            onclick="deleteItemUI('${type}','${esc(item.id)}')">✕</button>
         </div>
       </div>
     </div>
@@ -749,19 +749,22 @@ function taskCard(item, type) {
 
 // ── RENDER EVENTS ─────────────────────────────────────
 function renderEvents() {
-  const list  = document.getElementById('event-list');
-  const items = getItems('events').sort((a,b) => {
+  const list = document.getElementById('event-list');
+  if (!list) return;
+  const items = [...MEM.events].sort((a,b) => {
     if (a.date !== b.date) return a.date < b.date ? -1 : 1;
     return (a.time||'') < (b.time||'') ? -1 : 1;
   });
-  if (!list) return;
   if (!items.length) {
-    list.innerHTML = `<div class="empty"><div class="empty-icon">📅</div><div class="empty-title">No events yet</div><div class="empty-sub">Add appointments and they'll appear in your dashboard calendar</div></div>`;
+    list.innerHTML = `<div class="empty"><div class="empty-icon">📅</div>
+      <div class="empty-title">No events yet</div>
+      <div class="empty-sub">Add appointments and they'll appear on your dashboard</div></div>`;
     return;
   }
   list.innerHTML = items.map(item => {
-    const cat     = (item.type || 'personal').toLowerCase().replace(/\s+/g,'-');
-    const dateStr = item.date ? new Date(item.date + 'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}) : '';
+    const dateStr = item.date
+      ? new Date(item.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})
+      : '';
     const timeStr = item.time ? formatTime(item.time) : '';
     const doneClass = item.done ? 'done-card' : '';
     return `<div class="item-card ${doneClass}" id="card-${esc(item.id)}">
@@ -769,16 +772,20 @@ function renderEvents() {
       <div class="item-body">
         <div class="item-meta">
           <span class="item-cat cat-client">${esc(item.type||'Event')}</span>
-          ${dateStr ? `<span class="item-date">${esc(dateStr)}</span>` : ''}
-          ${timeStr ? `<span class="item-time">${esc(timeStr)}</span>` : ''}
+          ${dateStr?`<span class="item-date">${esc(dateStr)}</span>`:''}
+          ${timeStr?`<span class="item-time">${esc(timeStr)}</span>`:''}
         </div>
         <div class="item-title">${esc(item.name)}</div>
-        ${item.location ? `<div class="item-detail">📍 ${esc(item.location)}</div>` : ''}
-        ${item.notes    ? `<div class="item-detail">${esc(item.notes)}</div>` : ''}
+        ${item.location?`<div class="item-detail">📍 ${esc(item.location)}</div>`:''}
+        ${item.notes?`<div class="item-detail">${esc(item.notes)}</div>`:''}
         <div class="item-footer">
           <div class="item-actions">
-            <button class="act-btn done-btn" onclick="toggleDone('events','${esc(item.id)}',this)">${item.done ? '↩ Reopen' : '✓ Done'}</button>
-            <button class="act-btn del-btn" onclick="deleteItem('events','${esc(item.id)}')">✕</button>
+            <button class="act-btn done-btn"
+              onclick="toggleDoneItem('events','${esc(item.id)}',${!item.done},this)">
+              ${item.done?'↩ Reopen':'✓ Done'}
+            </button>
+            <button class="act-btn del-btn"
+              onclick="deleteItemUI('events','${esc(item.id)}')">✕</button>
           </div>
         </div>
       </div>
@@ -788,34 +795,47 @@ function renderEvents() {
 
 // ── RENDER FOLLOW-UPS ─────────────────────────────────
 function renderFollowUps() {
-  const list  = document.getElementById('fu-list');
-  const items = getItems('followups');
+  const list = document.getElementById('fu-list');
   if (!list) return;
+  const items = [...MEM.followups].sort((a,b)=>{
+    const po={Urgent:0,High:1,Normal:2,Low:3};
+    return (po[a.priority]||2)-(po[b.priority]||2);
+  });
   if (!items.length) {
-    list.innerHTML = `<div class="empty"><div class="empty-icon">🔥</div><div class="empty-title">No follow-ups yet</div><div class="empty-sub">Add leads to follow up with and they'll appear on your dashboard</div></div>`;
+    list.innerHTML = `<div class="empty"><div class="empty-icon">🔥</div>
+      <div class="empty-title">No follow-ups yet</div>
+      <div class="empty-sub">Add leads to follow up with and they'll appear on your dashboard</div></div>`;
     return;
   }
   list.innerHTML = items.map(item => {
-    const prio    = (item.priority||'normal').toLowerCase();
-    const dotClass= prio==='urgent'?'hot':prio==='high'?'warm':'cool';
-    const doneClass = item.done ? 'done-card' : '';
-    const dateStr = item.followUpDate ? new Date(item.followUpDate + 'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
+    const prio     = (item.priority||'normal').toLowerCase();
+    const dateStr  = item.followUpDate
+      ? new Date(item.followUpDate+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})
+      : '';
     const isOverdue = item.followUpDate && new Date(item.followUpDate) < new Date() && !item.done;
+    const doneClass = item.done ? 'done-card' : '';
     return `<div class="item-card ${doneClass}" id="card-${esc(item.id)}">
       <div class="item-stripe stripe-${prio==='urgent'?'personal':prio==='high'?'revenue':'client'}"></div>
       <div class="item-body">
         <div class="item-meta">
-          <span class="item-prio prio-${prio}">${prio==='urgent'?'🔥 Hot':prio==='high'?'Warm':'Nurture'}</span>
-          ${item.method ? `<span class="item-cat cat-admin">${esc(item.method)}</span>` : ''}
-          ${dateStr ? `<span class="item-time${isOverdue?' prio-urgent':''}">${isOverdue?'⚠ ':''} ${esc(dateStr)}</span>` : ''}
+          <span class="item-prio prio-${prio}">
+            ${prio==='urgent'?'🔥 Hot':prio==='high'?'Warm':'Nurture'}
+          </span>
+          ${item.method?`<span class="item-cat cat-admin">${esc(item.method)}</span>`:''}
+          ${dateStr?`<span class="item-time${isOverdue?' prio-urgent':''}">
+            ${isOverdue?'⚠ ':''}${esc(dateStr)}</span>`:''}
         </div>
         <div class="item-title">${esc(item.name)}</div>
-        ${item.notes ? `<div class="item-detail">${esc(item.notes)}</div>` : ''}
+        ${item.notes?`<div class="item-detail">${esc(item.notes)}</div>`:''}
         <div class="item-footer">
-          ${item.assignedTo ? `<span class="item-assigned">👤 ${esc(item.assignedTo)}</span>` : ''}
+          ${item.assignedTo?`<span class="item-assigned">👤 ${esc(item.assignedTo)}</span>`:''}
           <div class="item-actions">
-            <button class="act-btn done-btn" onclick="toggleDone('followups','${esc(item.id)}',this)">${item.done ? '↩ Reopen' : '✓ Contacted'}</button>
-            <button class="act-btn del-btn" onclick="deleteItem('followups','${esc(item.id)}')">✕</button>
+            <button class="act-btn done-btn"
+              onclick="toggleDoneItem('followups','${esc(item.id)}',${!item.done},this)">
+              ${item.done?'↩ Reopen':'✓ Contacted'}
+            </button>
+            <button class="act-btn del-btn"
+              onclick="deleteItemUI('followups','${esc(item.id)}')">✕</button>
           </div>
         </div>
       </div>
@@ -827,33 +847,43 @@ function renderFollowUps() {
 async function submitTask() {
   const name = document.getElementById('task-name').value.trim();
   if (!name) { showToast('Please enter a task name', 'error'); return; }
-
   setBtnLoading('task-submit', true);
 
-  const item = {
-    id:         'task_' + Date.now(),
-    name,
-    category:   getSelectedPill('task-cat-pills')   || 'Admin',
-    priority:   getSelectedPrio('task-prio-pills')  || 'Normal',
-    dueDate:    document.getElementById('task-date').value,
-    assignedTo: document.getElementById('task-assigned').value,
-    notes:      document.getElementById('task-notes').value.trim(),
-    done:       false,
-    createdAt:  new Date().toISOString()
-  };
+  const category  = getSelectedPill('task-cat-pills')  || 'Admin';
+  const priority  = getSelectedPrio('task-prio-pills') || 'Normal';
+  const dueDate   = document.getElementById('task-date').value;
+  const notes     = document.getElementById('task-notes').value.trim();
+  const assigned  = document.getElementById('task-assigned').value;
 
-  addItem('tasks', item);
+  const { ok, data, error } = await airtableFetch(PLANNER_EP, {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body:    JSON.stringify({
+      table: TABLE_TASKS,
+      fields: {
+        'Task Name':    name,
+        'Category':     category,
+        'Priority':     priority,
+        'Due Date':     dueDate ? dueDate+'T00:00:00.000Z' : undefined,
+        'Status':       'To Do',
+        'Task Details': notes,
+        'Task Type':    'Standard',
+        'Created Date': new Date().toISOString()
+      }
+    })
+  });
 
-  // Write to Airtable Tasks table
-  await writeToAirtable(TABLE_TASKS, {
-    'Task Name':    item.name,
-    'Category':     item.category,
-    'Priority':     item.priority,
-    'Due Date':     item.dueDate ? item.dueDate + 'T00:00:00.000Z' : undefined,
-    'Status':       'To Do',
-    'Task Details': item.notes,
-    'Task Type':    'Standard',
-    'Created Date': item.createdAt
+  if (!ok) {
+    showToast(`Save failed: ${error}`, 'error');
+    setBtnLoading('task-submit', false);
+    return;
+  }
+
+  // Add to in-memory store immediately
+  MEM.tasks.unshift({
+    id: data.id, airtableId: data.id, name, category, priority,
+    dueDate, assignedTo: assigned, notes, done: false,
+    createdAt: new Date().toISOString()
   });
 
   renderTasks();
@@ -863,41 +893,50 @@ async function submitTask() {
   // Clear form
   document.getElementById('task-name').value  = '';
   document.getElementById('task-notes').value = '';
-  showToast('✦ Task added to dashboard');
+  showToast('✦ Saved to dashboard — visible on all devices');
 }
 
 // ── SUBMIT EVENT ──────────────────────────────────────
 async function submitEvent() {
   const name = document.getElementById('event-name').value.trim();
   if (!name) { showToast('Please enter an event name', 'error'); return; }
-
   setBtnLoading('event-submit', true);
 
-  const date    = document.getElementById('event-date').value;
-  const time    = document.getElementById('event-time').value;
-  const dateTime= date && time ? `${date}T${time}:00.000Z` : date ? `${date}T12:00:00.000Z` : undefined;
+  const date     = document.getElementById('event-date').value;
+  const time     = document.getElementById('event-time').value;
+  const location = document.getElementById('event-location').value.trim();
+  const notes    = document.getElementById('event-notes').value.trim();
+  const type     = getSelectedPill('event-type-pills') || 'Personal';
+  const dateTime = date && time ? `${date}T${time}:00.000Z`
+                 : date         ? `${date}T12:00:00.000Z`
+                 : undefined;
 
-  const item = {
-    id:        'evt_' + Date.now(),
-    name,
-    type:      getSelectedPill('event-type-pills') || 'Personal',
-    date,
-    time,
-    location:  document.getElementById('event-location').value.trim(),
-    notes:     document.getElementById('event-notes').value.trim(),
-    done:      false,
+  const { ok, data, error } = await airtableFetch(PLANNER_EP, {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body:    JSON.stringify({
+      table: TABLE_EVENTS,
+      fields: {
+        'Event Name':   name,
+        'Date/Time':    dateTime,
+        'Type':         type,
+        'Location':     location,
+        'Event Notes':  notes,
+        'Event Status': 'Scheduled'
+      }
+    })
+  });
+
+  if (!ok) {
+    showToast(`Save failed: ${error}`, 'error');
+    setBtnLoading('event-submit', false);
+    return;
+  }
+
+  MEM.events.push({
+    id: data.id, airtableId: data.id, name, type,
+    date, time, location, notes, done: false,
     createdAt: new Date().toISOString()
-  };
-
-  addItem('events', item);
-
-  await writeToAirtable(TABLE_EVENTS, {
-    'Event Name':   item.name,
-    'Date/Time':    dateTime,
-    'Type':         item.type,
-    'Location':     item.location,
-    'Event Notes':  item.notes,
-    'Event Status': 'Scheduled'
   });
 
   renderEvents();
@@ -908,40 +947,50 @@ async function submitEvent() {
   document.getElementById('event-location').value = '';
   document.getElementById('event-notes').value    = '';
   document.getElementById('event-time').value     = '';
-  showToast('📅 Event added to dashboard');
+  showToast('📅 Saved to dashboard — visible on all devices');
 }
 
 // ── SUBMIT FOLLOW-UP ──────────────────────────────────
 async function submitFollowUp() {
   const name = document.getElementById('fu-name').value.trim();
   if (!name) { showToast('Please enter a contact name', 'error'); return; }
-
   setBtnLoading('fu-submit', true);
 
-  const item = {
-    id:           'fu_' + Date.now(),
-    name,
-    priority:     getSelectedPrio('fu-prio-pills')     || 'Urgent',
-    method:       getSelectedPill('fu-method-pills')   || 'Call',
-    followUpDate: document.getElementById('fu-date').value,
-    assignedTo:   document.getElementById('fu-assigned').value,
-    notes:        document.getElementById('fu-notes').value.trim(),
-    done:         false,
-    createdAt:    new Date().toISOString()
-  };
+  const priority     = getSelectedPrio('fu-prio-pills')   || 'Urgent';
+  const method       = getSelectedPill('fu-method-pills') || 'Call';
+  const followUpDate = document.getElementById('fu-date').value;
+  const notes        = document.getElementById('fu-notes').value.trim();
+  const assigned     = document.getElementById('fu-assigned').value;
 
-  addItem('followups', item);
+  const { ok, data, error } = await airtableFetch(PLANNER_EP, {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body:    JSON.stringify({
+      table: TABLE_TASKS,
+      fields: {
+        'Task Name':    `Follow up: ${name}`,
+        'Category':     'Follow-Up',
+        'Priority':     priority,
+        'Due Date':     followUpDate ? followUpDate+'T00:00:00.000Z' : undefined,
+        'Status':       'To Do',
+        'Task Details': `Method: ${method}. ${notes}`,
+        'Task Type':    'Follow-Up',
+        'Created Date': new Date().toISOString()
+      }
+    })
+  });
 
-  // Follow-ups go into Tasks table with category = Follow-Up
-  await writeToAirtable(TABLE_TASKS, {
-    'Task Name':    `Follow up: ${item.name}`,
-    'Category':     'Follow-Up',
-    'Priority':     item.priority,
-    'Due Date':     item.followUpDate ? item.followUpDate + 'T00:00:00.000Z' : undefined,
-    'Status':       'To Do',
-    'Task Details': `Method: ${item.method}. ${item.notes}`,
-    'Task Type':    'Follow-Up',
-    'Created Date': item.createdAt
+  if (!ok) {
+    showToast(`Save failed: ${error}`, 'error');
+    setBtnLoading('fu-submit', false);
+    return;
+  }
+
+  MEM.followups.unshift({
+    id: data.id, airtableId: data.id, name, priority,
+    method, followUpDate, assignedTo: assigned,
+    notes, done: false, isFollowUp: true,
+    createdAt: new Date().toISOString()
   });
 
   renderFollowUps();
@@ -950,7 +999,7 @@ async function submitFollowUp() {
 
   document.getElementById('fu-name').value  = '';
   document.getElementById('fu-notes').value = '';
-  showToast('🔥 Follow-up added to dashboard');
+  showToast('🔥 Saved to dashboard — visible on all devices');
 }
 
 // ── SAVE BRIEF ────────────────────────────────────────
@@ -959,80 +1008,110 @@ async function saveBrief() {
   if (btn) btn.disabled = true;
 
   const fields = {
-    p1:         document.getElementById('brief-p1')?.value.trim()         || '',
-    p2:         document.getElementById('brief-p2')?.value.trim()         || '',
-    p3:         document.getElementById('brief-p3')?.value.trim()         || '',
-    opportunity:document.getElementById('brief-opp')?.value.trim()        || '',
-    risk:       document.getElementById('brief-risk')?.value.trim()       || '',
-    focus:      document.getElementById('brief-focus')?.value.trim()      || '',
-    affirmation:document.getElementById('brief-affirm')?.value.trim()     || '',
-    reflection: document.getElementById('brief-reflection')?.value.trim() || ''
+    p1:          document.getElementById('brief-p1')?.value.trim()         || '',
+    p2:          document.getElementById('brief-p2')?.value.trim()         || '',
+    p3:          document.getElementById('brief-p3')?.value.trim()         || '',
+    opportunity: document.getElementById('brief-opp')?.value.trim()        || '',
+    risk:        document.getElementById('brief-risk')?.value.trim()       || '',
+    focus:       document.getElementById('brief-focus')?.value.trim()      || '',
+    affirmation: document.getElementById('brief-affirm')?.value.trim()     || '',
+    reflection:  document.getElementById('brief-reflection')?.value.trim() || ''
   };
 
-  // Save locally
-  const store = getStore();
-  store.brief  = fields;
-  saveStore(store);
-
-  // Write to Airtable Daily Brief table
-  await writeToAirtable(TABLE_BRIEF, {
-    'Top Priority 1':   fields.p1,
-    'Top Priority 2':   fields.p2,
-    'Top Priority 3':   fields.p3,
-    'Biggest Opportunity': fields.opportunity,
-    'Biggest Risk':     fields.risk,
-    'Focus Reminder':   fields.focus,
-    'Affirmation':      fields.affirmation,
-    'Evening Reflection': fields.reflection,
-    'Last Updated':     new Date().toISOString()
+  const { ok, error } = await airtableFetch(PLANNER_EP, {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body:    JSON.stringify({
+      table: TABLE_BRIEF,
+      fields: {
+        'Top Priority 1':      fields.p1,
+        'Top Priority 2':      fields.p2,
+        'Top Priority 3':      fields.p3,
+        'Biggest Opportunity': fields.opportunity,
+        'Biggest Risk':        fields.risk,
+        'Focus Reminder':      fields.focus,
+        'Affirmation':         fields.affirmation,
+        'Evening Reflection':  fields.reflection,
+        'Last Updated':        new Date().toISOString()
+      }
+    })
   });
 
-  showToast('✦ Morning brief saved — opens on your dashboard tomorrow');
+  if (!ok) {
+    showToast(`Save failed: ${error}`, 'error');
+  } else {
+    showToast('✦ Morning brief saved — synced to all devices');
+  }
   if (btn) btn.disabled = false;
 }
 
-function loadBriefFields() {
-  const store = getStore();
-  const f     = store.brief || {};
-  const map   = { 'brief-p1':'p1','brief-p2':'p2','brief-p3':'p3','brief-opp':'opportunity','brief-risk':'risk','brief-focus':'focus','brief-affirm':'affirmation','brief-reflection':'reflection' };
+function loadBriefFields(b) {
+  if (!b) return;
+  const map = {
+    'brief-p1':         'p1',
+    'brief-p2':         'p2',
+    'brief-p3':         'p3',
+    'brief-opp':        'opportunity',
+    'brief-risk':       'risk',
+    'brief-focus':      'focus',
+    'brief-affirm':     'affirmation',
+    'brief-reflection': 'reflection'
+  };
   Object.entries(map).forEach(([elId, key]) => {
     const el = document.getElementById(elId);
-    if (el && f[key]) el.value = f[key];
+    if (el && b[key]) el.value = b[key];
   });
 }
 
-// ── ITEM ACTIONS ──────────────────────────────────────
-function toggleDone(type, id, btn) {
-  const items = getItems(type);
-  const item  = items.find(i => i.id === id);
-  if (!item) return;
-  updateItem(type, id, { done: !item.done });
-  loadItems();
+// ── TOGGLE DONE (syncs to Airtable) ──────────────────
+async function toggleDoneItem(type, id, newDone, btn) {
+  if (btn) btn.disabled = true;
+
+  // Optimistic UI update
+  const airtableType = type === 'events' ? 'events' : 'tasks';
+  const memKey = type === 'followups' ? 'followups' : type;
+  const item = MEM[memKey]?.find(i => i.id === id);
+  if (item) { item.done = newDone; renderAll(); }
+
+  const { ok, error } = await airtableFetch(PLANNER_EP, {
+    method:  'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body:    JSON.stringify({ recordId: id, type: airtableType, done: newDone })
+  });
+
+  if (!ok) {
+    // Revert on failure
+    if (item) { item.done = !newDone; renderAll(); }
+    showToast(`Update failed: ${error}`, 'error');
+  }
+  if (btn) btn.disabled = false;
 }
 
-function deleteItem(type, id) {
-  removeItem(type, id);
-  loadItems();
-  showToast('Item removed');
+// ── DELETE (removes from in-memory display only) ──────
+// Note: records stay in Airtable — deletion from Airtable requires admin
+function deleteItemUI(type, id) {
+  const memKey = type === 'followups' ? 'followups' : type;
+  if (MEM[memKey]) {
+    MEM[memKey] = MEM[memKey].filter(i => i.id !== id);
+    renderAll();
+    showToast('Removed from view');
+  }
 }
 
 // ── UPDATE COUNTS ─────────────────────────────────────
 function updateCounts() {
-  const taskActive = getItems('tasks').filter(i => !i.done).length;
-  const evtActive  = getItems('events').filter(i => !i.done).length;
-  const fuActive   = getItems('followups').filter(i => !i.done).length;
   const tc = document.getElementById('cnt-tasks');
   const ec = document.getElementById('cnt-schedule');
   const fc = document.getElementById('cnt-followups');
-  if (tc) tc.textContent = taskActive;
-  if (ec) ec.textContent = evtActive;
-  if (fc) fc.textContent = fuActive;
+  if (tc) tc.textContent = MEM.tasks.filter(i => !i.done).length;
+  if (ec) ec.textContent = MEM.events.filter(i => !i.done).length;
+  if (fc) fc.textContent = MEM.followups.filter(i => !i.done).length;
 }
 
 // ── FORMAT TIME ───────────────────────────────────────
 function formatTime(t) {
   if (!t) return '';
-  const [h,m] = t.split(':').map(Number);
+  const [h, m] = t.split(':').map(Number);
   const ap = h >= 12 ? 'PM' : 'AM';
   const hh = h % 12 || 12;
   return `${hh}:${m.toString().padStart(2,'0')} ${ap}`;
