@@ -300,6 +300,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font
   <div class="chip" id="chipPipeline"><span class="dot"></span>ISA · Airtable</div>
   <div class="chip" id="chipCal"><span class="dot"></span>Google Calendar</div>
   <div class="chip" id="chipFUB"><span class="dot"></span>Follow Up Boss</div>
+  <div class="chip" id="chipGmail"><span class="dot"></span>Gmail</div>
   <div class="sp"></div>
   <a href="/planner.html" style="display:flex;align-items:center;gap:6px;padding:7px 14px;background:transparent;border:1px solid var(--blushborder,rgba(196,121,106,.22));color:var(--rose,#c4796a);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:8.5px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;text-decoration:none;white-space:nowrap" onmouseover="this.style.background='rgba(196,121,106,.12)'" onmouseout="this.style.background='transparent'">✦ Planner</a>
   <button class="btnref" id="btnRef" onclick="refreshAll()">
@@ -555,6 +556,32 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font
 
   <!-- ── ROW 7: VISION + EOD ── -->
 
+  <!-- GMAIL DIGEST -->
+  <div class="card c12" id="gmailCard" style="animation-delay:.65s">
+    <div class="clabel">✉ Gmail Digest — bri@estemrealtygroup.com</div>
+    <div style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:14px">
+      <div style="text-align:center;padding:10px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2)">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--ink)" id="gmail-unread">—</div>
+        <div style="font-size:8px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3)">Unread</div>
+      </div>
+      <div style="text-align:center;padding:10px 16px;background:var(--blushdim,rgba(196,121,106,.08));border:1px solid var(--blushborder,rgba(196,121,106,.22));border-radius:var(--r2)">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--rose,#c4796a)" id="gmail-urgent">—</div>
+        <div style="font-size:8px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--rose,#c4796a)">Urgent</div>
+      </div>
+      <div style="text-align:center;padding:10px 16px;background:var(--sagedim,rgba(122,158,130,.09));border:1px solid var(--sageborder,rgba(122,158,130,.24));border-radius:var(--r2)">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--sage,#7a9e82)" id="gmail-client">—</div>
+        <div style="font-size:8px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--sage,#7a9e82)">Client</div>
+      </div>
+      <div style="font-size:10px;color:var(--ink4);font-style:italic;padding:10px 4px;align-self:center" id="gmail-status">Connecting…</div>
+    </div>
+    <div id="gmailFeed" style="display:flex;flex-direction:column;gap:8px">
+      <div style="height:13px;border-radius:3px;background:linear-gradient(90deg,var(--border) 25%,var(--bg3) 50%,var(--border) 75%);background-size:200% 100%;animation:shimmer 1.6s infinite;width:85%"></div>
+      <div style="height:13px;border-radius:3px;background:linear-gradient(90deg,var(--border) 25%,var(--bg3) 50%,var(--border) 75%);background-size:200% 100%;animation:shimmer 1.6s infinite;width:70%"></div>
+    </div>
+  </div>
+
+  <div class="rdiv"></div>
+
   <!-- VISION -->
   <div class="card vision-card c7" style="animation-delay:.56s">
     <div class="clabel">🌟 Vision + Identity</div>
@@ -706,31 +733,38 @@ function renderCalendar(events){
 async function loadCalendar(){
   setChip('chipCal','loading');
   try{
-    const tz='America/Chicago';
-    const now=new Date();
-    const todayStart=new Date(now.getFullYear(),now.getMonth(),now.getDate(),0,0,0).toISOString();
-    const todayEnd  =new Date(now.getFullYear(),now.getMonth(),now.getDate(),23,59,59).toISOString();
-    const url=`${BASE}/api/calendar?start=${encodeURIComponent(todayStart)}&end=${encodeURIComponent(todayEnd)}&tz=${tz}`;
-    const {ok,data,error}=await apiFetch(url);
-    if(!ok){
-      // Fallback: show the events we already know about from your calendar
-      renderCalendar(FALLBACK_EVENTS);
+    const url=`${BASE}/api/calendar`;
+    const {ok,data}=await apiFetch(url);
+
+    // setupRequired means OAuth credentials not yet in Vercel
+    if(!ok || data?.setupRequired){
       setChip('chipCal','err');
+      const feed=document.getElementById('calFeed');
+      if(feed)feed.innerHTML=`
+        <div style="padding:14px;background:var(--golddim);border:1px solid var(--goldborder);border-radius:var(--r2);font-size:11.5px;color:var(--ink2);line-height:1.65">
+          <div style="font-weight:600;color:var(--gold);margin-bottom:4px">📅 Calendar OAuth Setup Required</div>
+          Add <code style="background:var(--bg2);padding:1px 5px;border-radius:3px;font-size:10px">GCAL_CLIENT_ID</code>, 
+          <code style="background:var(--bg2);padding:1px 5px;border-radius:3px;font-size:10px">GCAL_CLIENT_SECRET</code>, 
+          <code style="background:var(--bg2);padding:1px 5px;border-radius:3px;font-size:10px">GCAL_REFRESH_TOKEN</code> 
+          to Vercel → Settings → Environment Variables. See setup instructions in <code style="font-size:10px">api/calendar.js</code>.
+        </div>`;
       return;
     }
-    renderCalendar(data.events||[]);
+
+    const events = data.events || [];
+    if(!events.length){
+      setChip('chipCal','live');
+      const feed=document.getElementById('calFeed');
+      if(feed)feed.innerHTML='<div style="font-size:12px;color:var(--ink4);font-style:italic;padding:12px 0">No events on your calendar today.</div>';
+      return;
+    }
+
+    renderCalendar(events);
     setChip('chipCal','live');
   }catch(e){
-    renderCalendar(FALLBACK_EVENTS);
     setChip('chipCal','err');
   }
 }
-
-// Real events from your calendar pulled right now — used as fallback until /api/calendar is built
-const FALLBACK_EVENTS=[
-  {summary:"📊 Estem Realty — Weekly KPI Review",start:{dateTime:"2026-05-25T08:30:00-05:00"},end:{dateTime:"2026-05-25T09:00:00-05:00"},conferenceUrl:"https://meet.google.com/hmu-zdiv-okd",location:"Google Meet"},
-  {summary:"☀️ Estem Realty — Daily Team Briefing",start:{dateTime:"2026-05-26T09:00:00-05:00"},end:{dateTime:"2026-05-26T09:15:00-05:00"},conferenceUrl:"https://meet.google.com/rpe-fwzi-mne",location:"Google Meet"}
-];
 
 /* ── RATE HELPERS ─────────────────────── */
 function rateVal(v){return `${esc(String(v))}<span class="pct">%</span>`;}
@@ -899,7 +933,7 @@ async function loadSummary(rd,nd){
   let rc='',nc='';
   if(rd?.thirtyYear)rc=`30yr:${rd.thirtyYear.rate}%(${rd.thirtyYear.direction}),15yr:${rd.fifteenYear?.rate||'N/A'}%,FHA:~${rd.fha?.rate||'N/A'}%,VA:~${rd.va?.rate||'N/A'}%`;
   if(nd)nc=[...(nd.national||[]),...(nd.dfw||[])].slice(0,6).map(a=>a.title).filter(Boolean).join(' | ');
-  const{ok,data:ai}=await apiFetch(`${BASE}/api/summary`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ratesContext:rc,newsContext:nc})});
+  const{ok,data:ai}=await apiFetch(`${BASE}/api/summary`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ratesContext:rc,newsContext:nc,gmailContext:window._gmailContext||''})});
   if(!ok){setChip('chipAI','err');setHTML('sum-matters',errNote('AI briefing unavailable — check ANTHROPIC_API_KEY in Vercel'));return;}
   setText('sum-matters',    ai.whatMattersMost);
   setText('sum-opportunity',ai.biggestOpportunity);
@@ -926,11 +960,50 @@ async function loadSummary(rd,nd){
 }
 
 /* ── REFRESH ALL ──────────────────────── */
+
+/* -- LOAD GMAIL ------------------------------------------- */
+async function loadGmail() {
+  setChip('chipGmail','loading');
+  const{ok,data}=await apiFetch(`${BASE}/api/gmail`);
+  if(!ok){
+    setChip('chipGmail','err');
+    const st=document.getElementById('gmail-status');
+    if(st)st.textContent='Gmail OAuth not configured — see Vercel env vars';
+    const feed=document.getElementById('gmailFeed');
+    if(feed)feed.innerHTML='<div style="font-size:11px;color:var(--ink4);font-style:italic;padding:8px 0">Add GMAIL_CLIENT_ID, GMAIL_CLIENT_SECRET, GMAIL_REFRESH_TOKEN to Vercel.</div>';
+    return null;
+  }
+  setText('gmail-unread',data.unreadCount??'0');
+  setText('gmail-urgent',data.urgentCount??'0');
+  setText('gmail-client',data.clientCount??'0');
+  const st=document.getElementById('gmail-status');
+  if(st){const ts=new Date(data.lastUpdated).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});st.textContent=`Last checked ${ts}`;}
+  const feed=document.getElementById('gmailFeed');
+  const emails=data.digest||[];
+  if(feed){
+    if(!emails.length){
+      feed.innerHTML='<div style="font-size:12px;color:var(--ink4);font-style:italic;padding:8px 0">Inbox clear — no priority emails right now.</div>';
+    }else{
+      const cats={urgent:['rgba(196,121,106,.08)','rgba(196,121,106,.22)','var(--rose,#c4796a)'],client:['rgba(122,158,130,.09)','rgba(122,158,130,.24)','var(--sage,#7a9e82)'],important:['var(--golddim)','var(--goldborder)','var(--gold)'],general:['var(--bg2)','var(--border)','var(--ink4)']};
+      feed.innerHTML=emails.map(e=>{
+        const[bg,border,accent]=(cats[e.category]||cats.general);
+        const ts=new Date(e.date).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
+        const dot=e.isUnread?`<span style="width:6px;height:6px;border-radius:50%;background:${accent};display:inline-block;flex-shrink:0;margin-top:4px"></span>`:'';
+        return `<div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:${bg};border:1px solid ${border};border-radius:var(--r2)">${dot}<div style="flex:1;min-width:0"><div style="display:flex;align-items:center;gap:8px;margin-bottom:2px;flex-wrap:wrap"><span style="font-size:11px;font-weight:600;color:var(--ink)">${esc(e.sender)}</span><span style="font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:${accent}">${e.category}</span><span style="font-size:9.5px;color:var(--ink4);margin-left:auto">${ts}</span></div><div style="font-size:12px;font-weight:500;color:var(--ink);margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(e.subject)}</div><div style="font-size:11px;color:var(--ink3);line-height:1.45">${esc(e.snippet)}</div></div></div>`;
+      }).join('');
+    }
+  }
+  if(data.aiContext)window._gmailContext=data.aiContext;
+  setChip('chipGmail','live');
+  return data;
+}
+
 async function refreshAll(){
   setRef(true);setText('lastRef','Refreshing…');setAffirmation();
   await Promise.all([
     loadCalendar(),
     loadPipeline(),
+    loadGmail(),
     (async()=>{
       const[rd,nd]=await Promise.all([loadRates(),loadNews()]);
       await loadSummary(rd,nd);
