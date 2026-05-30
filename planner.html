@@ -849,51 +849,34 @@ async function submitTask() {
   if (!name) { showToast('Please enter a task name', 'error'); return; }
   setBtnLoading('task-submit', true);
 
-  const category  = getSelectedPill('task-cat-pills')  || 'Admin';
-  const priority  = getSelectedPrio('task-prio-pills') || 'Normal';
-  const dueDate   = document.getElementById('task-date').value;
-  const notes     = document.getElementById('task-notes').value.trim();
-  const assigned  = document.getElementById('task-assigned').value;
+  const category = getSelectedPill('task-cat-pills')  || 'Admin';
+  const priority = getSelectedPrio('task-prio-pills') || 'Normal';
+  const dueDate  = document.getElementById('task-date').value;
+  const notes    = document.getElementById('task-notes').value.trim();
 
   const { ok, data, error } = await airtableFetch(PLANNER_EP, {
     method:  'POST',
     headers: { 'Content-Type': 'application/json' },
-    body:    JSON.stringify({
-      table: TABLE_TASKS,
-      fields: {
-        'Task Name':    name,
-        'Category':     category,
-        'Priority':     priority,
-        'Due Date':     dueDate ? dueDate+'T00:00:00.000Z' : undefined,
-        'Status':       'To Do',
-        'Task Details': notes,
-        'Task Type':    'Standard',
-        'Created Date': new Date().toISOString()
-      }
-    })
+    body:    JSON.stringify({ type: 'task', name, category, priority, dueDate, notes })
   });
 
   if (!ok) {
-    showToast(`Save failed: ${error}`, 'error');
+    showToast(`Save failed — ${error || 'check Vercel logs'}`, 'error');
     setBtnLoading('task-submit', false);
     return;
   }
 
-  // Add to in-memory store immediately
   MEM.tasks.unshift({
     id: data.id, airtableId: data.id, name, category, priority,
-    dueDate, assignedTo: assigned, notes, done: false,
-    createdAt: new Date().toISOString()
+    dueDate, notes, done: false, createdAt: new Date().toISOString()
   });
 
   renderTasks();
   updateCounts();
   setBtnLoading('task-submit', false);
-
-  // Clear form
   document.getElementById('task-name').value  = '';
   document.getElementById('task-notes').value = '';
-  showToast('✦ Saved to dashboard — visible on all devices');
+  showToast('✦ Saved — visible on all devices');
 }
 
 // ── SUBMIT EVENT ──────────────────────────────────────
@@ -902,52 +885,38 @@ async function submitEvent() {
   if (!name) { showToast('Please enter an event name', 'error'); return; }
   setBtnLoading('event-submit', true);
 
-  const date     = document.getElementById('event-date').value;
-  const time     = document.getElementById('event-time').value;
-  const location = document.getElementById('event-location').value.trim();
-  const notes    = document.getElementById('event-notes').value.trim();
-  const type     = getSelectedPill('event-type-pills') || 'Personal';
-  const dateTime = date && time ? `${date}T${time}:00.000Z`
-                 : date         ? `${date}T12:00:00.000Z`
-                 : undefined;
+  const date      = document.getElementById('event-date').value;
+  const time      = document.getElementById('event-time').value;
+  const location  = document.getElementById('event-location').value.trim();
+  const notes     = document.getElementById('event-notes').value.trim();
+  const eventType = getSelectedPill('event-type-pills') || 'Personal';
 
   const { ok, data, error } = await airtableFetch(PLANNER_EP, {
     method:  'POST',
     headers: { 'Content-Type': 'application/json' },
-    body:    JSON.stringify({
-      table: TABLE_EVENTS,
-      fields: {
-        'Event Name':   name,
-        'Date/Time':    dateTime,
-        'Type':         type,
-        'Location':     location,
-        'Event Notes':  notes,
-        'Event Status': 'Scheduled'
-      }
-    })
+    body:    JSON.stringify({ type: 'event', name, eventType, date, time, location, notes })
   });
 
   if (!ok) {
-    showToast(`Save failed: ${error}`, 'error');
+    showToast(`Save failed — ${error || 'check Vercel logs'}`, 'error');
     setBtnLoading('event-submit', false);
     return;
   }
 
   MEM.events.push({
-    id: data.id, airtableId: data.id, name, type,
-    date, time, location, notes, done: false,
+    id: data.id, airtableId: data.id, name,
+    type: eventType, date, time, location, notes, done: false,
     createdAt: new Date().toISOString()
   });
 
   renderEvents();
   updateCounts();
   setBtnLoading('event-submit', false);
-
   document.getElementById('event-name').value     = '';
   document.getElementById('event-location').value = '';
   document.getElementById('event-notes').value    = '';
   document.getElementById('event-time').value     = '';
-  showToast('📅 Saved to dashboard — visible on all devices');
+  showToast('📅 Saved — visible on all devices');
 }
 
 // ── SUBMIT FOLLOW-UP ──────────────────────────────────
@@ -960,46 +929,39 @@ async function submitFollowUp() {
   const method       = getSelectedPill('fu-method-pills') || 'Call';
   const followUpDate = document.getElementById('fu-date').value;
   const notes        = document.getElementById('fu-notes').value.trim();
-  const assigned     = document.getElementById('fu-assigned').value;
 
   const { ok, data, error } = await airtableFetch(PLANNER_EP, {
     method:  'POST',
     headers: { 'Content-Type': 'application/json' },
     body:    JSON.stringify({
-      table: TABLE_TASKS,
-      fields: {
-        'Task Name':    `Follow up: ${name}`,
-        'Category':     'Follow-Up',
-        'Priority':     priority,
-        'Due Date':     followUpDate ? followUpDate+'T00:00:00.000Z' : undefined,
-        'Status':       'To Do',
-        'Task Details': `Method: ${method}. ${notes}`,
-        'Task Type':    'Follow-Up',
-        'Created Date': new Date().toISOString()
-      }
+      type:       'task',
+      name:       `Follow up: ${name}`,
+      category:   'Follow-Up',
+      priority,
+      dueDate:    followUpDate,
+      notes:      `Method: ${method}. ${notes}`,
+      isFollowUp: true
     })
   });
 
   if (!ok) {
-    showToast(`Save failed: ${error}`, 'error');
+    showToast(`Save failed — ${error || 'check Vercel logs'}`, 'error');
     setBtnLoading('fu-submit', false);
     return;
   }
 
   MEM.followups.unshift({
     id: data.id, airtableId: data.id, name, priority,
-    method, followUpDate, assignedTo: assigned,
-    notes, done: false, isFollowUp: true,
+    method, followUpDate, notes, done: false, isFollowUp: true,
     createdAt: new Date().toISOString()
   });
 
   renderFollowUps();
   updateCounts();
   setBtnLoading('fu-submit', false);
-
   document.getElementById('fu-name').value  = '';
   document.getElementById('fu-notes').value = '';
-  showToast('🔥 Saved to dashboard — visible on all devices');
+  showToast('🔥 Saved — visible on all devices');
 }
 
 // ── SAVE BRIEF ────────────────────────────────────────
@@ -1022,18 +984,15 @@ async function saveBrief() {
     method:  'POST',
     headers: { 'Content-Type': 'application/json' },
     body:    JSON.stringify({
-      table: TABLE_BRIEF,
-      fields: {
-        'Top Priority 1':      fields.p1,
-        'Top Priority 2':      fields.p2,
-        'Top Priority 3':      fields.p3,
-        'Biggest Opportunity': fields.opportunity,
-        'Biggest Risk':        fields.risk,
-        'Focus Reminder':      fields.focus,
-        'Affirmation':         fields.affirmation,
-        'Evening Reflection':  fields.reflection,
-        'Last Updated':        new Date().toISOString()
-      }
+      type:        'brief',
+      p1:          fields.p1,
+      p2:          fields.p2,
+      p3:          fields.p3,
+      opportunity: fields.opportunity,
+      risk:        fields.risk,
+      focus:       fields.focus,
+      affirmation: fields.affirmation,
+      reflection:  fields.reflection
     })
   });
 
@@ -1076,7 +1035,7 @@ async function toggleDoneItem(type, id, newDone, btn) {
   const { ok, error } = await airtableFetch(PLANNER_EP, {
     method:  'PATCH',
     headers: { 'Content-Type': 'application/json' },
-    body:    JSON.stringify({ recordId: id, type: airtableType, done: newDone })
+    body:    JSON.stringify({ recordId: id, recordType: airtableType, done: newDone })
   });
 
   if (!ok) {
