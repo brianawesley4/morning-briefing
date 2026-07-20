@@ -1,1036 +1,206 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Bri · Brief">
-<title>Daily Executive Brief — Estem Realty Group</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg:         #f8f5f0;
-  --bg2:        #f2ede6;
-  --bg3:        #ebe4da;
-  --card:       #ffffff;
-  --card2:      #fdfaf6;
-  --ink:        #1c1a17;
-  --ink2:       #4a4540;
-  --ink3:       #857e76;
-  --ink4:       #b5afa6;
-  --ink5:       #d9d3ca;
-  --gold:       #b8924a;
-  --gold2:      #d4a85c;
-  --gold3:      #eacc88;
-  --golddim:    rgba(184,146,74,.09);
-  --goldborder: rgba(184,146,74,.24);
-  --blush:      #c4796a;
-  --blushdim:   rgba(196,121,106,.08);
-  --blushborder:rgba(196,121,106,.22);
-  --sage:       #7a9e82;
-  --sagedim:    rgba(122,158,130,.09);
-  --sageborder: rgba(122,158,130,.24);
-  --mauve:      #9b7fa8;
-  --mauvedim:   rgba(155,127,168,.09);
-  --mauvedim2:  rgba(155,127,168,.18);
-  --border:     #e6dfd4;
-  --border2:    #dad2c6;
-  --sh:         0 1px 4px rgba(28,26,23,.05);
-  --sh2:        0 4px 20px rgba(28,26,23,.08);
-  --r: 8px; --r2: 14px; --r3: 20px;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:13px;line-height:1.65;min-height:100vh;-webkit-font-smoothing:antialiased}
-
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-@keyframes popIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
-
-/* HEADER */
-.hdr{background:var(--card);border-bottom:1px solid var(--border);padding:18px 36px 16px;display:flex;justify-content:space-between;align-items:flex-end;position:sticky;top:0;z-index:200;box-shadow:var(--sh)}
-.hdr::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold2),var(--gold3),var(--gold2),transparent);opacity:.55}
-.hl .dtag{font-size:9px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:3px}
-.hl h1{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--ink);line-height:1}
-.hl h1 em{font-style:italic;color:var(--gold)}
-.hr{text-align:right}
-.clk{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:300;color:var(--ink);letter-spacing:1px;line-height:1}
-.clk .ap{font-family:'DM Sans',sans-serif;font-size:11px;color:var(--gold);margin-left:4px;letter-spacing:2px}
-.htag{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink4);margin-top:4px}
-.href{font-size:9px;color:var(--ink4);margin-top:3px;min-height:12px}
-
-/* STATUS BAR */
-.sbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:8px 36px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.chip{display:inline-flex;align-items:center;gap:5px;font-size:8px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:3px 9px;border-radius:20px;border:1px solid var(--border2);color:var(--ink3);transition:all .3s}
-.chip .dot{width:5px;height:5px;border-radius:50%;background:var(--ink5);animation:blink 2.5s infinite}
-.chip.live{color:var(--sage);border-color:var(--sageborder)}.chip.live .dot{background:var(--sage)}
-.chip.loading{color:var(--gold);border-color:var(--goldborder)}.chip.loading .dot{background:var(--gold)}
-.chip.err{color:var(--blush);border-color:var(--blushborder)}.chip.err .dot{background:var(--blush);animation:none}
-.sbar .sp{flex:1}
-.btnref{display:flex;align-items:center;gap:6px;padding:7px 16px;background:transparent;border:1px solid var(--gold);color:var(--gold);border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:8.5px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;white-space:nowrap}
-.btnref:hover{background:var(--gold);color:#fff}.btnref:disabled{opacity:.38;cursor:not-allowed}
-.btnref .si{display:none}.btnref.loading .si{display:inline;animation:spin .8s linear infinite}.btnref.loading .ii{display:none}
-
-/* GRID */
-.grid{max-width:1540px;margin:0 auto;padding:24px 36px 60px;display:grid;grid-template-columns:repeat(12,1fr);gap:15px}
-.c3{grid-column:span 3}.c4{grid-column:span 4}.c5{grid-column:span 5}
-.c6{grid-column:span 6}.c7{grid-column:span 7}.c8{grid-column:span 8}
-.c9{grid-column:span 9}.c12{grid-column:span 12}
-.rdiv{grid-column:1/-1;height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);margin:3px 0}
-
-/* CARDS */
-.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r3);padding:20px 20px 17px;box-shadow:var(--sh);position:relative;overflow:hidden;animation:fadeUp .5s ease both;transition:box-shadow .25s,border-color .25s}
-.card:hover{box-shadow:var(--sh2);border-color:var(--border2)}
-.card.warm{background:linear-gradient(135deg,#fffdf9,#fdf8f0);border-color:var(--goldborder)}
-.card.blush{background:linear-gradient(135deg,#fff9f8,#fdf2ef);border-color:var(--blushborder)}
-.card.sage-card{background:linear-gradient(135deg,#f8fcf9,#f0f8f2);border-color:var(--sageborder)}
-.card.vision-card{background:linear-gradient(135deg,#fdfaf4,#f8f2e6);border-color:var(--goldborder);overflow:visible}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold2),transparent);transform:scaleX(0);transform-origin:left;transition:transform .4s}
-.card:hover::before{transform:scaleX(1)}
-
-.clabel{font-size:8px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.clabel::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
-.slabel{font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--ink4);margin:13px 0 7px}
-
-/* SKELETON */
-.sk{display:block;border-radius:3px;height:13px;background:linear-gradient(90deg,var(--border) 25%,var(--bg3) 50%,var(--border) 75%);background-size:200% 100%;animation:shimmer 1.6s infinite}
-.sk+.sk{margin-top:6px}.sk.h20{height:20px}.sk.h32{height:32px}.sk.w55{width:55%}.sk.w70{width:70%}.sk.w85{width:85%}
-
-/* AFFIRMATION */
-.affirm-card{background:linear-gradient(135deg,#fdf9f2,#f8f0e2);border-color:var(--goldborder);padding:16px 22px 14px}
-.atext{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:300;font-style:italic;color:var(--gold);line-height:1.45;animation:popIn .6s ease}
-.asub{font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:var(--ink4);margin-top:6px}
-
-/* SUMMARY */
-.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:13px}
-.sitem{padding:12px 13px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);transition:border-color .2s}
-.sitem:hover{border-color:var(--goldborder)}
-.sitem.hl{border-color:var(--goldborder);background:var(--golddim)}
-.sitem .slb{font-size:7.5px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
-.sitem .sv{font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--ink);line-height:1.45}
-.plist{list-style:none}
-.plist li{display:flex;align-items:flex-start;gap:9px;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;color:var(--ink2)}
-.plist li:last-child{border-bottom:none}
-.pnum{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:300;color:var(--gold);line-height:1;min-width:18px}
-
-/* KPI STATS */
-.kgrid{display:grid;gap:9px}
-.k2{grid-template-columns:repeat(2,1fr)}.k3{grid-template-columns:repeat(3,1fr)}.k4{grid-template-columns:repeat(4,1fr)}
-.kstat{text-align:center;padding:13px 6px 10px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);transition:all .2s}
-.kstat:hover{border-color:var(--goldborder);background:var(--golddim)}
-.kn{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:300;color:var(--ink);line-height:1;margin-bottom:3px}
-.kn.g{color:var(--gold)}.kn.s{color:var(--sage)}.kn.b{color:var(--blush)}.kn.m{color:var(--mauve)}
-.kl{font-size:8px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3)}
-
-/* PROGRESS */
-.prog{margin-top:11px}
-.prow{display:flex;justify-content:space-between;font-size:10px;color:var(--ink3);margin-bottom:5px}
-.ptrack{height:3px;background:var(--border2);border-radius:2px;overflow:hidden}
-.pfill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold3));border-radius:2px;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
-
-/* ACTION BLOCK */
-.ablock{padding:12px 15px;margin-top:12px;background:var(--golddim);border:1px solid var(--goldborder);border-radius:var(--r2)}
-.ablock .alb{font-size:7.5px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:5px;font-weight:600}
-.ablock .atx{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--ink);line-height:1.45}
-
-/* CALENDAR — live events */
-.cali{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
-.cali:last-child{border-bottom:none}
-.cali.now{background:var(--golddim);border-radius:var(--r);padding:10px 12px;margin:0 -12px;border-bottom:none;margin-bottom:1px}
-.cali .ctime{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:300;color:var(--gold);min-width:64px;line-height:1.2}
-.cali .ctitle{font-size:12px;font-weight:500;color:var(--ink);margin-bottom:1px}
-.cali .csub{font-size:10px;color:var(--ink4)}
-.ctag{font-size:7.5px;padding:2px 7px;border-radius:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-left:auto;white-space:nowrap;align-self:center}
-.ctag.client{background:var(--sagedim);color:var(--sage)}
-.ctag.pers{background:var(--golddim);color:var(--gold)}
-.ctag.school{background:var(--mauvedim);color:var(--mauve)}
-.ctag.team{background:rgba(122,158,130,.15);color:var(--sage)}
-.ctag.warn{background:var(--blushdim);color:var(--blush)}
-.ctag.meet{background:rgba(106,157,206,.1);color:#6a9dce}
-.now-badge{font-size:7.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--blush);margin-bottom:1px}
-
-/* LEADS */
-.litem{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
-.litem:last-child{border-bottom:none}
-.ldot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.ldot.hot{background:var(--blush);box-shadow:0 0 0 3px var(--blushdim)}
-.ldot.warm{background:var(--gold2)}.ldot.cool{background:var(--ink5)}
-.lname{font-size:12.5px;font-weight:500;color:var(--ink);min-width:115px}
-.lnote{font-size:10.5px;color:var(--ink3);flex:1;line-height:1.4}
-.lbadge{font-size:7.5px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:2px 8px;border:1px solid var(--border2);border-radius:12px;color:var(--gold);white-space:nowrap}
-
-/* ATTENTION */
-.attn{padding:10px 13px;background:var(--blushdim);border:1px solid var(--blushborder);border-radius:var(--r2);margin-bottom:7px}
-.attn:last-child{margin-bottom:0}
-.attn-name{font-size:12px;font-weight:500;color:var(--ink);margin-bottom:2px}
-.attn-note{font-size:11px;color:var(--ink3);line-height:1.4}
-.attn-hot{font-size:10px;color:var(--blush);margin-top:2px;font-weight:500}
-
-/* RATES */
-.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:11px}
-.ritem{padding:11px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2)}
-.rtype{font-size:7.5px;letter-spacing:2px;text-transform:uppercase;color:var(--ink4);margin-bottom:3px}
-.rnum{font-family:'Cormorant Garamond',serif;font-size:25px;font-weight:300;color:var(--ink);line-height:1}
-.rnum .pct{font-size:12px;color:var(--ink4)}
-.rtrend{font-size:10px;margin-top:2px;color:var(--gold)}
-.rtrend.up{color:var(--blush)}.rtrend.dn{color:var(--sage)}
-.tp{padding:9px 12px;border-left:2px solid var(--gold3);margin-top:8px;font-size:11.5px;color:var(--ink3);font-style:italic;line-height:1.55;background:var(--golddim);border-radius:0 var(--r) var(--r) 0}
-
-/* NEWS */
-.ni{padding:10px 0;border-bottom:1px solid var(--border)}
-.ni:last-child{border-bottom:none}
-.nreg{font-size:7.5px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:2px}
-.nh{font-size:12px;color:var(--ink);line-height:1.4;margin-bottom:2px}
-.nd{font-size:10.5px;color:var(--ink3);line-height:1.45}
-.nl{font-size:10px;color:var(--gold);text-decoration:none;display:inline-block;margin-top:2px}
-.nl:hover{color:var(--gold2)}
-.n2col{display:grid;grid-template-columns:1fr 1fr;gap:15px}
-
-/* TODO */
-.tcols{display:grid;grid-template-columns:1fr 1fr;gap:15px}
-.tgrp h4{font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold);padding-bottom:6px;border-bottom:1px solid var(--border);margin-bottom:8px}
-.titem{display:flex;align-items:flex-start;gap:7px;padding:4px 0;font-size:11.5px;color:var(--ink3);line-height:1.4;cursor:pointer;transition:color .18s}
-.titem:hover{color:var(--ink)}.titem.done{color:var(--ink5);text-decoration:line-through}
-.chk{width:13px;height:13px;border:1.5px solid var(--border2);border-radius:3px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .18s;font-size:9px;color:transparent}
-.titem:hover .chk{border-color:var(--gold)}.titem.done .chk{background:var(--gold);border-color:var(--gold);color:#fff}
-
-/* P5 */
-.p5{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}
-.p5i{padding:13px 9px 10px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);text-align:center;cursor:pointer;transition:all .22s}
-.p5i:hover{border-color:var(--goldborder);background:var(--golddim)}
-.p5i.done{border-color:var(--sageborder);background:var(--sagedim)}
-.p5ico{font-size:17px;margin-bottom:6px}.p5lbl{font-size:8px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink4);line-height:1.4}
-.p5st{margin-top:6px;font-size:9.5px;color:var(--ink4)}.p5i.done .p5st{color:var(--sage)}
-
-/* BRAND */
-.ccard{padding:11px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);margin-bottom:8px}
-.ccard .ctype{font-size:7.5px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
-.ccard .ctxt{font-size:12px;color:var(--ink2);line-height:1.5}
-.postrow{display:flex;gap:5px;margin-top:10px}
-.pday{flex:1;height:28px;border:1px solid var(--border);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--ink4);cursor:pointer;transition:all .18s}
-.pday:hover{border-color:var(--goldborder);color:var(--gold)}.pday.done{background:var(--golddim);border-color:var(--goldborder);color:var(--gold)}
-
-/* WELLNESS */
-.wgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.wi{padding:11px 7px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);text-align:center}
-.wico{font-size:17px;margin-bottom:5px}.wlb{font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink4);margin-bottom:2px}.wv{font-size:11.5px;color:var(--ink2)}
-
-/* VISION */
-.vaff{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:300;font-style:italic;color:var(--gold);line-height:1.4;margin:9px 0 12px}
-.vpills{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
-.vpill{padding:3px 11px;border:1px solid var(--goldborder);border-radius:20px;font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);font-weight:500}
-
-/* AI GRID */
-.aigrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.aiitem{padding:11px 13px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2)}
-.aiitem .ailb{font-size:7.5px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:7px}
-.aiitem.focus .ailb{color:var(--sage)}.aiitem.money .ailb{color:var(--gold)}
-.aiitem.ignore .ailb{color:var(--ink4)}.aiitem.risk .ailb{color:var(--blush)}
-.aiitem.delg .ailb{color:var(--mauve)}.aiitem.dec .ailb{color:var(--gold2)}
-.aiitem ul{list-style:none}
-.aiitem ul li{font-size:11px;color:var(--ink3);padding:3px 0;border-bottom:1px solid var(--border);line-height:1.4}
-.aiitem ul li:last-child{border-bottom:none}
-
-/* EOD */
-.ecard{background:linear-gradient(135deg,#fdf7f5,#f8ede9);border-color:var(--blushborder)}
-.eitem{padding:9px 0;border-bottom:1px solid var(--border)}
-.eitem:last-child{border-bottom:none}
-.eq{font-size:8.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--blush);margin-bottom:4px}
-.ea{font-size:13px;color:var(--ink2);line-height:1.5;outline:none;min-height:1.5em;width:100%;cursor:text}
-.ea:empty::before{content:attr(data-ph);color:var(--ink5);font-style:italic;pointer-events:none}
-
-/* MEET BUTTON */
-.meetbtn{display:inline-flex;align-items:center;gap:5px;font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;background:rgba(106,157,206,.12);border:1px solid rgba(106,157,206,.3);border-radius:12px;color:#5b8dbf;text-decoration:none;margin-top:4px;transition:all .2s}
-.meetbtn:hover{background:rgba(106,157,206,.22)}
-
-.errnote{font-size:11px;color:var(--gold);padding:9px 12px;border:1px solid var(--goldborder);border-radius:var(--r2);margin-top:6px;font-style:italic;line-height:1.5;background:var(--golddim)}
-
-[contenteditable]{outline:none;cursor:text}
-[contenteditable]:focus{border-radius:2px;box-shadow:0 0 0 2px rgba(184,146,74,.18)}
-
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-
-/* FOOTER */
-.footer{border-top:1px solid var(--border);padding:14px 36px;display:flex;justify-content:space-between;align-items:center;font-size:9px;color:var(--ink4);letter-spacing:2px;text-transform:uppercase;background:var(--card)}
-.footer .brand{font-family:'Cormorant Garamond',serif;font-size:13px;color:var(--gold);letter-spacing:3px;font-style:italic;text-transform:none}
-
-/* RESPONSIVE */
-@media(max-width:1200px){
-  .grid{grid-template-columns:repeat(6,1fr);padding:18px 22px 48px;gap:12px}
-  .c3,.c4{grid-column:span 3}.c5,.c6,.c7,.c8,.c9,.c12{grid-column:span 6}
-  .n2col{grid-template-columns:1fr}.p5{grid-template-columns:repeat(3,1fr)}
-}
-@media(max-width:768px){
-  .hdr{padding:14px 18px;flex-direction:column;align-items:flex-start;gap:10px}
-  .sbar{padding:8px 18px;flex-direction:column;align-items:flex-start;gap:8px}
-  .grid{grid-template-columns:1fr;padding:13px 14px 40px;gap:11px}
-  .c3,.c4,.c5,.c6,.c7,.c8,.c9,.c12{grid-column:span 1}
-  .sgrid,.tcols,.aigrid,.n2col{grid-template-columns:1fr}
-  .kgrid.k3,.kgrid.k4{grid-template-columns:1fr 1fr}
-  .p5{grid-template-columns:repeat(2,1fr)}.wgrid{grid-template-columns:1fr 1fr}
-  .rgrid{grid-template-columns:1fr 1fr}
-  .footer{flex-direction:column;gap:5px;text-align:center;padding:12px 18px}
-}
-</style>
-</head>
-<body>
-
-<!-- HEADER -->
-<header class="hdr">
-  <div class="hl">
-    <div class="dtag" id="dateLabel">Loading…</div>
-    <h1 id="greeting">Good Morning, <em>Bri.</em></h1>
-  </div>
-  <div class="hr">
-    <div class="clk"><span id="clkT">—:——</span><span class="ap" id="clkAP">AM</span></div>
-    <div class="htag">Estem Realty Group · Executive Brief</div>
-    <div class="href" id="lastRef"></div>
-  </div>
-</header>
-
-<!-- STATUS BAR -->
-<div class="sbar">
-  <div class="chip" id="chipAI"><span class="dot"></span>AI Briefing</div>
-  <div class="chip" id="chipRates"><span class="dot"></span>Live Rates</div>
-  <div class="chip" id="chipNews"><span class="dot"></span>Market News</div>
-  <div class="chip" id="chipPipeline"><span class="dot"></span>ISA · Airtable</div>
-  <div class="chip" id="chipCal"><span class="dot"></span>Google Calendar</div>
-  <div class="chip" id="chipFUB"><span class="dot"></span>Follow Up Boss</div>
-  <div class="chip" id="chipGmail"><span class="dot"></span>Gmail</div>
-  <div class="sp"></div>
-  <a href="/planner.html" style="display:flex;align-items:center;gap:6px;padding:7px 14px;background:transparent;border:1px solid var(--blushborder,rgba(196,121,106,.22));color:var(--rose,#c4796a);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:8.5px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;text-decoration:none;white-space:nowrap" onmouseover="this.style.background='rgba(196,121,106,.12)'" onmouseout="this.style.background='transparent'">✦ Planner</a>
-  <button class="btnref" id="btnRef" onclick="refreshAll()">
-    <span class="ii">↻</span><span class="si">↻</span>&nbsp; Refresh Briefing
-  </button>
-</div>
-
-<div class="grid">
-
-  <!-- AFFIRMATION -->
-  <div class="card affirm-card c12" style="animation-delay:.02s">
-    <div class="clabel">Daily Affirmation</div>
-    <div class="atext" id="affirmText">Loading…</div>
-    <div class="asub" id="affirmSub"></div>
-  </div>
-
-  <div class="rdiv"></div>
-
-  <!-- ── ROW 1: SUMMARY + REVENUE ── -->
-
-  <!-- 01 EXECUTIVE SUMMARY -->
-  <div class="card warm c8" style="animation-delay:.04s">
-    <div class="clabel">01 — Today's Executive Summary</div>
-    <div class="sgrid">
-      <div class="sitem hl"><div class="slb">What Matters Most</div><div class="sv" id="sum-matters"><span class="sk w85 h20"></span></div></div>
-      <div class="sitem"><div class="slb">Biggest Opportunity</div><div class="sv" id="sum-opportunity"><span class="sk w85"></span></div></div>
-      <div class="sitem"><div class="slb">Watch Out For</div><div class="sv" id="sum-risk"><span class="sk w85"></span></div></div>
-      <div class="sitem"><div class="slb">Move Forward By</div><div class="sv" id="sum-forward"><span class="sk w85"></span></div></div>
-    </div>
-    <div class="slabel" style="margin-top:0">Top 3 Priorities</div>
-    <ul class="plist">
-      <li><span class="pnum">1</span><span id="pri-1" contenteditable="true"><span class="sk w70"></span></span></li>
-      <li><span class="pnum">2</span><span id="pri-2" contenteditable="true"><span class="sk w85"></span></span></li>
-      <li><span class="pnum">3</span><span id="pri-3" contenteditable="true"><span class="sk w70"></span></span></li>
-    </ul>
-  </div>
-
-  <!-- REVENUE COMMAND -->
-  <div class="card c4" style="animation-delay:.08s">
-    <div class="clabel">Revenue Command</div>
-    <div class="kgrid k3">
-      <div class="kstat"><div class="kn g" id="fub-activeBuyers">—</div><div class="kl">Active Buyers</div></div>
-      <div class="kstat"><div class="kn" id="fub-activeSellers">—</div><div class="kl">Active Sellers</div></div>
-      <div class="kstat"><div class="kn" id="fub-warmLeads">—</div><div class="kl">Warm Leads</div></div>
-      <div class="kstat"><div class="kn b" id="fub-hotLeads">—</div><div class="kl">Hot Follow-Ups</div></div>
-      <div class="kstat"><div class="kn b" id="fub-overdue">—</div><div class="kl">Overdue</div></div>
-      <div class="kstat"><div class="kn s" id="fub-closing">—</div><div class="kl">Closing This Mo.</div></div>
-    </div>
-    <div style="display:flex;gap:8px;margin-top:10px;font-size:10px;color:var(--ink3)">
-      <span>New leads today:</span>
-      <span id="fub-newToday" style="font-weight:600;color:var(--gold)">—</span>
-      <span style="margin-left:8px">Total active:</span>
-      <span id="fub-totalActive" style="font-weight:600;color:var(--ink2)">—</span>
-    </div>
-    <div class="prog">
-      <div class="prow"><span>Monthly GCI Goal</span><span>$24K / $40K</span></div>
-      <div class="ptrack"><div class="pfill" style="width:60%"></div></div>
-    </div>
-    <div class="ablock">
-      <div class="alb">⚡ First Revenue Action</div>
-      <div class="atx" id="rev-action" contenteditable="true"><span class="sk w85"></span></div>
-    </div>
-  </div>
-
-  <div class="rdiv"></div>
-
-  <!-- ── ROW 2: CALENDAR + LEADS + RATES ── -->
-
-  <!-- GOOGLE CALENDAR — LIVE -->
-  <div class="card c4" style="animation-delay:.12s">
-    <div class="clabel">📅 Today's Schedule — Live</div>
-    <div id="calFeed">
-      <div class="cali"><div class="ctime">—</div><div><div class="ctitle"><span class="sk w70"></span></div><div class="csub"><span class="sk w55"></span></div></div></div>
-      <div class="cali"><div class="ctime">—</div><div><div class="ctitle"><span class="sk w85"></span></div></div></div>
-      <div class="cali"><div class="ctime">—</div><div><div class="ctitle"><span class="sk w70"></span></div></div></div>
-    </div>
-    <div style="margin-top:11px;font-size:9px;color:var(--ink4);letter-spacing:1px">Connected · bri@estemrealtygroup.com</div>
-  </div>
-
-  <!-- FOLLOW-UP PRIORITIES + ATTENTION -->
-  <div class="card c4" style="animation-delay:.16s">
-    <div class="clabel">🔥 Follow-Up Priorities</div>
-    <div id="fubHotLeadsFeed">
-      <div class="litem"><div class="ldot hot"></div><div class="lname">Loading from FUB…</div><div class="lnote">Connecting to Follow Up Boss</div></div>
-    </div>
-    <div class="slabel">⚠ Needs Bri's Review — Airtable</div>
-    <div id="needsAttn"><div class="errnote">Loading from Airtable…</div></div>
-    <div class="slabel" style="margin-top:12px">📋 Overdue Follow-Ups — FUB</div>
-    <div id="fubOverdueFeed"><div class="errnote">Loading from Follow Up Boss…</div></div>
-    <div class="slabel" style="margin-top:14px">AI Suggested Message</div>
-    <div class="tp" id="lead-msg" style="font-style:normal;color:var(--ink3)"><span class="sk w85"></span></div>
-  </div>
-
-  <!-- INTEREST RATES -->
-  <div class="card c4" style="animation-delay:.20s">
-    <div class="clabel">📊 Rate Snapshot — FRED Live</div>
-    <div class="rgrid">
-      <div class="ritem"><div class="rtype">30-Year Fixed</div><div class="rnum" id="rate-30yr"><span class="sk w55 h32"></span></div><div class="rtrend" id="trend-30yr">Loading…</div></div>
-      <div class="ritem"><div class="rtype">15-Year Fixed</div><div class="rnum" id="rate-15yr"><span class="sk w55 h32"></span></div><div class="rtrend" id="trend-15yr">Loading…</div></div>
-      <div class="ritem"><div class="rtype">FHA 30-Year</div><div class="rnum" id="rate-fha"><span class="sk w55 h32"></span></div><div class="rtrend" id="trend-fha">~0.3% below conv.</div></div>
-      <div class="ritem"><div class="rtype">VA / USDA</div><div class="rnum" id="rate-va"><span class="sk w55 h32"></span></div><div class="rtrend dn" id="trend-va">Best for eligible buyers</div></div>
-    </div>
-    <div class="slabel">Client Talking Point</div>
-    <div class="tp" id="tp-rates">"Buyers who lock now protect against movement. Builders offering 2-1 buydowns — effective rate into the 4s."</div>
-  </div>
-
-  <div class="rdiv"></div>
-
-  <!-- ── ROW 3: POWER 5 ── -->
-  <div class="card c12" style="animation-delay:.24s">
-    <div class="clabel">✨ Power 5 — Daily Non-Negotiables</div>
-    <div class="p5">
-      <div class="p5i" onclick="toggleDone(this)"><div class="p5ico">💬</div><div class="p5lbl">5 Real Estate Conversations</div><div class="p5st">0 / 5</div></div>
-      <div class="p5i" onclick="toggleDone(this)"><div class="p5ico">📸</div><div class="p5lbl">1 Content / Visibility Action</div><div class="p5st">Pending</div></div>
-      <div class="p5i" onclick="toggleDone(this)"><div class="p5ico">🤝</div><div class="p5lbl">1 Relationship Touch</div><div class="p5st">Pending</div></div>
-      <div class="p5i" onclick="toggleDone(this)"><div class="p5ico">🎯</div><div class="p5lbl">1 Lead Generation Activity</div><div class="p5st">Pending</div></div>
-      <div class="p5i" onclick="toggleDone(this)"><div class="p5ico">💰</div><div class="p5lbl">1 Wealth-Building Activity</div><div class="p5st">Pending</div></div>
-    </div>
-  </div>
-
-  <div class="rdiv"></div>
-
-  <!-- ── ROW 4: MARKET NEWS + ISA ── -->
-
-  <!-- MARKET NEWS -->
-  <div class="card c8" style="animation-delay:.28s">
-    <div class="clabel">🏡 Real Estate Market Intelligence</div>
-    <div class="n2col">
-      <div id="news-national"><div class="slabel" style="margin-top:0">National + Texas</div><div class="ni"><span class="sk w85"></span><span class="sk w70"></span></div><div class="ni"><span class="sk w85"></span></div></div>
-      <div id="news-dfw"><div class="slabel" style="margin-top:0">South DFW — Your Markets</div><div class="ni"><span class="sk w85"></span><span class="sk w70"></span></div><div class="ni"><span class="sk w85"></span></div></div>
-    </div>
-    <div class="slabel">AI Market Insight</div>
-    <div class="tp" id="tp-market"><span class="sk w85"></span></div>
-  </div>
-
-  <!-- ISA DAILY ACTIVITY -->
-  <div class="card c4" style="animation-delay:.32s">
-    <div class="clabel">👩‍💼 ISA Activity — Airtable</div>
-    <div class="kgrid k2">
-      <div class="kstat"><div class="kn g" id="kpi-calls">—</div><div class="kl">Calls Made</div></div>
-      <div class="kstat"><div class="kn s" id="kpi-appts">—</div><div class="kl">Appts Set</div></div>
-      <div class="kstat"><div class="kn" id="kpi-convos">—</div><div class="kl">Conversations</div></div>
-      <div class="kstat"><div class="kn" id="kpi-followups">—</div><div class="kl">Follow Ups</div></div>
-    </div>
-    <div class="slabel">ISA Notes</div>
-    <div id="isaNotesBlock" style="font-size:12px;color:var(--ink3);line-height:1.55">Loading…</div>
-    <div class="slabel">AI Team Direction</div>
-    <div class="tp" id="team-dir" style="font-style:normal;color:var(--ink3)"><span class="sk w85"></span></div>
-  </div>
-
-  <div class="rdiv"></div>
-
-  <!-- ── ROW 5: TODO + WELLNESS ── -->
-
-  <!-- PRIORITY MATRIX -->
-  <div class="card c8" style="animation-delay:.36s">
-    <div class="clabel">✅ Priority Matrix + Tasks</div>
-    <div class="tcols">
-      <div>
-        <div class="tgrp">
-          <h4>Must Do — Revenue</h4>
-          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">Your top revenue action</span></div>
-          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">Second revenue task</span></div>
-          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">Third task</span></div>
-          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">Content / visibility post</span></div>
-        </div>
-        <div class="tgrp" style="margin-top:13px">
-          <h4>Business Dev</h4>
-          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">Update all lead statuses in FUB</span></div>
-          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">Request review from last closing</span></div>
-          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">Send curated listings to warm lead</span></div>
-        </div>
-      </div>
-      <div>
-        <div class="tgrp">
-          <h4>Personal / School</h4>
-          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">School deadline check</span></div>
-          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">Family obligations</span></div>
-          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">Self-care + meal prep</span></div>
-        </div>
-        <div class="tgrp" style="margin-top:13px">
-          <h4>Delegate</h4>
-          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">ISA — internet lead follow-ups</span></div>
-          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">VA — schedule social content</span></div>
-          <div class="titem" onclick="toggleTodo(this)"><div class="chk">✓</div><span contenteditable="true">Admin — receipts + CRM cleanup</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- WELLNESS -->
-  <div class="card c4" style="animation-delay:.40s">
-    <div class="clabel">🌸 Wellness + Energy</div>
-    <div class="wgrid">
-      <div class="wi"><div class="wico">😴</div><div class="wlb">Sleep</div><div class="wv" contenteditable="true">— hrs</div></div>
-      <div class="wi"><div class="wico">💧</div><div class="wlb">Water</div><div class="wv" contenteditable="true">0 / 8</div></div>
-      <div class="wi"><div class="wico">🏃‍♀️</div><div class="wlb">Movement</div><div class="wv" contenteditable="true">Pending</div></div>
-      <div class="wi"><div class="wico">⚡</div><div class="wlb">Energy</div><div class="wv" contenteditable="true">— / 10</div></div>
-    </div>
-    <div class="slabel">How Do I Need to Show Up?</div>
-    <div class="tp" contenteditable="true" style="font-style:normal;color:var(--ink2)">Grounded, decisive, and magnetic. Present and moving — that's enough.</div>
-    <div style="margin-top:10px;padding:9px 12px;background:var(--golddim);border:1px solid var(--goldborder);border-radius:var(--r2);font-size:11px;color:var(--gold)">👗 Dress for the version of you that already has everything she's building toward.</div>
-    <div class="slabel">Weekly Posting</div>
-    <div class="postrow">
-      <div class="pday" onclick="this.classList.toggle('done')">M</div>
-      <div class="pday" onclick="this.classList.toggle('done')">T</div>
-      <div class="pday" onclick="this.classList.toggle('done')">W</div>
-      <div class="pday" onclick="this.classList.toggle('done')">T</div>
-      <div class="pday" onclick="this.classList.toggle('done')">F</div>
-      <div class="pday" onclick="this.classList.toggle('done')">S</div>
-      <div class="pday" onclick="this.classList.toggle('done')">S</div>
-    </div>
-    <div style="margin-top:8px;font-size:10px;color:var(--ink4);font-style:italic">✨ Show your face. Done > perfect. You are the brand.</div>
-  </div>
-
-  <div class="rdiv"></div>
-
-  <!-- ── ROW 6: BRAND + WORLD NEWS + AI STRATEGY ── -->
-
-  <!-- BRAND -->
-  <div class="card c4" style="animation-delay:.44s">
-    <div class="clabel">📱 Brand + Content</div>
-    <div class="ccard"><div class="ctype">📹 Reel Idea</div><div class="ctxt" id="idea-reel" contenteditable="true"><span class="sk w85"></span><span class="sk w70"></span></div></div>
-    <div class="ccard"><div class="ctype">💬 Caption Prompt</div><div class="ctxt" id="idea-caption" contenteditable="true"><span class="sk w85"></span></div></div>
-    <div class="ccard"><div class="ctype">📖 Story Idea</div><div class="ctxt" id="idea-story" contenteditable="true"><span class="sk w70"></span></div></div>
-  </div>
-
-  <!-- WORLD NEWS -->
-  <div class="card c4" style="animation-delay:.48s">
-    <div class="clabel">🌐 World + Business News</div>
-    <div id="news-world">
-      <div class="ni"><span class="sk w85"></span><span class="sk w70"></span></div>
-      <div class="ni"><span class="sk w85"></span><span class="sk w70"></span></div>
-      <div class="ni"><span class="sk w85"></span></div>
-      <div class="ni"><span class="sk w70"></span></div>
-    </div>
-  </div>
-
-  <!-- AI STRATEGY -->
-  <div class="card c4" style="animation-delay:.52s">
-    <div class="clabel">🧠 AI Strategy Notes</div>
-    <div class="aigrid">
-      <div class="aiitem focus"><div class="ailb">✦ Focus On</div><ul id="ai-focus"><li><span class="sk w85"></span></li><li><span class="sk w70"></span></li></ul></div>
-      <div class="aiitem money"><div class="ailb">💰 Money Moves</div><ul id="ai-money"><li><span class="sk w85"></span></li><li><span class="sk w70"></span></li></ul></div>
-      <div class="aiitem ignore"><div class="ailb">✗ Ignore Today</div><ul id="ai-ignore"><li><span class="sk w70"></span></li><li><span class="sk w55"></span></li></ul></div>
-      <div class="aiitem risk"><div class="ailb">⚠ Watch Out</div><ul id="ai-risk"><li><span class="sk w85"></span></li><li><span class="sk w55"></span></li></ul></div>
-      <div class="aiitem delg"><div class="ailb">→ Delegate</div><ul id="ai-delegate"><li><span class="sk w85"></span></li><li><span class="sk w70"></span></li></ul></div>
-      <div class="aiitem dec"><div class="ailb">◆ Decide Today</div><ul id="ai-decide"><li><span class="sk w85"></span></li><li><span class="sk w70"></span></li></ul></div>
-    </div>
-  </div>
-
-  <div class="rdiv"></div>
-
-  <!-- ── ROW 7: VISION + EOD ── -->
-
-  <!-- GMAIL DIGEST -->
-  <div class="card c12" id="gmailCard" style="animation-delay:.65s">
-    <div class="clabel">✉ Gmail Digest — bri@estemrealtygroup.com</div>
-    <div style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:14px">
-      <div style="text-align:center;padding:10px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2)">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--ink)" id="gmail-unread">—</div>
-        <div style="font-size:8px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3)">Unread</div>
-      </div>
-      <div style="text-align:center;padding:10px 16px;background:var(--blushdim,rgba(196,121,106,.08));border:1px solid var(--blushborder,rgba(196,121,106,.22));border-radius:var(--r2)">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--rose,#c4796a)" id="gmail-urgent">—</div>
-        <div style="font-size:8px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--rose,#c4796a)">Urgent</div>
-      </div>
-      <div style="text-align:center;padding:10px 16px;background:var(--sagedim,rgba(122,158,130,.09));border:1px solid var(--sageborder,rgba(122,158,130,.24));border-radius:var(--r2)">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--sage,#7a9e82)" id="gmail-client">—</div>
-        <div style="font-size:8px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--sage,#7a9e82)">Client</div>
-      </div>
-      <div style="font-size:10px;color:var(--ink4);font-style:italic;padding:10px 4px;align-self:center" id="gmail-status">Connecting…</div>
-    </div>
-    <div id="gmailFeed" style="display:flex;flex-direction:column;gap:8px">
-      <div style="height:13px;border-radius:3px;background:linear-gradient(90deg,var(--border) 25%,var(--bg3) 50%,var(--border) 75%);background-size:200% 100%;animation:shimmer 1.6s infinite;width:85%"></div>
-      <div style="height:13px;border-radius:3px;background:linear-gradient(90deg,var(--border) 25%,var(--bg3) 50%,var(--border) 75%);background-size:200% 100%;animation:shimmer 1.6s infinite;width:70%"></div>
-    </div>
-  </div>
-
-  <div class="rdiv"></div>
-
-  <!-- VISION -->
-  <div class="card vision-card c7" style="animation-delay:.56s">
-    <div class="clabel">🌟 Vision + Identity</div>
-    <div class="vaff" id="vision-affirm" contenteditable="true">"I am building a life so beautiful and abundant that my children will never question their worth. I am not just a realtor — I am a legacy architect."</div>
-    <div style="font-size:12px;color:var(--ink3);line-height:1.7" contenteditable="true">You are becoming a woman who leads with excellence, builds generational wealth through real estate, and shows other women — especially Black women and mothers — that it is possible to have it all with grace. The luxury family real estate space was made for you. Keep going.</div>
-    <div class="vpills">
-      <div class="vpill">Generational Wealth</div><div class="vpill">Family Legacy</div>
-      <div class="vpill">Luxury Real Estate</div><div class="vpill">Business Ownership</div>
-      <div class="vpill">Financial Freedom</div><div class="vpill">Discipline</div>
-      <div class="vpill">Elegance</div><div class="vpill" id="closing-pill" contenteditable="true">You're ready. Go.</div>
-    </div>
-  </div>
-
-  <!-- END OF DAY REVIEW -->
-  <div class="card ecard c5" style="animation-delay:.60s">
-    <div class="clabel">🌙 End of Day Review</div>
-    <div class="eitem"><div class="eq">What did I accomplish?</div><div class="ea" contenteditable="true" data-ph="Write it here…"></div></div>
-    <div class="eitem"><div class="eq">What carries to tomorrow?</div><div class="ea" contenteditable="true" data-ph="Write it here…"></div></div>
-    <div class="eitem"><div class="eq">Revenue actions taken?</div><div class="ea" contenteditable="true" data-ph="Write it here…"></div></div>
-    <div class="eitem"><div class="eq">How did I show up?</div><div class="ea" contenteditable="true" data-ph="Write it here…"></div></div>
-    <div class="eitem"><div class="eq">One thing I'm grateful for?</div><div class="ea" contenteditable="true" data-ph="Write it here…"></div></div>
-  </div>
-
-</div>
-
-<footer class="footer">
-  <span class="brand">Estem Realty Group · Daily Executive Brief</span>
-  <span>Wealth · Vision · Execution · Legacy</span>
-  <span id="footerDate"></span>
-</footer>
-
-<script>
-'use strict';
-const BASE = 'https://morning-briefing-ashen.vercel.app';
-const DAYS   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-
-/* ── AFFIRMATIONS ─────────────────────── */
-const AFF = [
-  { t:"I am building a legacy so powerful that my name will echo through my family for generations. Every decision I make today is an investment in that future.", s:"Legacy · Generational Wealth" },
-  { t:"I am not waiting for the perfect moment. I am the moment. Every conversation, every call, every showing is me claiming what is already mine.", s:"Execution · Revenue" },
-  { t:"I lead with excellence. I close with confidence. I show up as the most elevated version of myself because my clients deserve that — and so do I.", s:"Leadership · Excellence" },
-  { t:"My business is growing. My income is expanding. My family is protected. I am exactly where I am supposed to be, doing exactly what I was built to do.", s:"Abundance · Purpose" },
-  { t:"I am a luxury real estate authority in South DFW. I know my markets, I know my value, and I know how to serve families at the highest level.", s:"Authority · Expertise" },
-  { t:"Discipline is my love language. Every consistent action I take today compounds into the freedom I am building for tomorrow.", s:"Discipline · Freedom" },
-  { t:"I am the woman other women look at and say — she made it possible. I carry that responsibility with grace and I show up fully.", s:"Visibility · Impact" },
-  { t:"My pipeline is healthy. My leads are converting. My income flows to me freely and consistently. I receive abundance with gratitude.", s:"Pipeline · Prosperity" },
-  { t:"I balance business, motherhood, education, and legacy not because it is easy — but because I was built for this. I rise every time.", s:"Balance · Resilience" },
-  { t:"Every home I close is a family stepping into their future. That is not just a transaction — that is a life changed. I never take that lightly.", s:"Service · Purpose" },
-  { t:"Today I choose revenue-producing actions over busyness. I choose focus over distraction. I choose my future over my comfort zone.", s:"Focus · Revenue" },
-  { t:"I am building wealth quietly and powerfully. My investments, my commissions, my savings — all of it is stacking toward a life of true freedom.", s:"Wealth · Financial Freedom" }
-];
-function setAffirmation() {
-  const n=new Date();
-  const i=(n.getFullYear()*10000+(n.getMonth()+1)*100+n.getDate()+n.getHours())%AFF.length;
-  const a=AFF[i];
-  const el=document.getElementById('affirmText'),sub=document.getElementById('affirmSub');
-  if(el){el.style.animation='none';el.offsetHeight;el.style.animation='';el.textContent=`"${a.t}"`;}
-  if(sub)sub.textContent=a.s;
-}
-
-/* ── CLOCK + GREETING ─────────────────── */
-function greet(h){if(h>=5&&h<12)return 'Good Morning';if(h>=12&&h<17)return 'Good Afternoon';if(h>=17&&h<24)return 'Good Evening';return 'Still Building';}
-function tick(){
-  const n=new Date(),raw=n.getHours();
-  let h=raw;const m=n.getMinutes().toString().padStart(2,'0'),s=n.getSeconds().toString().padStart(2,'0'),ap=h>=12?'PM':'AM';
-  h=h%12||12;
-  const ct=document.getElementById('clkT');if(ct)ct.textContent=`${h}:${m}:${s}`;
-  const ca=document.getElementById('clkAP');if(ca)ca.textContent=ap;
-  const label=`${DAYS[n.getDay()]}, ${MONTHS[n.getMonth()]} ${n.getDate()}, ${n.getFullYear()}`;
-  const dl=document.getElementById('dateLabel');if(dl)dl.textContent=label;
-  const fl=document.getElementById('footerDate');if(fl)fl.textContent=label;
-  const gr=document.getElementById('greeting');if(gr)gr.innerHTML=`${greet(raw)}, <em>Bri.</em>`;
-}
-tick();setInterval(tick,1000);
-
-/* ── HELPERS ──────────────────────────── */
-function setText(id,v){const el=document.getElementById(id);if(el&&v!=null&&String(v).trim())el.textContent=v;}
-function setHTML(id,h){const el=document.getElementById(id);if(el&&h)el.innerHTML=h;}
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function setChip(id,st){const el=document.getElementById(id);if(el)el.className='chip '+st;}
-function setRef(on){const b=document.getElementById('btnRef');if(!b)return;b.disabled=on;b.classList.toggle('loading',on);}
-function errNote(m){return `<div class="errnote">${esc(m)}</div>`;}
-function listItems(a){if(!Array.isArray(a)||!a.length)return '';return a.map(i=>`<li>${esc(i)}</li>`).join('');}
-
-/* ── SAFE FETCH ───────────────────────── */
-async function apiFetch(url,opts){
-  try{
-    const res=await fetch(url,opts),text=await res.text(),ch=text.trim()[0];
-    if(ch!='{'&&ch!='[')return{ok:false,error:`${url} returned HTML not JSON (HTTP ${res.status})`};
-    let p;try{p=JSON.parse(text);}catch{return{ok:false,error:`${url} malformed JSON`};}
-    if(p.ok===false)return{ok:false,error:p.error||`${url} ok:false`};
-    return{ok:true,data:p};
-  }catch(e){return{ok:false,error:`Network: ${e.message}`};}
-}
-
-/* ── GOOGLE CALENDAR RENDER ───────────── */
-function fmtTime(iso){
-  if(!iso)return 'All day';
-  const d=new Date(iso);
-  let h=d.getHours(),m=d.getMinutes().toString().padStart(2,'0'),ap=h>=12?'PM':'AM';
-  h=h%12||12;return `${h}:${m} ${ap}`;
-}
-function calTag(summary){
-  const s=(summary||'').toLowerCase();
-  if(s.includes('kpi')||s.includes('review')||s.includes('team')||s.includes('briefing'))return['team','Team'];
-  if(s.includes('showing')||s.includes('listing')||s.includes('client')||s.includes('buyer')||s.includes('seller'))return['client','Client'];
-  if(s.includes('school')||s.includes('class')||s.includes('homework'))return['school','School'];
-  if(s.includes('meet')||s.includes('zoom')||s.includes('call'))return['meet','Meeting'];
-  if(s.includes('family')||s.includes('pickup')||s.includes('personal'))return['pers','Personal'];
-  return['pers','Event'];
-}
-function renderCalendar(events){
-  const feed=document.getElementById('calFeed');
-  if(!feed)return;
-  const now=new Date();
-  if(!events||events.length===0){
-    feed.innerHTML='<div style="font-size:12px;color:var(--ink4);padding:12px 0;font-style:italic">No events found for today. Check your Google Calendar connection.</div>';
-    return;
-  }
-  feed.innerHTML=events.map(ev=>{
-    const isAllDay=!!ev.start?.date;
-    const startISO=ev.start?.dateTime||ev.start?.date;
-    const endISO  =ev.end?.dateTime  ||ev.end?.date;
-    const startD  =startISO?new Date(startISO):null;
-    const endD    =endISO  ?new Date(endISO)  :null;
-    const isNow   =!isAllDay&&startD&&endD&&now>=startD&&now<=endD;
-    const [tagClass,tagLabel]=calTag(ev.summary||'');
-    const timeStr =isAllDay?'All day':fmtTime(startISO);
-    const endStr  =(!isAllDay&&endD)?` – ${fmtTime(endISO)}`:'';
-    const meetUrl =ev.conferenceUrl||ev.hangoutLink||'';
-    const meetBtn =meetUrl?`<a class="meetbtn" href="${esc(meetUrl)}" target="_blank" rel="noopener">📹 Join Meet</a>`:'';
-    const nowBadge=isNow?'<div class="now-badge">▶ HAPPENING NOW</div>':'';
-    return `<div class="cali${isNow?' now':''}">
-      <div class="ctime">${esc(timeStr)}</div>
-      <div style="flex:1">
-        ${nowBadge}
-        <div class="ctitle">${esc(ev.summary||'Event')}</div>
-        ${ev.location?`<div class="csub">📍 ${esc(ev.location)}</div>`:''}
-        ${endStr?`<div class="csub">${esc(endStr)}</div>`:''}
-        ${meetBtn}
-      </div>
-      <div class="ctag ${tagClass}">${tagLabel}</div>
-    </div>`;
-  }).join('');
-}
-
-/* ── LOAD CALENDAR ────────────────────── */
-async function loadCalendar(){
-  setChip('chipCal','loading');
-  const syncEl = document.getElementById('calSyncStatus');
-  try{
-    const url = `${BASE}/api/calendar?_=${Date.now()}`;
-    const {ok, data} = await apiFetch(url);
-
-    if(data && data.setupRequired){
-      setChip('chipCal','err');
-      if(syncEl) syncEl.textContent = 'Calendar: OAuth credentials not set in Vercel';
-      const feed = document.getElementById('calFeed');
-      if(feed) feed.innerHTML = '<div style="padding:12px 14px;background:var(--golddim);border:1px solid var(--goldborder);border-radius:var(--r2);font-size:11.5px;color:var(--ink2);line-height:1.65"><strong style="color:var(--gold)">Calendar setup needed.</strong> Add GCAL_CLIENT_ID, GCAL_CLIENT_SECRET, GCAL_REFRESH_TOKEN to Vercel env vars, then redeploy.</div>';
-      return;
+// api/pipeline.js
+// Reads from the Estem CRM (estem-crm.vercel.app) — the source of truth.
+// No FUB dependency. Real lead data, real stage counts, real opportunities.
+
+export default async function handler(req, res) {
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Cache-Control', 'no-store');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  if (req.method === 'OPTIONS') return res.status(200).end();
+
+  // Also read Airtable ISA data
+  const AIRTABLE_TOKEN = process.env.AIRTABLE_TOKEN;
+  const AIRTABLE_BASE  = 'appzePtOYiXoG4w1i';
+  const AIRTABLE_ISA   = 'tblQloWBA4xVtcBbv';
+
+  try {
+    // ── 1. Fetch all leads from the Estem CRM ──────────────────────
+    const crmRes = await fetch('https://estem-crm.vercel.app/api/leads', {
+      headers: { 'Accept': 'application/json' }
+    });
+
+    if (!crmRes.ok) {
+      return res.status(502).json({ ok: false, error: `CRM returned HTTP ${crmRes.status}` });
     }
 
-    if(!ok){
-      setChip('chipCal','err');
-      if(syncEl) syncEl.textContent = 'Calendar connection error — check api/calendar.js';
-      return;
+    const leads = await crmRes.json();
+
+    if (!Array.isArray(leads)) {
+      return res.status(502).json({ ok: false, error: 'CRM did not return a lead array' });
     }
 
-    const events   = data.events || [];
-    const synced   = data.fetchedAt ? new Date(data.fetchedAt).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true}) : '';
-    const count    = events.length;
-    if(syncEl){
-      syncEl.innerHTML = `<span style="color:var(--sage)">&#9679;</span> bri@estemrealtygroup.com &middot; Last synced: ${synced} &middot; ${count} event${count!==1?'s':''} today`;
+    const active = leads.filter(l => !l.is_archived);
+
+    // ── 2. Pipeline counts by stage ────────────────────────────────
+    const stageCounts = {};
+    active.forEach(l => {
+      const s = l.stage || 'Unknown';
+      stageCounts[s] = (stageCounts[s] || 0) + 1;
+    });
+
+    // ── 3. Hot leads — Grade A/A+ with notes ─────────────────────
+    const hotLeads = active
+      .filter(l => ['A+', 'A'].includes(l.grade) && l.notes?.trim())
+      .sort((a, b) => (b.score || 0) - (a.score || 0))
+      .slice(0, 8)
+      .map(l => ({
+        id:           l.id,
+        name:         l.name,
+        stage:        l.stage,
+        grade:        l.grade,
+        score:        l.score,
+        phone:        l.phone,
+        email:        l.email,
+        notes:        l.notes,
+        daysSinceContact: l.lcd,
+        source:       l.source,
+        type:         l.type,
+        assigned:     l.assigned
+      }));
+
+    // ── 4. Overdue — A/A+/B grade, not contacted in 90+ days ─────
+    const overdueLeads = active
+      .filter(l => ['A+', 'A', 'B'].includes(l.grade) && (l.lcd || 0) >= 90)
+      .sort((a, b) => (b.score || 0) - (a.score || 0))
+      .slice(0, 10)
+      .map(l => ({
+        name:             l.name,
+        stage:            l.stage,
+        grade:            l.grade,
+        daysSinceContact: l.lcd,
+        phone:            l.phone,
+        notes:            l.notes?.slice(0, 100)
+      }));
+
+    // ── 5. Summary pipeline counts ────────────────────────────────
+    const buyers      = active.filter(l => l.type?.includes('Buyer')).length;
+    const sellers     = active.filter(l => l.type?.includes('Seller')).length;
+    const sphere      = active.filter(l => l.stage === 'Sphere').length;
+    const referrals   = active.filter(l => l.stage === 'Referral').length;
+    const pastClients = active.filter(l => l.stage === 'Past Client').length;
+    const highGrade   = active.filter(l => ['A+', 'A'].includes(l.grade)).length;
+    const closedThisYear = active.filter(l => l.stage === 'Closed').length;
+    const newToday    = active.filter(l => {
+      if (!l.created_at) return false;
+      const d = new Date(l.created_at);
+      const now = new Date();
+      return d.toDateString() === now.toDateString();
+    }).length;
+
+    // ── 6. Source breakdown for AI context ────────────────────────
+    const sourceCounts = {};
+    active.forEach(l => {
+      const s = l.source || 'Unknown';
+      sourceCounts[s] = (sourceCounts[s] || 0) + 1;
+    });
+
+    // ── 7. ISA data from Airtable ─────────────────────────────────
+    let kpis = null;
+    let needsAttention = [];
+    let isaRecords = [];
+
+    if (AIRTABLE_TOKEN) {
+      try {
+        const params = new URLSearchParams({
+          filterByFormula: "AND({VA Name}!='',{Activity Date}!='')",
+          'sort[0][field]':     'Activity Date',
+          'sort[0][direction]': 'desc',
+          maxRecords: '10'
+        });
+        const atRes = await fetch(
+          `https://api.airtable.com/v0/${AIRTABLE_BASE}/${AIRTABLE_ISA}?${params}`,
+          { headers: { Authorization: `Bearer ${AIRTABLE_TOKEN}` } }
+        );
+        if (atRes.ok) {
+          const atData = await atRes.json();
+          isaRecords = (atData.records || []).map(r => {
+            const f = r.fields || {};
+            return {
+              id:              r.id,
+              vaName:          f['VA Name']              || '',
+              activityDate:    f['Activity Date']         || '',
+              callsMade:       Number(f['Calls Made'])    || 0,
+              conversations:   Number(f['Conversations']) || 0,
+              leadsContacted:  Number(f['Leads Contacted'])|| 0,
+              appointmentsSet: Number(f['Appointments Set'])|| 0,
+              followUps:       Number(f['Follow Ups'])    || 0,
+              notesFromISA:    f['Notes From ISA']        || '',
+              needsBriReview:  f["Needs Bri's Review"]   === true,
+              hotLeads:        f['Hot Leads']             === true
+            };
+          });
+          if (isaRecords.length) {
+            const latest = isaRecords[0];
+            kpis = {
+              callsMade:       latest.callsMade,
+              conversations:   latest.conversations,
+              leadsContacted:  latest.leadsContacted,
+              appointmentsSet: latest.appointmentsSet,
+              followUps:       latest.followUps
+            };
+          }
+          needsAttention = isaRecords
+            .filter(r => r.needsBriReview || r.hotLeads)
+            .map(r => ({
+              vaName:       r.vaName,
+              activityDate: r.activityDate,
+              notes:        r.notesFromISA,
+              isHotLead:    r.hotLeads
+            }));
+        }
+      } catch (_) { /* ISA data optional */ }
     }
 
-    if(!events.length){
-      setChip('chipCal','live');
-      const feed = document.getElementById('calFeed');
-      if(feed) feed.innerHTML = '<div style="font-size:12px;color:var(--ink4);font-style:italic;padding:12px 0">No Google Calendar events found for today.</div>';
-      return;
-    }
+    // ── 8. AI context string ──────────────────────────────────────
+    const crmContext = [
+      `Total active leads: ${active.length}`,
+      `Grade A+/A leads: ${highGrade} (${overdueLeads.length} not contacted in 90+ days)`,
+      `Buyers: ${buyers} | Sellers: ${sellers} | Sphere: ${sphere} | Referrals: ${referrals}`,
+      `Past Clients: ${pastClients} | Closed: ${closedThisYear}`,
+      `Top hot lead: ${hotLeads[0]?.name || 'none'} (${hotLeads[0]?.daysSinceContact || 0}d since contact)`,
+      `Sources: ${Object.entries(sourceCounts).map(([k,v])=>`${k}:${v}`).join(', ')}`
+    ].join(' | ');
 
-    renderCalendar(events);
-    setChip('chipCal','live');
-  }catch(e){
-    setChip('chipCal','err');
-    if(syncEl) syncEl.textContent = `Calendar error: ${e.message}`;
+    return res.status(200).json({
+      ok: true,
+      lastUpdated: new Date().toISOString(),
+
+      // Pipeline counts for Revenue Command card
+      pipeline: {
+        totalActive:      active.length,
+        buyers,
+        sellers,
+        sphere,
+        referrals,
+        pastClients,
+        highGrade,
+        closedThisYear,
+        newToday,
+        stageCounts
+      },
+
+      // Hot leads for Follow-Up card
+      hotLeadsList: hotLeads,
+
+      // Overdue contacts
+      overdueList: overdueLeads,
+
+      // ISA KPIs from Airtable
+      kpis,
+      records:        isaRecords,
+      needsAttention,
+
+      // For AI summary
+      crmContext,
+
+      sources: {
+        crm:      true,
+        airtable: !!AIRTABLE_TOKEN
+      }
+    });
+
+  } catch (err) {
+    return res.status(500).json({ ok: false, error: err.message });
   }
 }
-
-/* ── RATE HELPERS ─────────────────────── */
-function rateVal(v){return `${esc(String(v))}<span class="pct">%</span>`;}
-function trendTxt(d){if(!d||d.change==null)return '';const a=d.direction==='up'?'▲':d.direction==='down'?'▼':'→';return `${a} ${Math.abs(parseFloat(d.change)||0).toFixed(2)}% vs last week`;}
-function trendCls(d){if(!d)return 'rtrend';if(d.direction==='up')return 'rtrend up';if(d.direction==='down')return 'rtrend dn';return 'rtrend';}
-
-/* ── NEWS BUILDER ─────────────────────── */
-function newsBlock(articles,region){
-  if(!Array.isArray(articles)||!articles.length)return '';
-  return articles.slice(0,4).map(a=>`
-    <div class="ni">
-      <div class="nreg">${esc(region)}</div>
-      <div class="nh">${esc((a.title||'').split(' - ')[0])}</div>
-      ${a.description?`<div class="nd">${esc(a.description.substring(0,120))}</div>`:''}
-      ${a.url?`<a class="nl" href="${esc(a.url)}" target="_blank" rel="noopener">Read →</a>`:''}
-    </div>`).join('');
-}
-
-/* ── LOAD RATES ───────────────────────── */
-async function loadRates(){
-  setChip('chipRates','loading');
-  const{ok,data}=await apiFetch(`${BASE}/api/rates`);
-  if(!ok){setChip('chipRates','err');return null;}
-  if(data.thirtyYear){setHTML('rate-30yr',rateVal(data.thirtyYear.rate));const t=document.getElementById('trend-30yr');if(t){t.textContent=trendTxt(data.thirtyYear);t.className=trendCls(data.thirtyYear);}}
-  if(data.fifteenYear){setHTML('rate-15yr',rateVal(data.fifteenYear.rate));const t=document.getElementById('trend-15yr');if(t){t.textContent=trendTxt(data.fifteenYear);t.className=trendCls(data.fifteenYear);}}
-  if(data.fha)setHTML('rate-fha',rateVal(data.fha.rate));
-  if(data.va) setHTML('rate-va', rateVal(data.va.rate));
-  setChip('chipRates','live');return data;
-}
-
-/* ── LOAD NEWS ────────────────────────── */
-async function loadNews(){
-  setChip('chipNews','loading');
-  const{ok,data}=await apiFetch(`${BASE}/api/news`);
-  if(!ok){setChip('chipNews','err');return null;}
-  const ne=document.getElementById('news-national');
-  if(ne&&data.national?.length)ne.innerHTML=`<div class="slabel" style="margin-top:0">National + Texas</div>${newsBlock(data.national,'National')}`;
-  const de=document.getElementById('news-dfw');
-  if(de&&data.dfw?.length)de.innerHTML=`<div class="slabel" style="margin-top:0">South DFW — Your Markets</div>${newsBlock(data.dfw,'South DFW')}`;
-  const we=document.getElementById('news-world');
-  if(we&&data.world?.length)we.innerHTML=newsBlock(data.world,'Economy / Rates');
-  setChip('chipNews','live');return data;
-}
-
-/* ── RENDER FUB HOT LEADS ────────────────── */
-function renderHotLeads(leads) {
-  const el = document.getElementById('fubHotLeadsFeed');
-  if (!el) return;
-  if (!leads || !leads.length) {
-    el.innerHTML = '<div style="font-size:11px;color:var(--sage);padding:8px 0">✓ No hot leads flagged right now.</div>';
-    return;
-  }
-  el.innerHTML = leads.slice(0, 6).map(l => {
-    const daysSince = l.lastActivity
-      ? Math.floor((Date.now() - new Date(l.lastActivity)) / 86400000)
-      : null;
-    const dueFlag = l.followUpDate && new Date(l.followUpDate) < new Date()
-      ? '<span style="color:var(--blush);font-size:9px;font-weight:600;margin-left:6px">OVERDUE</span>' : '';
-    const touchedText = daysSince !== null ? `Last touch: ${daysSince}d ago` : '';
-    return `<div class="litem">
-      <div class="ldot hot"></div>
-      <div class="lname">${esc(l.name)}</div>
-      <div class="lnote">${esc(l.stage)}${touchedText ? ' · ' + touchedText : ''}${dueFlag}</div>
-      <div class="lbadge">${l.phone ? 'Call' : 'Email'}</div>
-    </div>`;
-  }).join('');
-}
-
-/* ── RENDER FUB OVERDUE ───────────────────── */
-function renderOverdue(list) {
-  const el = document.getElementById('fubOverdueFeed');
-  if (!el) return;
-  if (!list || !list.length) {
-    el.innerHTML = '<div style="font-size:11px;color:var(--sage);padding:8px 0">✓ No overdue follow-ups.</div>';
-    return;
-  }
-  el.innerHTML = list.slice(0, 5).map(o =>
-    `<div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid var(--border)">
-      <div class="ldot" style="background:var(--blush);flex-shrink:0"></div>
-      <div style="flex:1">
-        <div style="font-size:12px;font-weight:500;color:var(--ink)">${esc(o.name)}</div>
-        <div style="font-size:10px;color:var(--ink4)">${esc(o.stage)} · ${o.daysOverdue}d overdue</div>
-      </div>
-      <div class="lbadge" style="border-color:var(--blushborder);color:var(--blush)">Follow Up</div>
-    </div>`
-  ).join('');
-}
-
-/* ── LOAD PIPELINE (FUB + Airtable) ──────── */
-async function loadPipeline() {
-  setChip('chipPipeline', 'loading');
-  setChip('chipFUB',      'loading');
-
-  const { ok, data } = await apiFetch(`${BASE}/api/pipeline`);
-
-  if (!ok) {
-    setChip('chipPipeline', 'err');
-    setChip('chipFUB',      'err');
-    setHTML('needsAttn',       errNote('Airtable unavailable — check AIRTABLE_TOKEN in Vercel'));
-    setHTML('fubHotLeadsFeed', errNote('FUB unavailable — check FUB_API_KEY in Vercel'));
-    return;
-  }
-
-  // ── FUB pipeline counts → Revenue Command cards ──────────────────
-  const p = data.pipeline || {};
-  setText('fub-activeBuyers',  p.activeBuyers    ?? '—');
-  setText('fub-activeSellers', p.activeSellers   ?? '—');
-  setText('fub-warmLeads',     p.warmLeads       ?? '—');
-  setText('fub-hotLeads',      p.hotLeads        ?? '—');
-  setText('fub-overdue',       p.overdueFollowUp ?? '—');
-  setText('fub-closing',       p.closingThisMonth?? '—');
-  setText('fub-newToday',      p.newToday        ?? '—');
-  setText('fub-totalActive',   p.totalActive     ?? '—');
-
-  // ── FUB hot leads list ───────────────────────────────────────────
-  renderHotLeads(data.hotLeadsList || []);
-  renderOverdue(data.overdueList   || []);
-
-  // ── Source health chips ──────────────────────────────────────────
-  const src = data.sources || {};
-  setChip('chipFUB',      src.fub      ? 'live' : 'err');
-  setChip('chipPipeline', src.airtable ? 'live' : 'err');
-
-  // ── Airtable ISA KPIs ────────────────────────────────────────────
-  const k = data.kpis || {};
-  setText('kpi-calls',     k.callsMade       ?? '—');
-  setText('kpi-appts',     k.appointmentsSet ?? '—');
-  setText('kpi-convos',    k.conversations   ?? '—');
-  setText('kpi-followups', k.followUps       ?? '—');
-
-  // ── ISA notes from latest Airtable record ───────────────────────
-  const records = data.records || [];
-  const isan    = document.getElementById('isaNotesBlock');
-  if (isan && records.length) {
-    const l = records[0];
-    isan.innerHTML = l.notesFromISA
-      ? `<div style="font-size:12px;color:var(--ink2);line-height:1.6;padding:8px 11px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2)">${esc(l.notesFromISA)}</div>`
-      : '<div style="font-size:11px;color:var(--ink4);font-style:italic">No ISA notes logged yet today.</div>';
-  }
-
-  // ── Needs Bri's attention — Airtable flags ───────────────────────
-  const attn = data.needsAttention || [];
-  const ae   = document.getElementById('needsAttn');
-  if (ae) {
-    ae.innerHTML = attn.length
-      ? attn.map(a => `<div class="attn">
-          <div class="attn-name">${esc(a.vaName)} · ${esc(a.activityDate)}</div>
-          ${a.isHotLead ? '<div class="attn-hot">🔥 Hot Lead Flagged</div>' : ''}
-          ${a.notes     ? `<div class="attn-note">${esc(a.notes)}</div>`     : ''}
-        </div>`).join('')
-      : '<div style="font-size:11.5px;color:var(--sage);padding:8px 0">✓ Nothing needs your attention right now.</div>';
-  }
-
-  // Show errors if either source partially failed
-  if (data.errors?.fub) {
-    const errEl = document.getElementById('fubHotLeadsFeed');
-    if (errEl && (!data.hotLeadsList || !data.hotLeadsList.length)) {
-      errEl.innerHTML = errNote(`FUB: ${data.errors.fub}`);
-    }
-  }
-}
-
-/* ── LOAD SUMMARY ─────────────────────── */
-async function loadSummary(rd,nd){
-  setChip('chipAI','loading');
-  let rc='',nc='';
-  if(rd?.thirtyYear)rc=`30yr:${rd.thirtyYear.rate}%(${rd.thirtyYear.direction}),15yr:${rd.fifteenYear?.rate||'N/A'}%,FHA:~${rd.fha?.rate||'N/A'}%,VA:~${rd.va?.rate||'N/A'}%`;
-  if(nd)nc=[...(nd.national||[]),...(nd.dfw||[])].slice(0,6).map(a=>a.title).filter(Boolean).join(' | ');
-  const{ok,data:ai}=await apiFetch(`${BASE}/api/summary`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ratesContext:rc,newsContext:nc,gmailContext:window._gmailContext||''})});
-  if(!ok){setChip('chipAI','err');setHTML('sum-matters',errNote('AI briefing unavailable — check ANTHROPIC_API_KEY in Vercel'));return;}
-  setText('sum-matters',    ai.whatMattersMost);
-  setText('sum-opportunity',ai.biggestOpportunity);
-  setText('sum-risk',       ai.biggestRisk);
-  setText('sum-forward',    ai.moveForwardBy);
-  setText('pri-1',ai.priority1);setText('pri-2',ai.priority2);setText('pri-3',ai.priority3);
-  setText('rev-action',ai.revenueAction);
-  if(ai.ratesTalkingPoint)setText('tp-rates', `"${ai.ratesTalkingPoint}"`);
-  if(ai.marketInsight)    setText('tp-market',ai.marketInsight);
-  if(ai.leadMessage)      setText('lead-msg', ai.leadMessage);
-  if(ai.reelIdea)         setText('idea-reel',    ai.reelIdea);
-  if(ai.captionPrompt)    setText('idea-caption', ai.captionPrompt);
-  if(ai.storyIdea)        setText('idea-story',   ai.storyIdea);
-  if(ai.teamPriority)     setText('team-dir',     ai.teamPriority);
-  if(ai.affirmation)      setText('vision-affirm',`"${ai.affirmation}"`);
-  if(ai.closingLine)      setText('closing-pill', ai.closingLine);
-  if(Array.isArray(ai.focusOn))    setHTML('ai-focus',   listItems(ai.focusOn));
-  if(Array.isArray(ai.moneyMoves)) setHTML('ai-money',   listItems(ai.moneyMoves));
-  if(Array.isArray(ai.ignoreToday))setHTML('ai-ignore',  listItems(ai.ignoreToday));
-  if(Array.isArray(ai.watchOut))   setHTML('ai-risk',    listItems(ai.watchOut));
-  if(Array.isArray(ai.delegate))   setHTML('ai-delegate',listItems(ai.delegate));
-  if(Array.isArray(ai.decideToday))setHTML('ai-decide',  listItems(ai.decideToday));
-  setChip('chipAI','live');
-}
-
-/* ── REFRESH ALL ──────────────────────── */
-
-/* -- LOAD GMAIL ------------------------------------------- */
-async function loadGmail() {
-  setChip('chipGmail','loading');
-  const{ok,data}=await apiFetch(`${BASE}/api/gmail`);
-  if(!ok){
-    setChip('chipGmail','err');
-    const st=document.getElementById('gmail-status');
-    if(st)st.textContent='Gmail OAuth not configured — see Vercel env vars';
-    const feed=document.getElementById('gmailFeed');
-    if(feed)feed.innerHTML='<div style="font-size:11px;color:var(--ink4);font-style:italic;padding:8px 0">Add GMAIL_CLIENT_ID, GMAIL_CLIENT_SECRET, GMAIL_REFRESH_TOKEN to Vercel.</div>';
-    return null;
-  }
-  setText('gmail-unread',data.unreadCount??'0');
-  setText('gmail-urgent',data.urgentCount??'0');
-  setText('gmail-client',data.clientCount??'0');
-  const st=document.getElementById('gmail-status');
-  if(st){const ts=new Date(data.lastUpdated).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});st.textContent=`Last checked ${ts}`;}
-  const feed=document.getElementById('gmailFeed');
-  const emails=data.digest||[];
-  if(feed){
-    if(!emails.length){
-      feed.innerHTML='<div style="font-size:12px;color:var(--ink4);font-style:italic;padding:8px 0">Inbox clear — no priority emails right now.</div>';
-    }else{
-      const cats={urgent:['rgba(196,121,106,.08)','rgba(196,121,106,.22)','var(--rose,#c4796a)'],client:['rgba(122,158,130,.09)','rgba(122,158,130,.24)','var(--sage,#7a9e82)'],important:['var(--golddim)','var(--goldborder)','var(--gold)'],general:['var(--bg2)','var(--border)','var(--ink4)']};
-      feed.innerHTML=emails.map(e=>{
-        const[bg,border,accent]=(cats[e.category]||cats.general);
-        const ts=new Date(e.date).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
-        const dot=e.isUnread?`<span style="width:6px;height:6px;border-radius:50%;background:${accent};display:inline-block;flex-shrink:0;margin-top:4px"></span>`:'';
-        return `<div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:${bg};border:1px solid ${border};border-radius:var(--r2)">${dot}<div style="flex:1;min-width:0"><div style="display:flex;align-items:center;gap:8px;margin-bottom:2px;flex-wrap:wrap"><span style="font-size:11px;font-weight:600;color:var(--ink)">${esc(e.sender)}</span><span style="font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:${accent}">${e.category}</span><span style="font-size:9.5px;color:var(--ink4);margin-left:auto">${ts}</span></div><div style="font-size:12px;font-weight:500;color:var(--ink);margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(e.subject)}</div><div style="font-size:11px;color:var(--ink3);line-height:1.45">${esc(e.snippet)}</div></div></div>`;
-      }).join('');
-    }
-  }
-  if(data.aiContext)window._gmailContext=data.aiContext;
-  setChip('chipGmail','live');
-  return data;
-}
-
-async function refreshAll(){
-  setRef(true);setText('lastRef','Refreshing…');setAffirmation();
-  await Promise.all([
-    loadCalendar(),
-    loadPipeline(),
-    loadGmail(),
-    (async()=>{
-      const[rd,nd]=await Promise.all([loadRates(),loadNews()]);
-      await loadSummary(rd,nd);
-    })()
-  ]);
-  const now=new Date();
-  setText('lastRef',`Last refreshed ${now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true})}`);
-  setRef(false);
-}
-
-/* ── INTERACTIONS ─────────────────────── */
-function toggleDone(el){el.classList.toggle('done');const s=el.querySelector('.p5st');if(!s)return;s.textContent=el.classList.contains('done')?'✓ Complete':'Pending';if(el.classList.contains('done'))s.classList.add('done');else s.classList.remove('done');}
-function toggleTodo(el){if(window.getSelection&&window.getSelection().type==='Range')return;el.classList.toggle('done');}
-
-/* ── INIT ─────────────────────────────── */
-window.addEventListener('DOMContentLoaded',()=>{
-  document.querySelectorAll('.card').forEach((c,i)=>{if(!c.style.animationDelay)c.style.animationDelay=`${.04+i*.026}s`;});
-  setAffirmation();
-  refreshAll();
-});
-</script>
-</body>
-</html>
