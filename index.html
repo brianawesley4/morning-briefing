@@ -241,6 +241,52 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font
   .card-calendar{order:4}.card-pipeline{order:5}.card-gmail{order:6}
   .card-rates{order:7}.card-news{order:8}.card-brand{order:9}.card-strategy{order:10}
 }
+
+/* ── EXECUTIVE ALERT CENTER ─── */
+.alert-center{padding:0;margin:0}
+.alert-none{font-size:12px;color:var(--sage);padding:11px 14px;background:var(--sagedim);border:1px solid var(--sageborder);border-radius:var(--r2);font-style:italic}
+.alert-row{display:flex;align-items:flex-start;gap:13px;padding:12px 16px;border-radius:var(--r2);border:1px solid var(--border);margin-bottom:8px;background:var(--card);position:relative;overflow:hidden;transition:box-shadow .2s}
+.alert-row:last-child{margin-bottom:0}
+.alert-row:hover{box-shadow:var(--sh2)}
+.alert-row.critical{border-color:rgba(196,121,106,.35);background:linear-gradient(135deg,#fff9f8,#fdf4f2)}
+.alert-row.critical::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--blush)}
+.alert-row.important{border-color:var(--goldborder);background:linear-gradient(135deg,#fffdf9,#fdf9f2)}
+.alert-row.important::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold)}
+.alert-row.monitor::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--ink5)}
+.alert-row.positive{border-color:var(--sageborder);background:var(--sagedim)}
+.alert-row.positive::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--sage)}
+.alert-sev{font-size:7px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;padding:1px 6px;border-radius:8px}
+.critical .alert-sev{color:var(--blush);background:var(--blushdim)}
+.important .alert-sev{color:var(--gold);background:var(--golddim)}
+.monitor .alert-sev{color:var(--ink4);background:var(--bg3)}
+.positive .alert-sev{color:var(--sage);background:var(--sagedim)}
+.alert-title{font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.alert-why{font-size:11px;color:var(--ink3);line-height:1.45;margin-bottom:7px}
+.alert-meta{font-size:9.5px;color:var(--ink4);margin-bottom:7px}
+.alert-acts{display:flex;gap:6px;flex-wrap:wrap}
+.alert-btn{display:inline-flex;align-items:center;font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:4px 11px;border-radius:var(--r);border:1px solid var(--border2);background:var(--card);color:var(--ink2);cursor:pointer;text-decoration:none;transition:all .18s;font-family:'DM Sans',sans-serif}
+.alert-btn:hover{border-color:var(--gold);color:var(--gold)}
+.alert-btn.primary{background:var(--golddim);border-color:var(--goldborder);color:var(--gold)}
+.alert-btn.primary:hover{background:var(--gold);color:white}
+.alert-btn.dismiss{border-color:transparent;color:var(--ink4)}
+.alert-btn.dismiss:hover{color:var(--blush)}
+
+/* ── SINCE YESTERDAY ─── */
+.sy-item{display:flex;align-items:flex-start;gap:11px;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px}
+.sy-item:last-child{border-bottom:none}
+.sy-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px;background:var(--gold2)}
+.sy-dot.new{background:var(--sage)}.sy-dot.risk{background:var(--blush)}.sy-dot.info{background:var(--gold2)}
+.sy-text{color:var(--ink2);line-height:1.45;flex:1}
+.sy-time{font-size:9px;color:var(--ink4);white-space:nowrap;padding-top:2px}
+
+/* ── MOBILE PRIORITY ORDER ─── */
+@media(max-width:768px){
+  .card-alerts{order:1}.card-summary{order:2}.card-calendar{order:3}
+  .card-people{order:4}.card-pipeline{order:5}.card-gmail{order:6}
+  .card-rates{order:7}.card-news{order:8}.card-brand{order:9}
+  .card-since{order:10}.card-strategy{order:11}.card-affirmation{order:12}
+  .grid{display:flex;flex-direction:column}
+}
 </style>
 </head>
 <body>
@@ -276,35 +322,41 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font
 
 <div class="grid">
 
-  <!-- AFFIRMATION -->
-  <div class="card affirm-card c12 card-affirmation" style="animation-delay:.02s">
-    <div class="clabel">Daily Affirmation</div>
-    <div class="atext" id="affirmText">Loading…</div>
-    <div class="asub" id="affirmSub"></div>
+  <!-- 1 — EXECUTIVE ALERT CENTER -->
+  <div class="card c12 card-alerts" style="animation-delay:.02s;padding:18px 20px 16px">
+    <div class="clabel">Executive Alerts</div>
+    <div class="alert-center" id="alertFeed">
+      <div class="sk w70" style="height:14px;margin-bottom:8px"></div>
+      <div class="sk w55" style="height:14px"></div>
+    </div>
   </div>
 
   <div class="rdiv"></div>
 
-  <!-- ROW 1: SUMMARY + PIPELINE SNAPSHOT -->
-
-  <!-- EXECUTIVE SUMMARY -->
+  <!-- 2 — TODAY'S EXECUTIVE BRIEF + PIPELINE SNAPSHOT -->
   <div class="card warm c8 card-summary" style="animation-delay:.04s">
-    <div class="clabel">01 — Today's Executive Brief</div>
+    <div class="clabel">Today's Executive Brief</div>
     <div class="sgrid">
       <div class="sitem hl"><div class="slb">What Matters Most</div><div class="sv" id="sum-matters"><span class="sk w85 h20"></span></div></div>
       <div class="sitem"><div class="slb">Biggest Opportunity</div><div class="sv" id="sum-opportunity"><span class="sk w85"></span></div></div>
       <div class="sitem"><div class="slb">Biggest Risk</div><div class="sv" id="sum-risk"><span class="sk w85"></span></div></div>
-      <div class="sitem"><div class="slb">Move Forward By</div><div class="sv" id="sum-forward"><span class="sk w85"></span></div></div>
+      <div class="sitem"><div class="slb">First Revenue Action</div><div class="sv" id="rev-action"><span class="sk w85"></span></div></div>
     </div>
-    <div class="slabel" style="margin-top:0">Top 3 Priorities Today</div>
+    <div class="slabel" style="margin-top:0">Top 3 Priorities</div>
     <ul class="plist">
       <li><span class="pnum">1</span><span id="pri-1"><span class="sk w70"></span></span></li>
       <li><span class="pnum">2</span><span id="pri-2"><span class="sk w85"></span></span></li>
       <li><span class="pnum">3</span><span id="pri-3"><span class="sk w70"></span></span></li>
     </ul>
-    <div class="ablock" style="margin-top:14px">
-      <div class="alb">First Revenue Action</div>
-      <div class="atx" id="rev-action"><span class="sk w85"></span></div>
+    <div style="margin-top:13px;display:grid;grid-template-columns:1fr 1fr;gap:9px">
+      <div style="padding:9px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2)">
+        <div style="font-size:7.5px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--ink4);margin-bottom:4px">Delegate</div>
+        <div style="font-size:12px;color:var(--ink2)" id="ai-delegate-main"><span class="sk w70"></span></div>
+      </div>
+      <div style="padding:9px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2)">
+        <div style="font-size:7.5px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--ink4);margin-bottom:4px">Postpone</div>
+        <div style="font-size:12px;color:var(--ink2)" id="ai-postpone"><span class="sk w55"></span></div>
+      </div>
     </div>
   </div>
 
@@ -321,80 +373,56 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font
     <div class="pipe-stage"><span>Buyers</span><span class="pipe-count" id="crm-buyers">—</span></div>
     <div class="pipe-stage"><span>Sellers</span><span class="pipe-count" id="crm-sellers">—</span></div>
     <div class="pipe-stage"><span>Sphere</span><span class="pipe-count" id="crm-sphere">—</span></div>
-    <div class="pipe-stage"><span>Hot (Active)</span><span class="pipe-count" id="crm-hot">—</span></div>
+    <div class="pipe-stage"><span>Referrals</span><span class="pipe-count" id="crm-referrals">—</span></div>
     <div style="display:flex;gap:8px;margin-top:10px;font-size:10px;color:var(--ink3)">
       <span>New today:</span>
       <span id="crm-newToday" style="font-weight:600;color:var(--gold)">—</span>
-      <span style="margin-left:6px">Total:</span>
+      <span style="margin-left:6px">Total active:</span>
       <span id="crm-totalActive" style="font-weight:600;color:var(--ink2)">—</span>
     </div>
+    <a href="https://estem-crm.vercel.app" target="_blank" rel="noopener"
+       style="display:inline-block;margin-top:11px;font-size:9px;color:var(--gold);text-decoration:none;letter-spacing:1px;font-weight:600;text-transform:uppercase">
+      View all in CRM →
+    </a>
   </div>
 
   <div class="rdiv"></div>
 
-  <!-- ROW 2: PEOPLE REQUIRING ACTION + CALENDAR + RATES -->
-
-  <!-- PEOPLE REQUIRING ACTION -->
-  <div class="card c5 card-people" style="animation-delay:.12s">
-    <div class="clabel">People Requiring Action</div>
-    <div id="praFeed">
-      <div class="pra-item">
-        <div class="pra-row"><div class="pra-name"><span class="sk w70"></span></div></div>
-        <div class="pra-why"><span class="sk w85"></span></div>
-      </div>
-      <div class="pra-item">
-        <div class="pra-row"><div class="pra-name"><span class="sk w55"></span></div></div>
-        <div class="pra-why"><span class="sk w70"></span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- CALENDAR -->
-  <div class="card c4 card-calendar" style="animation-delay:.16s">
+  <!-- 3 — TODAY'S SCHEDULE + 4 — PEOPLE REQUIRING ACTION -->
+  <div class="card c4 card-calendar" style="animation-delay:.12s">
     <div class="clabel">Today's Schedule</div>
     <div id="calFeed">
       <div class="cali"><div class="ctime">—</div><div><div class="ctitle"><span class="sk w70"></span></div><div class="csub"><span class="sk w55"></span></div></div></div>
       <div class="cali"><div class="ctime">—</div><div><div class="ctitle"><span class="sk w85"></span></div></div></div>
     </div>
-    <div style="margin-top:11px;font-size:9px;color:var(--ink4);letter-spacing:1px">Connected · bri@estemrealtygroup.com</div>
+    <div style="margin-top:11px;font-size:9px;color:var(--ink4)">bri@estemrealtygroup.com</div>
   </div>
 
-  <!-- RATES -->
-  <div class="card c3 card-rates" style="animation-delay:.20s">
-    <div class="clabel">Rate Snapshot — FRED</div>
-    <div class="rgrid">
-      <div class="ritem"><div class="rtype">30-Year Fixed</div><div class="rnum" id="rate-30yr"><span class="sk w55 h32"></span></div><div class="rtrend" id="trend-30yr">Loading…</div></div>
-      <div class="ritem"><div class="rtype">15-Year Fixed</div><div class="rnum" id="rate-15yr"><span class="sk w55 h32"></span></div><div class="rtrend" id="trend-15yr">Loading…</div></div>
+  <!-- PEOPLE REQUIRING ACTION -->
+  <div class="card c8 card-people" style="animation-delay:.16s">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px">
+      <div class="clabel" style="margin-bottom:0">People Requiring Action</div>
+      <a href="https://estem-crm.vercel.app" target="_blank" rel="noopener"
+         style="font-size:9px;color:var(--gold);text-decoration:none;letter-spacing:1px;font-weight:600;text-transform:uppercase;white-space:nowrap">View all →</a>
     </div>
-    <div class="slabel">Client Talking Point</div>
-    <div class="tp" id="tp-rates"><span class="sk w85"></span></div>
+    <div id="praFeed">
+      <div class="pra-item"><div class="pra-row"><div class="pra-name"><span class="sk w70"></span></div></div><div class="pra-why"><span class="sk w85"></span></div></div>
+      <div class="pra-item"><div class="pra-row"><div class="pra-name"><span class="sk w55"></span></div></div><div class="pra-why"><span class="sk w70"></span></div></div>
+    </div>
   </div>
 
   <div class="rdiv"></div>
 
-  <!-- ROW 3: MARKET NEWS + GMAIL -->
-
-  <!-- MARKET NEWS -->
-  <div class="card c8 card-news" style="animation-delay:.24s">
-    <div class="clabel">Real Estate Market Intelligence</div>
-    <div class="n2col">
-      <div id="news-national"><div class="slabel" style="margin-top:0">National + Texas</div><div class="ni"><span class="sk w85"></span><span class="sk w70"></span></div></div>
-      <div id="news-dfw"><div class="slabel" style="margin-top:0">South DFW — Your Markets</div><div class="ni"><span class="sk w85"></span><span class="sk w70"></span></div></div>
-    </div>
-    <div class="slabel">AI Market Insight</div>
-    <div class="tp" id="tp-market"><span class="sk w85"></span></div>
-  </div>
-
-  <!-- GMAIL DIGEST -->
-  <div class="card c4 card-gmail" style="animation-delay:.28s">
-    <div class="clabel">Gmail Digest</div>
-    <div style="display:flex;gap:10px;margin-bottom:13px;flex-wrap:wrap">
-      <div style="text-align:center;padding:9px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2)">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--ink)" id="gmail-unread">—</div>
+  <!-- 5 — GMAIL + RATES -->
+  <div class="card c5 card-gmail" style="animation-delay:.20s">
+    <div class="clabel">Important Email</div>
+    <div style="display:flex;gap:10px;margin-bottom:11px">
+      <div style="text-align:center;padding:8px 13px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2)">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;color:var(--ink)" id="gmail-unread">—</div>
         <div style="font-size:8px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3)">Unread</div>
       </div>
-      <div style="text-align:center;padding:9px 14px;background:var(--blushdim);border:1px solid var(--blushborder);border-radius:var(--r2)">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--blush)" id="gmail-urgent">—</div>
+      <div style="text-align:center;padding:8px 13px;background:var(--blushdim);border:1px solid var(--blushborder);border-radius:var(--r2)">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;color:var(--blush)" id="gmail-urgent">—</div>
         <div style="font-size:8px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--blush)">Priority</div>
       </div>
       <div style="font-size:10px;color:var(--ink4);font-style:italic;align-self:center" id="gmail-status">Connecting…</div>
@@ -405,28 +433,66 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font
     </div>
   </div>
 
+  <div class="card c4 card-rates" style="animation-delay:.24s">
+    <div class="clabel">Rate Snapshot — FRED</div>
+    <div class="rgrid">
+      <div class="ritem"><div class="rtype">30-Year Fixed</div><div class="rnum" id="rate-30yr"><span class="sk w55 h32"></span></div><div class="rtrend" id="trend-30yr">Loading…</div></div>
+      <div class="ritem"><div class="rtype">15-Year Fixed</div><div class="rnum" id="rate-15yr"><span class="sk w55 h32"></span></div><div class="rtrend" id="trend-15yr">Loading…</div></div>
+    </div>
+    <div class="slabel">Client Talking Point</div>
+    <div class="tp" id="tp-rates"><span class="sk w85"></span></div>
+  </div>
+
+  <!-- SINCE YESTERDAY -->
+  <div class="card c3 card-since" style="animation-delay:.27s">
+    <div class="clabel">Since Yesterday</div>
+    <div id="sinceFeed">
+      <div class="sk w85" style="height:13px;margin-bottom:6px"></div>
+      <div class="sk w70" style="height:13px"></div>
+    </div>
+  </div>
+
   <div class="rdiv"></div>
 
-  <!-- ROW 4: AI STRATEGY + BRAND CONTENT -->
+  <!-- 6 — MARKET NEWS + AI STRATEGY -->
+  <div class="card c8 card-news" style="animation-delay:.30s">
+    <div class="clabel">Real Estate Market Intelligence</div>
+    <div class="n2col">
+      <div id="news-national"><div class="slabel" style="margin-top:0">National + Texas</div><div class="ni"><span class="sk w85"></span><span class="sk w70"></span></div></div>
+      <div id="news-dfw"><div class="slabel" style="margin-top:0">South DFW — Your Markets</div><div class="ni"><span class="sk w85"></span><span class="sk w70"></span></div></div>
+    </div>
+    <div class="slabel">AI Market Insight</div>
+    <div class="tp" id="tp-market"><span class="sk w85"></span></div>
+  </div>
 
-  <div class="card c6 card-strategy" style="animation-delay:.32s">
+  <div class="card c4 card-strategy" style="animation-delay:.34s">
     <div class="clabel">AI Strategy Notes</div>
     <div class="aigrid">
-      <div class="aiitem focus"><div class="ailb">Focus On</div><ul id="ai-focus"><li><span class="sk w85"></span></li><li><span class="sk w70"></span></li></ul></div>
-      <div class="aiitem money"><div class="ailb">Money Moves</div><ul id="ai-money"><li><span class="sk w85"></span></li><li><span class="sk w70"></span></li></ul></div>
-      <div class="aiitem ignore"><div class="ailb">Ignore Today</div><ul id="ai-ignore"><li><span class="sk w70"></span></li><li><span class="sk w55"></span></li></ul></div>
+      <div class="aiitem focus"><div class="ailb">Focus On</div><ul id="ai-focus"><li><span class="sk w85"></span></li></ul></div>
+      <div class="aiitem money"><div class="ailb">Money Moves</div><ul id="ai-money"><li><span class="sk w85"></span></li></ul></div>
+      <div class="aiitem ignore"><div class="ailb">Ignore Today</div><ul id="ai-ignore"><li><span class="sk w70"></span></li></ul></div>
       <div class="aiitem risk"><div class="ailb">Watch Out</div><ul id="ai-risk"><li><span class="sk w85"></span></li></ul></div>
       <div class="aiitem delg"><div class="ailb">Delegate</div><ul id="ai-delegate"><li><span class="sk w85"></span></li></ul></div>
       <div class="aiitem dec"><div class="ailb">Decide Today</div><ul id="ai-decide"><li><span class="sk w85"></span></li></ul></div>
     </div>
   </div>
 
-  <!-- BRAND + CONTENT -->
-  <div class="card c6 card-brand" style="animation-delay:.36s">
+  <div class="rdiv"></div>
+
+  <!-- 7 — CONTENT BRIEF + AFFIRMATION (secondary position) -->
+  <div class="card c8 card-brand" style="animation-delay:.38s">
     <div class="clabel">Brand + Content Brief</div>
-    <div class="ccard"><div class="ctype">Reel Concept</div><div class="ctxt" id="idea-reel"><span class="sk w85"></span><span class="sk w70"></span></div></div>
-    <div class="ccard"><div class="ctype">Caption Prompt</div><div class="ctxt" id="idea-caption"><span class="sk w85"></span></div></div>
-    <div class="ccard"><div class="ctype">Story Idea</div><div class="ctxt" id="idea-story"><span class="sk w70"></span></div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px">
+      <div class="ccard" style="margin-bottom:0"><div class="ctype">Reel Concept</div><div class="ctxt" id="idea-reel"><span class="sk w85"></span><span class="sk w70"></span></div></div>
+      <div class="ccard" style="margin-bottom:0"><div class="ctype">Caption Prompt</div><div class="ctxt" id="idea-caption"><span class="sk w85"></span></div></div>
+      <div class="ccard" style="margin-bottom:0"><div class="ctype">Story Idea</div><div class="ctxt" id="idea-story"><span class="sk w70"></span></div></div>
+    </div>
+  </div>
+
+  <div class="card affirm-card c4 card-affirmation" style="animation-delay:.42s">
+    <div class="clabel">Daily Intention</div>
+    <div class="atext" id="affirmText" style="font-size:15px">Loading…</div>
+    <div class="asub" id="affirmSub"></div>
   </div>
 
 </div>
@@ -671,13 +737,126 @@ async function markContacted(leadId,name,btn){
   }
 }
 
+/* ── ALERT ENGINE ─────────────────────── */
+function buildAlerts(pipelineData) {
+  const alerts = [];
+  const p = pipelineData?.pipeline || {};
+  const hotLeads = pipelineData?.hotLeadsList || [];
+  const revived  = hotLeads.filter(l => l.is_revived);
+  const overdue  = pipelineData?.overdueList  || [];
+
+  // Alert: Revived leads awaiting follow-up
+  if (revived.length > 0) {
+    revived.forEach(l => {
+      alerts.push({
+        severity: 'important',
+        title:    `${l.name} responded after a long absence`,
+        why:      `This lead re-engaged and is now marked Revived. They were last contacted ${l.daysSinceContact} days ago. This is your highest-probability conversion opportunity.`,
+        meta:     `Grade ${l.grade} · ${l.stage}`,
+        action:   'Follow Up Now',
+        crmLink:  `https://estem-crm.vercel.app?tab=leads&id=${l.id}`,
+        phone:    l.phone
+      });
+    });
+  }
+
+  // Alert: A+ leads with notes neglected 300+ days
+  const deepNeglect = hotLeads.filter(l =>
+    l.grade === 'A+' && l.notes && Number(l.daysSinceContact) >= 300
+  );
+  if (deepNeglect.length > 0) {
+    const lead = deepNeglect[0];
+    alerts.push({
+      severity: 'important',
+      title:    `${lead.name} — Grade A+ not contacted in ${lead.daysSinceContact} days`,
+      why:      `This is your highest-scoring lead with documented context. The longer this goes uncontacted, the higher the risk they work with another agent.`,
+      meta:     `${lead.stage} · ${lead.notes?.slice(0,80)}…`,
+      action:   'Open in CRM',
+      crmLink:  `https://estem-crm.vercel.app?tab=leads&id=${lead.id}`,
+      phone:    lead.phone
+    });
+  }
+
+  // Alert: Large neglected high-grade pool
+  const neglectedCount = overdue.length;
+  if (neglectedCount >= 20) {
+    alerts.push({
+      severity: 'monitor',
+      title:    `${neglectedCount} high-grade leads have had no contact in 90+ days`,
+      why:      `Your A and B-grade pipeline has stalled. These contacts need systematic re-engagement to protect conversion potential.`,
+      meta:     `${p.highGrade || 0} total Grade A/A+ leads in CRM`,
+      action:   'View Re-Engagement',
+      crmLink:  `https://estem-crm.vercel.app?tab=reactivation`
+    });
+  }
+
+  return alerts;
+}
+
+function renderAlerts(alerts) {
+  const feed = document.getElementById('alertFeed');
+  if (!feed) return;
+  if (!alerts || !alerts.length) {
+    feed.innerHTML = '<div class="alert-none">Nothing urgent requires your attention right now.</div>';
+    return;
+  }
+  feed.innerHTML = alerts.map(a => {
+    const phone  = (a.phone || '').replace(/\D/g,'');
+    const tel    = phone.length === 10 ? `+1${phone}` : phone ? `+${phone}` : '';
+    const callBtn = tel ? `<a class="alert-btn" href="tel:${esc(tel)}">Call</a>` : '';
+    return `<div class="alert-row ${esc(a.severity)}">
+      <div style="flex:1;min-width:0">
+        <div class="alert-sev">${a.severity.toUpperCase()}</div>
+        <div class="alert-title">${esc(a.title)}</div>
+        <div class="alert-why">${esc(a.why)}</div>
+        ${a.meta ? `<div class="alert-meta">${esc(a.meta)}</div>` : ''}
+        <div class="alert-acts">
+          ${a.crmLink ? `<a class="alert-btn primary" href="${esc(a.crmLink)}" target="_blank" rel="noopener">${esc(a.action)}</a>` : ''}
+          ${callBtn}
+          <button class="alert-btn dismiss" onclick="this.closest('.alert-row').remove();checkAlertsEmpty()">Dismiss</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function checkAlertsEmpty() {
+  const feed = document.getElementById('alertFeed');
+  if (feed && !feed.querySelector('.alert-row')) {
+    feed.innerHTML = '<div class="alert-none">Nothing urgent requires your attention right now.</div>';
+  }
+}
+
+/* ── SINCE YESTERDAY ─────────────────── */
+function renderSinceYesterday(changed) {
+  const feed = document.getElementById('sinceFeed');
+  if (!feed) return;
+  if (!changed || !changed.length) {
+    feed.innerHTML = '<div style="font-size:12px;color:var(--ink4);font-style:italic;padding:8px 0">No changes in the last 24 hours.</div>';
+    return;
+  }
+  feed.innerHTML = changed.slice(0, 8).map(l => {
+    const ts = new Date(l.updated_at).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
+    const dot = l.is_revived ? 'new' : 'info';
+    const text = l.is_revived
+      ? `${esc(l.name)} re-engaged — marked as Revived`
+      : `${esc(l.name)} updated · ${esc(l.stage)}`;
+    return `<div class="sy-item">
+      <div class="sy-dot ${dot}"></div>
+      <div class="sy-text">${text}</div>
+      <div class="sy-time">${ts}</div>
+    </div>`;
+  }).join('');
+}
+
 /* ── LOAD PIPELINE (CRM) ─────────────── */
 async function loadPipeline(){
   setChip('chipCRM','loading');
   const{ok,data}=await apiFetch(`${BASE}/api/pipeline`);
   if(!ok){
     setChip('chipCRM','err');
-    setHTML('praFeed',errNote('CRM data unavailable. Check estem-crm.vercel.app and Vercel logs.'));
+    setHTML('praFeed',errNote('CRM data is temporarily unavailable.'));
+    setHTML('alertFeed','<div class="alert-none">CRM data temporarily unavailable — alerts will load on refresh.</div>');
     return;
   }
   const p=data.pipeline||{};
@@ -688,11 +867,13 @@ async function loadPipeline(){
   setText('crm-buyers',     p.buyers       ??'—');
   setText('crm-sellers',    p.sellers      ??'—');
   setText('crm-sphere',     p.sphere       ??'—');
-  setText('crm-hot',        p.hot          ??'—');
+  setText('crm-referrals',  p.referrals    ??'—');
   setText('crm-newToday',   p.newToday     ??'—');
   setText('crm-totalActive',p.totalActive  ??'—');
   if(data.crmContext)window._crmContext=data.crmContext;
   renderPRA(data.hotLeadsList||[]);
+  renderAlerts(buildAlerts(data));
+  renderSinceYesterday(data.changedRecently||[]);
   setChip('chipCRM','live');
 }
 
@@ -703,7 +884,7 @@ async function loadGmail(){
   if(!ok){
     setChip('chipGmail','err');
     const st=document.getElementById('gmail-status');if(st)st.textContent='Gmail not configured';
-    const feed=document.getElementById('gmailFeed');if(feed)feed.innerHTML='<div style="font-size:11px;color:var(--ink4);font-style:italic;padding:6px 0">Add GMAIL_ env vars to Vercel.</div>';
+    const feed=document.getElementById('gmailFeed');if(feed)feed.innerHTML='<div style="font-size:11px;color:var(--ink4);font-style:italic;padding:6px 0">Email insights are temporarily unavailable.</div>';
     return null;
   }
   setText('gmail-unread',data.unreadCount??'0');
@@ -768,6 +949,10 @@ async function loadSummary(rd,nd){
   if(Array.isArray(ai.watchOut))   setHTML('ai-risk',   listItems(ai.watchOut));
   if(Array.isArray(ai.delegate))   setHTML('ai-delegate',listItems(ai.delegate));
   if(Array.isArray(ai.decideToday))setHTML('ai-decide', listItems(ai.decideToday));
+  // Populate new brief fields
+  if(ai.delegate&&ai.delegate[0])    setText('ai-delegate-main',ai.delegate[0]);
+  if(ai.ignoreToday&&ai.ignoreToday[0]) setText('ai-postpone',ai.ignoreToday[0]);
+  if(ai.moveForwardBy) setText('sum-forward',ai.moveForwardBy);
   setChip('chipAI','live');
 }
 
